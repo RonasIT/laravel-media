@@ -2,7 +2,7 @@
 
 namespace RonasIT\Media\Http\Requests;
 
-use App\Http\Requests\Request;
+use RonasIT\Media\Requests\Request;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
