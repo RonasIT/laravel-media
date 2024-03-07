@@ -15,7 +15,9 @@
             "RonasIT\\Media\\": "src/"
         }
     },
-    "require": {},
+    "require": {
+        "ronasit/laravel-helpers": ">=2.2"
+    },
     "extra": {
         "laravel": {
             "providers": [
