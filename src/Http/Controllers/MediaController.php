@@ -1,7 +1,8 @@
 <?php
 
-namespace RonasIT\Media\Controllers;
+namespace RonasIT\Media\Http\Controllers;
 
+use Illuminate\Routing\Controller;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -12,10 +13,7 @@ use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Http\Resources\MediaCollection;
 use RonasIT\Media\Http\Resources\MediaResource;
-use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
-use function response;
 
 class MediaController extends Controller
 {
@@ -30,7 +28,7 @@ class MediaController extends Controller
 
         $media = $mediaService->create($content, $file->getClientOriginalName(), $data);
 
-        return new MediaResource($media);
+        return MediaResource::make($media);
     }
 
     public function delete(DeleteMediaRequestContract $request, MediaServiceContract $mediaService, int $id): Response

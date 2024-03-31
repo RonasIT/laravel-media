@@ -9,19 +9,21 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DeleteMediaRequest extends Request implements DeleteMediaRequestContract
 {
+    protected $media;
+
     public function authorize(): bool
     {
-        return $this->user()->isAdmin();
+        return $this->media->owner_id === $this->user()->id;
     }
 
     public function validateResolved(): void
     {
-        parent::validateResolved();
+        $this->media = app(MediaServiceContract::class)->get($this->route('id'));
 
-        $service = app(MediaServiceContract::class);
-
-        if (!$service->exists($this->route('id'))) {
+        if (!$this->media) {
             throw new NotFoundHttpException(__('validation.exceptions.not_found', ['entity' => 'Media']));
         }
+
+        parent::validateResolved();
     }
 }

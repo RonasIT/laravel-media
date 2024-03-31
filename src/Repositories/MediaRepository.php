@@ -1,9 +1,9 @@
 <?php
 
-namespace RonasIT\Media\Http\Repositories;
+namespace RonasIT\Media\Repositories;
 
-use RonasIT\Media\Models\Media;
 use Illuminate\Pagination\LengthAwarePaginator;
+use RonasIT\Media\Models\Media;
 use RonasIT\Support\Repositories\BaseRepository;
 
 /**

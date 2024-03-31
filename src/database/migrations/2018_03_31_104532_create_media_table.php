@@ -13,7 +13,7 @@ class CreateMediaTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->string('link');
-            $table->string('name')->nullable();
+            $table->string('name')->unique();
             $table->boolean('is_public')->default(false);
             $table->integer('owner_id')->nullable();
 
@@ -26,7 +26,7 @@ class CreateMediaTable extends Migration
             $table
                 ->foreign('owner_id')
                 ->references('id')
-                ->on('users')
+                ->on(app(config('media.classes.user_model'))->getTable())
                 ->onDelete('cascade');
         });
     }

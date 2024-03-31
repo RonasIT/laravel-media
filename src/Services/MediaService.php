@@ -2,12 +2,12 @@
 
 namespace RonasIT\Media\Services;
 
-use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Http\Repositories\MediaRepository;
+use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
@@ -26,6 +26,12 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function search(array $filters): LengthAwarePaginator
     {
+        if (!Auth::check()) {
+            $filters['is_public'] = true;
+        } else {
+            $filters['owner_id'] = Auth::id();
+        }
+
         return $this
             ->searchQuery($filters)
             ->filterByQuery(['name'])
@@ -37,7 +43,7 @@ class MediaService extends EntityService implements MediaServiceContract
         $fileName = $this->saveFile($fileName, $content);
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
-        $data['owner_id'] = Auth::user()->id;
+        $data['owner_id'] = Auth::id();
 
         return $this->repository->create($data);
     }

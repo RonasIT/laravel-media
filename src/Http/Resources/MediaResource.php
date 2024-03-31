@@ -12,8 +12,7 @@ class MediaResource extends BaseResource implements MediaResourceContract
             'id' => $this->resource->id,
             'link' => $this->resource->link,
             'name' => $this->resource->name,
-            'is_public' => $this->when($request->user() && $request->user()->isAdmin(), $this->resource->is_public),
-            'owner_id' => $this->when($request->user() && $request->user()->isAdmin(), $this->resource->owner_id),
+            'is_public' => $this->resource->is_public,
             'meta' => $this->resource->meta,
         ];
     }
