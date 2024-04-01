@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 return [
     'permitted_types' => [
         'jpg',
@@ -9,6 +11,6 @@ return [
     ],
 
     'classes' => [
-        'user_model' => config('media.classes.user_model')
+        'user_model' => User::class,
     ],
 ];

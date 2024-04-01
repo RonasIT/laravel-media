@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Illuminate\Support\Collection;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -61,5 +62,10 @@ class MediaService extends EntityService implements MediaServiceContract
     public function delete($where): int
     {
         return $this->repository->delete($where);
+    }
+
+    public function get(array $where = []): Collection
+    {
+        return $this->repository->get($where);
     }
 }

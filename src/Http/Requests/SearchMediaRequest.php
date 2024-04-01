@@ -16,7 +16,7 @@ class SearchMediaRequest extends BaseRequest implements SearchMediaRequestContra
             'query' => 'string',
             'order_by' => 'string|in:link,name',
             'desc' => 'boolean',
-            'name' => 'string'
+            'name' => 'string',
         ];
     }
 }
