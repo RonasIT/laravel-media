@@ -18,7 +18,7 @@ class DeleteMediaRequest extends Request implements DeleteMediaRequestContract
 
     public function validateResolved(): void
     {
-        $this->media = app(MediaServiceContract::class)->get(['id' => $this->route('id')])->first();
+        $this->media = app(MediaServiceContract::class)->first($this->route('id'))->first();
 
         if (!$this->media) {
             throw new NotFoundHttpException(__('validation.exceptions.not_found', ['entity' => 'Media']));

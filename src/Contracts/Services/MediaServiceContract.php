@@ -20,5 +20,5 @@ interface MediaServiceContract
      */
     public function delete($where): int;
 
-    public function get(array $where = []): Collection;
+    public function first(int|array $where = []): ?Model;
 }
