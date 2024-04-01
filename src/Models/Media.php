@@ -2,10 +2,12 @@
 
 namespace RonasIT\Media\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use RonasIT\Support\Traits\ModelTrait;
 
 class Media extends Model
@@ -29,6 +31,25 @@ class Media extends Model
     ];
 
     protected $hidden = ['pivot'];
+
+    public function scopeApplyMediaPermissionRestrictions(Builder $query): void
+    {
+        if (!Auth::check()) {
+            $query->where('is_public', true);
+
+            return;
+        }
+
+        $user = Auth::user();
+
+        if (!$user->isAdmin()) {
+            $query->where(function ($subQuery) use ($user) {
+                $subQuery
+                    ->where('is_public', true)
+                    ->orWhere('owner_id', $user->id);
+            });
+        }
+    }
 
     public function owner(): BelongsTo
     {

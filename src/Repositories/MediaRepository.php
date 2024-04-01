@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Repositories;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use RonasIT\Media\Models\Media;
 use RonasIT\Support\Repositories\BaseRepository;
 
@@ -13,5 +14,12 @@ class MediaRepository extends BaseRepository
     public function __construct()
     {
         $this->setModel(Media::class);
+    }
+
+    public function getSearchResults(): LengthAwarePaginator
+    {
+        $this->query->applyMediaPermissionRestrictions();
+
+        return parent::getSearchResults();
     }
 }

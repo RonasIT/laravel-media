@@ -1,0 +1,13 @@
+{
+    "data": [
+        {
+            "id": 6,
+            "link": "\/storage\/file.png",
+            "name": "file.png",
+            "is_public": false,
+            "meta": [
+                "test1"
+            ]
+        }
+    ]
+}

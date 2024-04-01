@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media;
 
+use Dotenv\Dotenv;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -16,18 +17,36 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
-    public function boot(): void
-    {
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-    }
-
     public function register(): void
     {
         $this->app->bind(CreateMediaRequestContract::class, CreateMediaRequest::class);
         $this->app->bind(BulkCreateMediaRequestContract::class, BulkCreateMediaRequest::class);
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
-
         $this->app->bind(MediaServiceContract::class, MediaService::class);
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
+        $this->mergeConfigFrom(__DIR__ . '/../config/defaults.php', 'defaults');
+
+        $this->includeEnvFile();
+    }
+
+    public function boot(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/media.php' => config_path('media.php'),
+        ], 'config');
+
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+    }
+
+    protected function includeEnvFile(): void
+    {
+        $envFilePath = __DIR__ . '/../.env';
+
+        if (file_exists($envFilePath)) {
+            $dotenv = Dotenv::createMutable(dirname($envFilePath));
+            $dotenv->load();
+        }
     }
 }

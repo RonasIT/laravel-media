@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use RonasIT\Media\Models\User;
 
 return [
     'permitted_types' => [

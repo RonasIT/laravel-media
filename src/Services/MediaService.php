@@ -27,12 +27,6 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function search(array $filters): LengthAwarePaginator
     {
-        if (!Auth::check()) {
-            $filters['is_public'] = true;
-        } else {
-            $filters['owner_id'] = Auth::id();
-        }
-
         return $this
             ->searchQuery($filters)
             ->filterByQuery(['name'])
