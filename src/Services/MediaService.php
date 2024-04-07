@@ -58,8 +58,8 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->delete($where);
     }
 
-    public function get(array $where = []): Collection
+    public function first(array|int $where = []): ?Model
     {
-        return $this->repository->get($where);
+        return $this->repository->first($where);
     }
 }

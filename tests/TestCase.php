@@ -40,12 +40,12 @@ class TestCase extends BaseTest
 
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('database.default', env('DB_DEFAULT'));
+        $app['config']->set('database.default', env('DB_DEFAULT', 'pgsql'));
         $app['config']->set('database.connections.pgsql', [
-            'driver' => env('DB_DRIVER'),
-            'host' => env('DB_HOST'),
-            'database' => env('DB_DATABASE'),
-            'username' => env('DB_USERNAME'),
+            'driver' => env('DB_DRIVER', 'pgsql'),
+            'host' => env('DB_HOST', 'pgsql'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
         ]);
     }
 

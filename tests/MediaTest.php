@@ -26,7 +26,6 @@ class MediaTest extends TestCase
         $this->admin = User::find(1);
         $this->user = User::find(2);
         $this->file = UploadedFile::fake()->image('file.png', 600, 600);
-
     }
 
     public function testCreate(): void

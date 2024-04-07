@@ -17,6 +17,14 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
+    public function boot(): void
+    {
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
+        $this->mergeConfigFrom(__DIR__ . '/../config/defaults.php', 'defaults');
+    }
+
     public function register(): void
     {
         $this->app->bind(CreateMediaRequestContract::class, CreateMediaRequest::class);
@@ -25,19 +33,7 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
-        $this->mergeConfigFrom(__DIR__ . '/../config/defaults.php', 'defaults');
-
         $this->includeEnvFile();
-    }
-
-    public function boot(): void
-    {
-        $this->publishes([
-            __DIR__.'/../config/media.php' => config_path('media.php'),
-        ], 'config');
-
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
     }
 
     protected function includeEnvFile(): void
