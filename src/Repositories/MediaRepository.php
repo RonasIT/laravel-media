@@ -15,11 +15,4 @@ class MediaRepository extends BaseRepository
     {
         $this->setModel(Media::class);
     }
-
-    public function getSearchResults(): LengthAwarePaginator
-    {
-        $this->query->applyMediaPermissionRestrictions();
-
-        return parent::getSearchResults();
-    }
 }

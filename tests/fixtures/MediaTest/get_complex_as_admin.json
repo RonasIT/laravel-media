@@ -8,30 +8,23 @@
             "meta": []
         },
         {
-            "id": 4,
-            "link": "http:\/\/localhost\/test4.jpg",
-            "name": "Photo",
+            "id": 1,
+            "link": "http:\/\/localhost\/test.jpg",
+            "name": "Product main photo",
             "is_public": true,
-            "meta": []
-        },
-        {
-            "id": 5,
-            "link": "http:\/\/localhost\/test5.jpg",
-            "name": "Private photo",
-            "is_public": false,
             "meta": []
         }
     ],
     "links": {
         "first": "http:\/\/localhost\/media?page=1",
-        "last": "http:\/\/localhost\/media?page=2",
+        "last": "http:\/\/localhost\/media?page=1",
         "prev": null,
-        "next": "http:\/\/localhost\/media?page=2"
+        "next": null
     },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 2,
+        "last_page": 1,
         "links": [
             {
                 "url": null,
@@ -44,19 +37,14 @@
                 "active": true
             },
             {
-                "url": "http:\/\/localhost\/media?page=2",
-                "label": "2",
-                "active": false
-            },
-            {
-                "url": "http:\/\/localhost\/media?page=2",
+                "url": null,
                 "label": "Next &raquo;",
                 "active": false
             }
         ],
         "path": "http:\/\/localhost\/media",
         "per_page": 3,
-        "to": 3,
-        "total": 4
+        "to": 2,
+        "total": 2
     }
 }

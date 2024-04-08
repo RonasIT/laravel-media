@@ -32,25 +32,6 @@ class Media extends Model
 
     protected $hidden = ['pivot'];
 
-    public function scopeApplyMediaPermissionRestrictions(Builder $query): void
-    {
-        if (!Auth::check()) {
-            $query->where('is_public', true);
-
-            return;
-        }
-
-        $user = Auth::user();
-
-        if (!$user->isAdmin()) {
-            $query->where(function ($subQuery) use ($user) {
-                $subQuery
-                    ->where('is_public', true)
-                    ->orWhere('owner_id', $user->id);
-            });
-        }
-    }
-
     public function owner(): BelongsTo
     {
         return $this->belongsTo(config('media.classes.user_model'));
