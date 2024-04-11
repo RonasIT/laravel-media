@@ -9,15 +9,19 @@ trait MediaTestTrait
 {
     use MockClassTrait;
 
-    public function mockGenerateFilename($callsCount = 1): void
+    public function mockGenerateFilename(...$fileNames): void
     {
+        if (empty($fileNames)) {
+            $fileNames = ['file.png'];
+        }
+
         $this->mockClass(
             class: MediaService::class,
-            callChain: array_fill(0, $callsCount, [
+            callChain: array_map(fn ($fileName) => [
                 'method' => 'generateName',
                 'arguments' => [],
-                'result' => 'file.png',
-            ])
+                'result' => $fileName,
+            ], $fileNames)
         );
     }
 }

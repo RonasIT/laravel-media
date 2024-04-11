@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Repositories;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use RonasIT\Media\Models\Media;
 use RonasIT\Support\Repositories\BaseRepository;
 

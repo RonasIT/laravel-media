@@ -22,7 +22,6 @@ class MediaServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
-        $this->mergeConfigFrom(__DIR__ . '/../config/defaults.php', 'defaults');
     }
 
     public function register(): void
@@ -32,17 +31,5 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
-
-        $this->includeEnvFile();
-    }
-
-    protected function includeEnvFile(): void
-    {
-        $envFilePath = __DIR__ . '/../.env';
-
-        if (file_exists($envFilePath)) {
-            $dotenv = Dotenv::createMutable(dirname($envFilePath));
-            $dotenv->load();
-        }
     }
 }
