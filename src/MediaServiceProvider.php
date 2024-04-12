@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media;
 
-use Dotenv\Dotenv;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
