@@ -3,11 +3,11 @@
 namespace RonasIT\Media\Tests\Support;
 
 use RonasIT\Media\Services\MediaService;
-use RonasIT\Support\Traits\MockClassTrait;
+use RonasIT\Support\Traits\MockTrait;
 
 trait MediaTestTrait
 {
-    use MockClassTrait;
+    use MockTrait;
 
     public function mockGenerateFilename(...$fileNames): void
     {
@@ -18,7 +18,7 @@ trait MediaTestTrait
         $this->mockClass(
             class: MediaService::class,
             callChain: array_map(fn ($fileName) => [
-                'method' => 'generateName',
+                'function' => 'generateName',
                 'arguments' => [],
                 'result' => $fileName,
             ], $fileNames)

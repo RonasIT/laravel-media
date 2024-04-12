@@ -21,7 +21,7 @@ class TestCase extends BaseTest
         $this->loadTestDump();
 
         if (config('database.default') === 'pgsql') {
-            $this->prepareSequences($this->getTables());
+            $this->prepareSequences();
         }
 
         putenv('FAIL_EXPORT_JSON=false');
