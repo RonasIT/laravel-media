@@ -8,6 +8,7 @@ use RonasIT\Media\Tests\Support\MediaTestTrait;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use RonasIT\Support\Tests\ModelTestState;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
 class MediaTest extends TestCase
@@ -155,24 +156,24 @@ class MediaTest extends TestCase
 
     public function testDeleteNoPermission(): void
     {
+        $modelTestState = new ModelTestState(Media::class);
+
         $response = $this->actingAs(self::$user)->json('delete', '/media/1');
 
         $response->assertForbidden();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 1,
-        ]);
+        $modelTestState->assertNotChanged();
     }
 
     public function testDeleteNoAuth(): void
     {
+        $modelTestState = new ModelTestState(Media::class);
+
         $response = $this->json('delete', '/media/1');
 
         $response->assertUnauthorized();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 1,
-        ]);
+        $modelTestState->assertNotChanged();
     }
 
     public function getSearchFilters(): array
