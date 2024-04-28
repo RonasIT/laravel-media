@@ -2,13 +2,14 @@
 
 namespace RonasIT\Media\Tests;
 
+use Carbon\Carbon;
 use RonasIT\Media\Models\User;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use RonasIT\Support\Tests\ModelTestState;
+use RonasIT\Media\Tests\Support\ModelTestState;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
 class MediaTest extends TestCase
@@ -19,6 +20,7 @@ class MediaTest extends TestCase
     protected static User $userOne;
     protected static User $userTwo;
     protected static File $file;
+    protected static ModelTestState $mediaTestState;
 
     public function setUp(): void
     {
@@ -27,28 +29,33 @@ class MediaTest extends TestCase
         self::$userOne ??= User::find(1);
         self::$userTwo ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
+        self::$mediaTestState ??= new ModelTestState(Media::class);
     }
 
     public function testCreate(): void
     {
         $this->mockGenerateFilename();
 
+        Carbon::setTestNow(Carbon::create(2024));
+
+        $mediaTestState = new ModelTestState(Media::class);
+
         $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 6,
-            'name' => 'file.png',
-            'owner_id' => self::$userOne->id,
-            'is_public' => false,
-            'link' => '/storage/file.png',
-        ]);
+        $mediaTestState->assertChangesEqualsFixture('create_changes.json');
+
+        Carbon::setTestNow();
     }
 
     public function testCreatePublic(): void
     {
         $this->mockGenerateFilename();
+
+        Carbon::setTestNow(Carbon::create(2024));
+
+        $mediaTestState = new ModelTestState(Media::class);
 
         $response = $this->actingAs(self::$userTwo)->json('post', '/media', [
             'file' => self::$file,
@@ -57,13 +64,9 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 6,
-            'name' => 'file.png',
-            'owner_id' => self::$userTwo->id,
-            'is_public' => true,
-            'link' => '/storage/file.png',
-        ]);
+        $mediaTestState->assertChangesEqualsFixture('create_public_changes.json');
+
+        Carbon::setTestNow();
     }
 
     public function testCreateCheckUrls(): void
@@ -75,20 +78,23 @@ class MediaTest extends TestCase
         $this->assertEquals(1, Media::where('link', 'like', '/%')->count());
     }
 
-    public function testCreateCheckResponse(): void
+    public function testCreateCheckFile(): void
     {
         $this->mockGenerateFilename();
+
+        Carbon::setTestNow(Carbon::create(2024));
+
+        $mediaTestState = new ModelTestState(Media::class);
 
         $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 6,
-            'link' => '/storage/file.png',
-        ]);
+        $mediaTestState->assertChangesEqualsFixture('create_check_file_changes.json');
 
         Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
+
+        Carbon::setTestNow();
 
         $this->clearUploadedFilesFolder();
     }
@@ -102,6 +108,10 @@ class MediaTest extends TestCase
 
     public function testBulkCreate(): void
     {
+        Carbon::setTestNow(Carbon::create(2024));
+
+        $mediaTestState = new ModelTestState(Media::class);
+
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
         $response = $this->actingAs(self::$userOne)->json('post', '/media/bulk', [
@@ -119,21 +129,9 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertDatabaseHas('media', [
-            'id' => 6,
-            'name' => 'file1.png',
-            'owner_id' => self::$userOne->id,
-            'meta' => "[\"test1\"]",
-            'is_public' => false,
-        ]);
+        $mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
 
-        $this->assertDatabaseHas('media', [
-            'id' => 7,
-            'name' => 'file2.png',
-            'owner_id' => self::$userOne->id,
-            'meta' => "[\"test2\"]",
-            'is_public' => false,
-        ]);
+        Carbon::setTestNow();
     }
 
     public function testDelete(): void
@@ -156,24 +154,20 @@ class MediaTest extends TestCase
 
     public function testDeleteNoPermission(): void
     {
-        $modelTestState = new ModelTestState(Media::class);
-
         $response = $this->actingAs(self::$userTwo)->json('delete', '/media/1');
 
         $response->assertForbidden();
 
-        $modelTestState->assertNotChanged();
+        self::$mediaTestState->assertNotChanged();
     }
 
     public function testDeleteNoAuth(): void
     {
-        $modelTestState = new ModelTestState(Media::class);
-
         $response = $this->json('delete', '/media/1');
 
         $response->assertUnauthorized();
 
-        $modelTestState->assertNotChanged();
+        self::$mediaTestState->assertNotChanged();
     }
 
     public function getSearchFilters(): array
@@ -323,12 +317,20 @@ class MediaTest extends TestCase
      */
     public function testUploadingGoodFiles(array $filter): void
     {
+        $this->mockGenerateFilename();
+
+        Carbon::setTestNow(Carbon::create(2024));
+
+        $mediaTestState = new ModelTestState(Media::class);
+
         self::$file = UploadedFile::fake()->image($filter['fileName'], 600, 600);
 
         $response = $this->actingAs(self::$userTwo)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $this->assertDatabaseHas('media', ['id' => 6]);
+        $mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
+
+        Carbon::setTestNow();
     }
 }

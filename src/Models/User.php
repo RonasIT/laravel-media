@@ -17,23 +17,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'set_password_hash_created_at',
-    ];
-
-    protected $guarded = [
-        'set_password_hash',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'set_password_hash',
-    ];
-
-    protected $casts = [
-        'is_public' => 'boolean',
-        'set_password_hash_created_at' => 'datetime',
     ];
 
     public function media(): HasMany

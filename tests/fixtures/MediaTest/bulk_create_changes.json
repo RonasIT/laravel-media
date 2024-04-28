@@ -1,0 +1,32 @@
+{
+    "updated": [],
+    "created": [
+        {
+            "id": 6,
+            "created_at": "2024-01-01 00:00:00",
+            "updated_at": "2024-01-01 00:00:00",
+            "deleted_at": null,
+            "link": "\/storage\/file1.png",
+            "name": "file1.png",
+            "is_public": false,
+            "owner_id": 1,
+            "meta": [
+                "test1"
+            ]
+        },
+        {
+            "id": 7,
+            "created_at": "2024-01-01 00:00:00",
+            "updated_at": "2024-01-01 00:00:00",
+            "deleted_at": null,
+            "link": "\/storage\/file2.png",
+            "name": "file2.png",
+            "is_public": false,
+            "owner_id": 1,
+            "meta": [
+                "test2"
+            ]
+        }
+    ],
+    "deleted": []
+}

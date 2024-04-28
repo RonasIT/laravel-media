@@ -2,14 +2,15 @@
 
 namespace RonasIT\Media\Tests;
 
-use Illuminate\Support\Arr;
 use Orchestra\Testbench\TestCase as BaseTest;
 use RonasIT\Media\MediaServiceProvider;
 use RonasIT\Support\Traits\FixturesTrait;
 
 class TestCase extends BaseTest
 {
-    use FixturesTrait;
+    use FixturesTrait {
+        getFixturePath as traitGetFixturePath;
+    }
 
     protected bool $globalExportMode = false;
 
@@ -29,11 +30,7 @@ class TestCase extends BaseTest
 
     public function getFixturePath(string $fixtureName): string
     {
-        $class = get_class($this);
-        $explodedClass = explode('\\', $class);
-        $className = Arr::last($explodedClass);
-
-        $path = base_path("tests/fixtures/{$className}/{$fixtureName}");
+        $path = $this->traitGetFixturePath($fixtureName);
 
         return str_replace('vendor/orchestra/testbench-core/laravel/', '', $path);
     }
