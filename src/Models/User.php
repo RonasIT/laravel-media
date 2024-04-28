@@ -3,7 +3,6 @@
 namespace RonasIT\Media\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use RonasIT\Support\Traits\ModelTrait;
@@ -19,7 +18,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
         'set_password_hash_created_at',
     ];
 
@@ -38,33 +36,8 @@ class User extends Authenticatable
         'set_password_hash_created_at' => 'datetime',
     ];
 
-    public function getJWTIdentifier(): int
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims(): array
-    {
-        return [];
-    }
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
     public function media(): HasMany
     {
         return $this->hasMany(Media::class, 'owner_id');
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role_id === Role::ADMIN;
-    }
-
-    public function isUser(): bool
-    {
-        return $this->role_id === Role::USER;
     }
 }

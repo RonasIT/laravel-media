@@ -16,16 +16,16 @@ class MediaTest extends TestCase
     use FilesUploadTrait;
     use MediaTestTrait;
 
-    protected static User $admin;
-    protected static User $user;
+    protected static User $userOne;
+    protected static User $userTwo;
     protected static File $file;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        self::$admin ??= User::find(1);
-        self::$user ??= User::find(2);
+        self::$userOne ??= User::find(1);
+        self::$userTwo ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
     }
 
@@ -33,14 +33,14 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $response = $this->actingAs(self::$admin)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
         $this->assertDatabaseHas('media', [
             'id' => 6,
             'name' => 'file.png',
-            'owner_id' => self::$admin->id,
+            'owner_id' => self::$userOne->id,
             'is_public' => false,
             'link' => '/storage/file.png',
         ]);
@@ -50,7 +50,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $response = $this->actingAs(self::$user)->json('post', '/media', [
+        $response = $this->actingAs(self::$userTwo)->json('post', '/media', [
             'file' => self::$file,
             'is_public' => true,
         ]);
@@ -60,7 +60,7 @@ class MediaTest extends TestCase
         $this->assertDatabaseHas('media', [
             'id' => 6,
             'name' => 'file.png',
-            'owner_id' => self::$user->id,
+            'owner_id' => self::$userTwo->id,
             'is_public' => true,
             'link' => '/storage/file.png',
         ]);
@@ -70,7 +70,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $this->actingAs(self::$admin)->json('post', '/media', ['file' => self::$file]);
+        $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
 
         $this->assertEquals(1, Media::where('link', 'like', '/%')->count());
     }
@@ -79,7 +79,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $response = $this->actingAs(self::$admin)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
@@ -104,7 +104,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
-        $response = $this->actingAs(self::$admin)->json('post', '/media/bulk', [
+        $response = $this->actingAs(self::$userOne)->json('post', '/media/bulk', [
             'media' => [
                 [
                     'file' => self::$file,
@@ -122,7 +122,7 @@ class MediaTest extends TestCase
         $this->assertDatabaseHas('media', [
             'id' => 6,
             'name' => 'file1.png',
-            'owner_id' => self::$admin->id,
+            'owner_id' => self::$userOne->id,
             'meta' => "[\"test1\"]",
             'is_public' => false,
         ]);
@@ -130,7 +130,7 @@ class MediaTest extends TestCase
         $this->assertDatabaseHas('media', [
             'id' => 7,
             'name' => 'file2.png',
-            'owner_id' => self::$admin->id,
+            'owner_id' => self::$userOne->id,
             'meta' => "[\"test2\"]",
             'is_public' => false,
         ]);
@@ -138,7 +138,7 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
-        $response = $this->actingAs(self::$admin)->json('delete', '/media/1');
+        $response = $this->actingAs(self::$userOne)->json('delete', '/media/1');
 
         $response->assertNoContent();
 
@@ -149,7 +149,7 @@ class MediaTest extends TestCase
 
     public function testDeleteNotExists(): void
     {
-        $response = $this->actingAs(self::$admin)->json('delete', '/media/0');
+        $response = $this->actingAs(self::$userOne)->json('delete', '/media/0');
 
         $response->assertNotFound();
     }
@@ -158,7 +158,7 @@ class MediaTest extends TestCase
     {
         $modelTestState = new ModelTestState(Media::class);
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/1');
+        $response = $this->actingAs(self::$userTwo)->json('delete', '/media/1');
 
         $response->assertForbidden();
 
@@ -191,7 +191,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['query' => 'product'],
-                'result' => 'get_by_query_as_admin.json',
+                'result' => 'get_by_query_as_user_one.json',
             ],
             [
                 'filter' => [
@@ -200,7 +200,7 @@ class MediaTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'result' => 'get_complex_as_admin.json',
+                'result' => 'get_complex_as_user_one.json',
             ],
         ];
     }
@@ -210,7 +210,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['query' => 'product'],
-                'result' => 'get_by_query_as_user.json',
+                'result' => 'get_by_query_as_user_two.json',
             ],
             [
                 'filter' => [
@@ -219,7 +219,7 @@ class MediaTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'result' => 'get_complex_as_user.json',
+                'result' => 'get_complex_as_user_two.json',
             ],
         ];
     }
@@ -247,7 +247,7 @@ class MediaTest extends TestCase
      */
     public function testSearchByAdmin($filter, $fixture)
     {
-        $response = $this->actingAs(self::$admin)->json('get', '/media', $filter);
+        $response = $this->actingAs(self::$userOne)->json('get', '/media', $filter);
 
         $response->assertOk();
 
@@ -262,7 +262,7 @@ class MediaTest extends TestCase
      */
     public function testSearchByUser(array $filter, string $fixture): void
     {
-        $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
+        $response = $this->actingAs(self::$userTwo)->json('get', '/media', $filter);
 
         $response->assertOk();
 
@@ -290,7 +290,7 @@ class MediaTest extends TestCase
     {
         self::$file = UploadedFile::fake()->create($filter['fileName'], 1024);
 
-        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$userTwo)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertUnprocessable();
 
@@ -325,7 +325,7 @@ class MediaTest extends TestCase
     {
         self::$file = UploadedFile::fake()->image($filter['fileName'], 600, 600);
 
-        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$userTwo)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
