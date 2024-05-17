@@ -21,4 +21,6 @@ interface MediaServiceContract
     public function delete($where): int;
 
     public function first(int|array $where = []): ?Model;
+
+    public function __toString(): string;
 }

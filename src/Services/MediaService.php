@@ -68,4 +68,9 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         return $this->repository->first($where);
     }
+
+    public function __toString(): string
+    {
+        return __CLASS__;
+    }
 }
