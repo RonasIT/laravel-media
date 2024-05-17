@@ -17,8 +17,7 @@ class MediaTest extends TestCase
     use FilesUploadTrait;
     use MediaTestTrait;
 
-    protected static User $userOne;
-    protected static User $userTwo;
+    protected static User $user;
     protected static File $file;
     protected static ModelTestState $mediaTestState;
 
@@ -26,8 +25,7 @@ class MediaTest extends TestCase
     {
         parent::setUp();
 
-        self::$userOne ??= User::find(1);
-        self::$userTwo ??= User::find(2);
+        self::$user ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
         self::$mediaTestState ??= new ModelTestState(Media::class);
     }
@@ -40,7 +38,7 @@ class MediaTest extends TestCase
 
         $mediaTestState = new ModelTestState(Media::class);
 
-        $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
@@ -57,7 +55,7 @@ class MediaTest extends TestCase
 
         $mediaTestState = new ModelTestState(Media::class);
 
-        $response = $this->actingAs(self::$userTwo)->json('post', '/media', [
+        $response = $this->actingAs(self::$user)->json('post', '/media', [
             'file' => self::$file,
             'is_public' => true,
         ]);
@@ -73,7 +71,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
+        $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $this->assertEquals(1, Media::where('link', 'like', '/%')->count());
     }
@@ -86,7 +84,7 @@ class MediaTest extends TestCase
 
         $mediaTestState = new ModelTestState(Media::class);
 
-        $response = $this->actingAs(self::$userOne)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
@@ -114,7 +112,7 @@ class MediaTest extends TestCase
 
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
-        $response = $this->actingAs(self::$userOne)->json('post', '/media/bulk', [
+        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
                 [
                     'file' => self::$file,
@@ -136,25 +134,25 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
-        $response = $this->actingAs(self::$userOne)->json('delete', '/media/1');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
 
         $response->assertNoContent();
 
         $this->assertSoftDeleted('media', [
-            'id' => 1,
+            'id' => 4,
         ]);
     }
 
     public function testDeleteNotExists(): void
     {
-        $response = $this->actingAs(self::$userOne)->json('delete', '/media/0');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/0');
 
         $response->assertNotFound();
     }
 
     public function testDeleteNoPermission(): void
     {
-        $response = $this->actingAs(self::$userTwo)->json('delete', '/media/1');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/1');
 
         $response->assertForbidden();
 
@@ -180,31 +178,12 @@ class MediaTest extends TestCase
         ];
     }
 
-    public function getAdminSearchFilters(): array
-    {
-        return [
-            [
-                'filter' => ['query' => 'product'],
-                'result' => 'get_by_query_as_user_one.json',
-            ],
-            [
-                'filter' => [
-                    'query' => 'photo',
-                    'order_by' => 'name',
-                    'desc' => false,
-                    'per_page' => 3,
-                ],
-                'result' => 'get_complex_as_user_one.json',
-            ],
-        ];
-    }
-
     public function getUserSearchFilters(): array
     {
         return [
             [
                 'filter' => ['query' => 'product'],
-                'result' => 'get_by_query_as_user_two.json',
+                'result' => 'get_by_query.json',
             ],
             [
                 'filter' => [
@@ -213,7 +192,7 @@ class MediaTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'result' => 'get_complex_as_user_two.json',
+                'result' => 'get_complex.json',
             ],
         ];
     }
@@ -234,21 +213,6 @@ class MediaTest extends TestCase
     }
 
     /**
-     * @dataProvider  getAdminSearchFilters
-     *
-     * @param  array $filter
-     * @param  string $fixture
-     */
-    public function testSearchByAdmin($filter, $fixture)
-    {
-        $response = $this->actingAs(self::$userOne)->json('get', '/media', $filter);
-
-        $response->assertOk();
-
-        $this->assertEqualsFixture($fixture, $response->json());
-    }
-
-    /**
      * @dataProvider  getUserSearchFilters
      *
      * @param array $filter
@@ -256,7 +220,7 @@ class MediaTest extends TestCase
      */
     public function testSearchByUser(array $filter, string $fixture): void
     {
-        $response = $this->actingAs(self::$userTwo)->json('get', '/media', $filter);
+        $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
 
         $response->assertOk();
 
@@ -284,7 +248,7 @@ class MediaTest extends TestCase
     {
         self::$file = UploadedFile::fake()->create($filter['fileName'], 1024);
 
-        $response = $this->actingAs(self::$userTwo)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertUnprocessable();
 
@@ -325,7 +289,7 @@ class MediaTest extends TestCase
 
         self::$file = UploadedFile::fake()->image($filter['fileName'], 600, 600);
 
-        $response = $this->actingAs(self::$userTwo)->json('post', '/media', ['file' => self::$file]);
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 

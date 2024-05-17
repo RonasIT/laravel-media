@@ -9,7 +9,7 @@
             "link": "\/storage\/file1.png",
             "name": "file1.png",
             "is_public": false,
-            "owner_id": 1,
+            "owner_id": 2,
             "meta": [
                 "test1"
             ]
@@ -22,7 +22,7 @@
             "link": "\/storage\/file2.png",
             "name": "file2.png",
             "is_public": false,
-            "owner_id": 1,
+            "owner_id": 2,
             "meta": [
                 "test2"
             ]
