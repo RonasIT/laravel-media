@@ -10,6 +10,8 @@
             "name": "file1.png",
             "is_public": false,
             "owner_id": 2,
+            "preview_name": "file1_preview.png",
+            "preview_link": "\/storage\/file1_preview.png",
             "meta": [
                 "test1"
             ]
@@ -23,6 +25,8 @@
             "name": "file2.png",
             "is_public": false,
             "owner_id": 2,
+            "preview_name": "file2_preview.png",
+            "preview_link": "\/storage\/file2_preview.png",
             "meta": [
                 "test2"
             ]

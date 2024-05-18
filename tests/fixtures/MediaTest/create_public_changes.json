@@ -10,6 +10,8 @@
             "name": "file.png",
             "is_public": true,
             "owner_id": 2,
+            "preview_name": "file_preview.png",
+            "preview_link": "\/storage\/file_preview.png",
             "meta": []
         }
     ],

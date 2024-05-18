@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Services;
 
-use Illuminate\Support\Collection;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
+use Spatie\Image\Image;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property MediaRepository $repository
@@ -19,6 +20,7 @@ use RonasIT\Support\Traits\FilesUploadTrait;
 class MediaService extends EntityService implements MediaServiceContract
 {
     use FilesUploadTrait;
+    use InteractsWithMedia;
 
     public function __construct()
     {
@@ -45,6 +47,8 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
+        $data['preview_name'] = $this->createPreview($data['name']);
+        $data['preview_link'] = Storage::url($data['preview_name']);
 
         return $this->repository->create($data);
     }
@@ -67,6 +71,23 @@ class MediaService extends EntityService implements MediaServiceContract
     public function first(array|int $where = []): ?Model
     {
         return $this->repository->first($where);
+    }
+
+    public function createPreview(string $name): string
+    {
+        $pathinfo = pathinfo($name);
+        $newName = $pathinfo['filename'] . '_preview.' . $pathinfo['extension'];
+
+        $link = Storage::path($name);
+        $dirname = pathinfo($link)['dirname'];
+        $newLink = "{$dirname}/$newName";
+
+        Image::load($link)
+            ->width(250)
+            ->height(250)
+            ->save($newLink);
+
+        return $newName;
     }
 
     public function __toString(): string
