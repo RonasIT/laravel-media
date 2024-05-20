@@ -4,7 +4,6 @@ namespace RonasIT\Media\Contracts\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 interface MediaServiceContract
 {
@@ -21,6 +20,4 @@ interface MediaServiceContract
     public function delete($where): int;
 
     public function first(int|array $where = []): ?Model;
-
-    public function __toString(): string;
 }

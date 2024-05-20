@@ -2,13 +2,12 @@
 
 namespace RonasIT\Media\Tests;
 
-use Carbon\Carbon;
-use RonasIT\Media\Models\User;
-use RonasIT\Media\Models\Media;
-use RonasIT\Media\Tests\Support\MediaTestTrait;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use RonasIT\Media\Models\Media;
+use RonasIT\Media\Tests\Models\User;
+use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
@@ -34,26 +33,16 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        Carbon::setTestNow(Carbon::create(2024));
-
-        $mediaTestState = new ModelTestState(Media::class);
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $mediaTestState->assertChangesEqualsFixture('create_changes.json');
-
-        Carbon::setTestNow();
+        self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
     }
 
     public function testCreatePublic(): void
     {
         $this->mockGenerateFilename();
-
-        Carbon::setTestNow(Carbon::create(2024));
-
-        $mediaTestState = new ModelTestState(Media::class);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', [
             'file' => self::$file,
@@ -62,37 +51,18 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        $mediaTestState->assertChangesEqualsFixture('create_public_changes.json');
-
-        Carbon::setTestNow();
-    }
-
-    public function testCreateCheckUrls(): void
-    {
-        $this->mockGenerateFilename();
-
-        $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
-
-        $this->assertEquals(1, Media::where('link', 'like', '/%')->count());
+        self::$mediaTestState->assertChangesEqualsFixture('create_public_changes.json');
     }
 
     public function testCreateCheckFile(): void
     {
         $this->mockGenerateFilename();
 
-        Carbon::setTestNow(Carbon::create(2024));
-
-        $mediaTestState = new ModelTestState(Media::class);
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $mediaTestState->assertChangesEqualsFixture('create_check_file_changes.json');
-
         Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
-
-        Carbon::setTestNow();
 
         $this->clearUploadedFilesFolder();
     }
@@ -106,10 +76,6 @@ class MediaTest extends TestCase
 
     public function testBulkCreate(): void
     {
-        Carbon::setTestNow(Carbon::create(2024));
-
-        $mediaTestState = new ModelTestState(Media::class);
-
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
@@ -127,9 +93,7 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        $mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
-
-        Carbon::setTestNow();
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
     }
 
     public function testDelete(): void
@@ -138,9 +102,7 @@ class MediaTest extends TestCase
 
         $response->assertNoContent();
 
-        $this->assertSoftDeleted('media', [
-            'id' => 4,
-        ]);
+        self::$mediaTestState->assertChangesEqualsFixture('delete_changes.json');
     }
 
     public function testDeleteNotExists(): void
@@ -198,7 +160,7 @@ class MediaTest extends TestCase
     }
 
     /**
-     * @dataProvider  getSearchFilters
+     * @dataProvider getSearchFilters
      *
      * @param array $filter
      * @param string $fixture
@@ -213,12 +175,12 @@ class MediaTest extends TestCase
     }
 
     /**
-     * @dataProvider  getUserSearchFilters
+     * @dataProvider getUserSearchFilters
      *
      * @param array $filter
      * @param string $fixture
      */
-    public function testSearchByUser(array $filter, string $fixture): void
+    public function testSearchWithAuth(array $filter, string $fixture): void
     {
         $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
 
@@ -231,22 +193,22 @@ class MediaTest extends TestCase
     {
         return [
             [
-                'filter' => ['fileName' => 'notAVirus.exe'],
+                'fileName' => 'notAVirus.exe',
             ],
             [
-                'filter' => ['fileName' => 'notAVirus.psd'],
+                'fileName' => 'notAVirus.psd',
             ],
         ];
     }
 
     /**
-     * @dataProvider  getBadFiles
+     * @dataProvider getBadFiles
      *
-     * @param array $filter
+     * @param string $fileName
      */
-    public function testUploadingBadFiles(array $filter): void
+    public function testUploadingBadFiles(string $fileName): void
     {
-        self::$file = UploadedFile::fake()->create($filter['fileName'], 1024);
+        self::$file = UploadedFile::fake()->create($fileName, 1024);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
@@ -263,38 +225,32 @@ class MediaTest extends TestCase
     {
         return [
             [
-                'filter' => ['fileName' => 'image.jpg'],
+                'fileName' => 'image.jpg',
             ],
             [
-                'filter' => ['fileName' => 'image.png'],
+                'fileName' => 'image.png',
             ],
             [
-                'filter' => ['fileName' => 'image.bmp'],
+                'fileName' => 'image.bmp',
             ],
         ];
     }
 
     /**
-     * @dataProvider  getGoodFiles
+     * @dataProvider getGoodFiles
      *
-     * @param array $filter
+     * @param string $fileName
      */
-    public function testUploadingGoodFiles(array $filter): void
+    public function testUploadingGoodFiles(string $fileName): void
     {
         $this->mockGenerateFilename();
 
-        Carbon::setTestNow(Carbon::create(2024));
-
-        $mediaTestState = new ModelTestState(Media::class);
-
-        self::$file = UploadedFile::fake()->image($filter['fileName'], 600, 600);
+        self::$file = UploadedFile::fake()->image($fileName, 600, 600);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        $mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
-
-        Carbon::setTestNow();
+        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
     }
 }
