@@ -18,7 +18,10 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
     }
 
@@ -28,7 +31,6 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(BulkCreateMediaRequestContract::class, BulkCreateMediaRequest::class);
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
-
         $this->app->bind(MediaServiceContract::class, MediaService::class);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace RonasIT\Media\Http\Requests;
 
-use App\Http\Requests\Request;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Support\BaseRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class DeleteMediaRequest extends Request implements DeleteMediaRequestContract
+class DeleteMediaRequest extends BaseRequest implements DeleteMediaRequestContract
 {
     protected $media;
 

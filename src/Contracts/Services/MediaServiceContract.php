@@ -4,7 +4,6 @@ namespace RonasIT\Media\Contracts\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 interface MediaServiceContract
 {
