@@ -31,8 +31,6 @@ class TestCase extends BaseTest
             $this->prepareSequences();
         }
 
-        putenv('FAIL_EXPORT_JSON=false');
-
         Carbon::setTestNow(Carbon::create(2024));
     }
 
