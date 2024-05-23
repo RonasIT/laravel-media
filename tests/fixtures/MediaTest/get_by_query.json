@@ -1,5 +1,13 @@
 {
-    "data": [],
+    "data": [
+        {
+            "id": 6,
+            "link": "http:\/\/localhost\/test6.jpg",
+            "name": "Product photo with owner 2",
+            "is_public": false,
+            "meta": []
+        }
+    ],
     "links": {
         "first": "http:\/\/localhost\/media?page=1",
         "last": "http:\/\/localhost\/media?page=1",
@@ -8,7 +16,7 @@
     },
     "meta": {
         "current_page": 1,
-        "from": null,
+        "from": 1,
         "last_page": 1,
         "links": [
             {
@@ -29,7 +37,7 @@
         ],
         "path": "http:\/\/localhost\/media",
         "per_page": 15,
-        "to": null,
-        "total": 0
+        "to": 1,
+        "total": 1
     }
 }

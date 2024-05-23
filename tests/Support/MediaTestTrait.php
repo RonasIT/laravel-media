@@ -2,7 +2,7 @@
 
 namespace RonasIT\Media\Tests\Support;
 
-use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Media\Services\MediaService;
 use RonasIT\Support\Traits\MockTrait;
 
 trait MediaTestTrait
@@ -16,7 +16,7 @@ trait MediaTestTrait
         }
 
         $this->mockClass(
-            class: (string) app(MediaServiceContract::class),
+            class: MediaService::class,
             callChain: array_map(fn ($fileName) => [
                 'function' => 'generateName',
                 'arguments' => [],

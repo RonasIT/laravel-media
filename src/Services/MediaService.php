@@ -89,9 +89,4 @@ class MediaService extends EntityService implements MediaServiceContract
 
         return $newName;
     }
-
-    public function __toString(): string
-    {
-        return __CLASS__;
-    }
 }

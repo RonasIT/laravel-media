@@ -1,0 +1,378 @@
+{
+    "swagger": "2.0",
+    "host": "localhost",
+    "basePath": "\/",
+    "schemes": [],
+    "paths": {
+        "\/media": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "consumes": [
+                    "application\/json"
+                ],
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#\/definitions\/mediaObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "example": {
+                                "id": 6,
+                                "link": "\/storage\/0_17070200_1713103282_a9183fb2f4283cc5265593bf7a592749.bmp",
+                                "name": "0_17070200_1713103282_a9183fb2f4283cc5265593bf7a592749.bmp",
+                                "is_public": false,
+                                "meta": []
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "example": {
+                                "error": "Unauthenticated."
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Content",
+                        "schema": {
+                            "example": {
+                                "message": "The file must be a file of type: jpg, jpeg, bmp, png.",
+                                "errors": {
+                                    "file": [
+                                        "The file must be a file of type: jpg, jpeg, bmp, png."
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "description": "",
+                "summary": "create media"
+            },
+            "get": {
+                "tags": [
+                    "media"
+                ],
+                "consumes": [
+                    "application\/json"
+                ],
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "integer",
+                        "type": "integer"
+                    },
+                    {
+                        "in": "query",
+                        "name": "per_page",
+                        "description": "integer",
+                        "type": "integer"
+                    },
+                    {
+                        "in": "query",
+                        "name": "all",
+                        "description": "integer",
+                        "type": "integer"
+                    },
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "string",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order_by",
+                        "description": "string, in:link,name",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "desc",
+                        "description": "boolean",
+                        "type": "boolean"
+                    },
+                    {
+                        "in": "query",
+                        "name": "name",
+                        "description": "string",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operation successfully done",
+                        "schema": {
+                            "example": {
+                                "data": [
+                                    {
+                                        "id": 4,
+                                        "link": "http:\/\/localhost\/test4.jpg",
+                                        "name": "Photo",
+                                        "is_public": true,
+                                        "meta": []
+                                    },
+                                    {
+                                        "id": 5,
+                                        "link": "http:\/\/localhost\/test5.jpg",
+                                        "name": "Private photo",
+                                        "is_public": false,
+                                        "meta": []
+                                    }
+                                ],
+                                "links": {
+                                    "first": "http:\/\/localhost\/media?page=1",
+                                    "last": "http:\/\/localhost\/media?page=1",
+                                    "prev": null,
+                                    "next": null
+                                },
+                                "meta": {
+                                    "current_page": 1,
+                                    "from": 1,
+                                    "last_page": 1,
+                                    "links": [
+                                        {
+                                            "url": null,
+                                            "label": "&laquo; Previous",
+                                            "active": false
+                                        },
+                                        {
+                                            "url": "http:\/\/localhost\/media?page=1",
+                                            "label": "1",
+                                            "active": true
+                                        },
+                                        {
+                                            "url": null,
+                                            "label": "Next &raquo;",
+                                            "active": false
+                                        }
+                                    ],
+                                    "path": "http:\/\/localhost\/media",
+                                    "per_page": 3,
+                                    "to": 2,
+                                    "total": 2
+                                },
+                                "to": 2,
+                                "total": 2
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "description": "",
+                "summary": "search media"
+            }
+        },
+        "\/media\/bulk": {
+            "post": {
+                "tags": [
+                    "media"
+                ],
+                "consumes": [
+                    "application\/json"
+                ],
+                "produces": [
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#\/definitions\/mediabulkObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operation successfully done",
+                        "schema": {
+                            "example": {
+                                "data": [
+                                    {
+                                        "id": 6,
+                                        "link": "\/storage\/file1.png",
+                                        "name": "file1.png",
+                                        "is_public": false,
+                                        "meta": [
+                                            "test1"
+                                        ]
+                                    },
+                                    {
+                                        "id": 7,
+                                        "link": "\/storage\/file2.png",
+                                        "name": "file2.png",
+                                        "is_public": false,
+                                        "meta": [
+                                            "test2"
+                                        ]
+                                    }
+                                ],
+                                "to": 2,
+                                "total": 2
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "description": "",
+                "summary": "bulk create media"
+            }
+        },
+        "\/media\/{id}": {
+            "delete": {
+                "tags": [
+                    "media"
+                ],
+                "consumes": [
+                    "application\/json"
+                ],
+                "produces": [
+                    "text\/plain",
+                    "application\/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Operation successfully done",
+                        "examples": {
+                            "example": "null"
+                        }
+                    },
+                    "404": {
+                        "description": "This entity not found",
+                        "schema": {
+                            "example": {
+                                "error": "Media does not exist"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "example": {
+                                "error": "This action is unauthorized."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "example": {
+                                "error": "Unauthenticated."
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "description": "",
+                "summary": "delete media"
+            }
+        }
+    },
+    "definitions": {
+        "mediaObject": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string",
+                    "description": "file, max:5120, mimes:jpg,jpeg,bmp,png"
+                },
+                "meta": {
+                    "type": "object",
+                    "description": ""
+                },
+                "is_public": {
+                    "type": "boolean",
+                    "description": ""
+                }
+            },
+            "required": [
+                "file"
+            ],
+            "example": {
+                "file": "[uploaded_file]"
+            }
+        },
+        "mediabulkObject": {
+            "type": "object",
+            "properties": {
+                "media": {
+                    "type": "object",
+                    "description": ""
+                },
+                "media.*": {
+                    "type": "object",
+                    "description": ""
+                },
+                "media.*.file": {
+                    "type": "string",
+                    "description": "file, max:5120, mimes:jpg,jpeg,bmp,png"
+                },
+                "media.*.meta": {
+                    "type": "object",
+                    "description": ""
+                },
+                "media.*.is_public": {
+                    "type": "boolean",
+                    "description": ""
+                }
+            },
+            "required": [
+                "media",
+                "media.*.file"
+            ],
+            "example": {
+                "media": [
+                    {
+                        "meta": [
+                            "test1"
+                        ],
+                        "file": "[uploaded_file]"
+                    },
+                    {
+                        "meta": [
+                            "test2"
+                        ],
+                        "file": "[uploaded_file]"
+                    }
+                ]
+            }
+        }
+    },
+    "info": {
+        "description": "Documentation for the Media API, describes all endpoints, provided by the package.",
+        "version": "0.0.1",
+        "title": "RonasIT/laravel-media",
+    }
+}

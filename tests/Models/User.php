@@ -1,12 +1,13 @@
 <?php
 
-namespace RonasIT\Media\Models;
+namespace RonasIT\Media\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Notifications\Notifiable;
-use RonasIT\Support\Traits\ModelTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use RonasIT\Media\Models\Media;
+use RonasIT\Support\Traits\ModelTrait;
 
 class User extends Authenticatable
 {
