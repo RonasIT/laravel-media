@@ -2,7 +2,19 @@
     "updated": [],
     "created": [
         {
-            "id": 7,
+            "id": 13,
+            "created_at": "2024-01-01 00:00:00",
+            "updated_at": "2024-01-01 00:00:00",
+            "deleted_at": null,
+            "link": "\/app\/vendor\/orchestra\/testbench-core\/laravel\/storage\/app\/preview_file.png",
+            "name": "preview_file.png",
+            "is_public": false,
+            "owner_id": 2,
+            "preview_id": null,
+            "meta": []
+        },
+        {
+            "id": 14,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
             "deleted_at": null,
@@ -10,8 +22,7 @@
             "name": "file.png",
             "is_public": true,
             "owner_id": 2,
-            "preview_name": "file_preview.png",
-            "preview_link": "\/storage\/file_preview.png",
+            "preview_id": "13",
             "meta": []
         }
     ],

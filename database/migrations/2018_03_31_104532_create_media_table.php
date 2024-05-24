@@ -16,8 +16,7 @@ class CreateMediaTable extends Migration
             $table->string('name')->unique();
             $table->boolean('is_public')->default(false);
             $table->integer('owner_id')->nullable();
-            $table->string('preview_name');
-            $table->string('preview_link');
+            $table->string('preview_id')->nullable();
 
             if (config('database.default') == 'mysql') {
                 $table->jsonb('meta')->nullable();

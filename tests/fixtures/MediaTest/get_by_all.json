@@ -2,13 +2,27 @@
     "data": [
         {
             "id": 1,
+            "link": "http:\/\/localhost\/test_preview_1.jpg",
+            "name": "preview_Product main photo",
+            "is_public": true,
+            "meta": []
+        },
+        {
+            "id": 4,
+            "link": "http:\/\/localhost\/test_preview_4.jpg",
+            "name": "preview_Photo",
+            "is_public": true,
+            "meta": []
+        },
+        {
+            "id": 7,
             "link": "http:\/\/localhost\/test.jpg",
             "name": "Product main photo",
             "is_public": true,
             "meta": []
         },
         {
-            "id": 4,
+            "id": 10,
             "link": "http:\/\/localhost\/test4.jpg",
             "name": "Photo",
             "is_public": true,
@@ -43,8 +57,8 @@
             }
         ],
         "path": "http:\/\/localhost\/media",
-        "per_page": 2,
-        "to": 2,
-        "total": 2
+        "per_page": 4,
+        "to": 4,
+        "total": 4
     }
 }

@@ -13,4 +13,9 @@ return [
     'classes' => [
         'user_model' => User::class,
     ],
+
+    'preview' => [
+        'width' => 250,
+        'height' => 250,
+    ],
 ];
