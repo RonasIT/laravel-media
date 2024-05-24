@@ -27,6 +27,8 @@ class MediaTest extends TestCase
         self::$user ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
         self::$mediaTestState ??= new ModelTestState(Media::class);
+
+        Storage::fake();
     }
 
     public function testCreate(): void
@@ -98,11 +100,16 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
+        $filePath = 'Photo';
+        Storage::put($filePath, 'content');
+
         $response = $this->actingAs(self::$user)->json('delete', '/media/4');
 
         $response->assertNoContent();
 
         self::$mediaTestState->assertChangesEqualsFixture('delete_changes.json');
+
+        Storage::assertMissing($filePath);
     }
 
     public function testDeleteNotExists(): void
