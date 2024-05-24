@@ -1,0 +1,35 @@
+name: Run tests with coverage
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  tests-with-coverage:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: docker-compose.yml
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare .env
+        run: cp .env.testing .env
+
+      - name: Docker-Compose Up
+        run: docker-compose up -d
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Execute unit tests via PHPUnit with coverage
+        run: docker-compose exec -T nginx php -d xdebug.mode=off vendor/bin/phpunit --coverage-clover build/logs/clover.xml --stop-on-failure ./tests/
+
+#      - name: Upload coverage results to Coveralls
+#        env:
+#          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          composer global require php-coveralls/php-coveralls
+#          php-coveralls --coverage_clover=build/logs/clover.xml -v
