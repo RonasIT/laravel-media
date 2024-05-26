@@ -75,17 +75,16 @@ class MediaService extends EntityService implements MediaServiceContract
     public function createPreview(string $name): Model
     {
         $link = Storage::path($name);
-        $name = "preview_{$name}";
-        $dirname = pathinfo($link)['dirname'];
-        $newLink = "{$dirname}/{$name}";
 
         Image::load($link)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
-            ->save($newLink);
+            ->save();
 
+        $name = "preview_{$name}";
         $data['name'] = $name;
-        $data['link'] = $newLink;
+        $dirname = pathinfo($link)['dirname'];
+        $data['link'] = "{$dirname}/{$name}";
         $data['owner_id'] = Auth::id();
 
         return $this->repository->create($data);
