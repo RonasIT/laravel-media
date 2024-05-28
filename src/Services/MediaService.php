@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
+use Spatie\Image\Image;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property MediaRepository $repository
@@ -18,6 +20,7 @@ use RonasIT\Support\Traits\FilesUploadTrait;
 class MediaService extends EntityService implements MediaServiceContract
 {
     use FilesUploadTrait;
+    use InteractsWithMedia;
 
     public function __construct()
     {
@@ -44,6 +47,7 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
+        $data['preview_id'] = $this->createPreview($data['name'])->id;
 
         return $this->repository->create($data);
     }
@@ -70,5 +74,23 @@ class MediaService extends EntityService implements MediaServiceContract
     public function first(array|int $where = []): ?Model
     {
         return $this->repository->first($where);
+    }
+
+    public function createPreview(string $name): Model
+    {
+        $link = Storage::path($name);
+
+        Image::load($link)
+            ->width(config('media.preview.width'))
+            ->height(config('media.preview.height'))
+            ->save();
+
+        $name = "preview_{$name}";
+        $data['name'] = $name;
+        $dirname = pathinfo($link)['dirname'];
+        $data['link'] = "{$dirname}/{$name}";
+        $data['owner_id'] = Auth::id();
+
+        return $this->repository->create($data);
     }
 }
