@@ -20,7 +20,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "9.6.13",
-    "orchestra/testbench": "^8.0"
+    "orchestra/testbench": "^8.0",
+    "php-coveralls/php-coveralls": "^0.1.0"
   },
   "autoload": {
     "psr-4": {
