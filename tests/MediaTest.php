@@ -100,7 +100,7 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
-        $filePath = 'Photo';
+        $filePath = 'preview_Photo';
         Storage::put($filePath, 'content');
 
         $response = $this->actingAs(self::$user)->json('delete', '/media/4');
