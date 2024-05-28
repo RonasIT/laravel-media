@@ -373,6 +373,6 @@
     "info": {
         "description": "Documentation for the Media API, describes all endpoints, provided by the package.",
         "version": "0.0.1",
-        "title": "RonasIT/laravel-media",
+        "title": "RonasIT/laravel-media"
     }
 }

@@ -1,37 +1,37 @@
 {
     "data": [
         {
-            "id": 4,
+            "id": 10,
             "link": "http:\/\/localhost\/test4.jpg",
             "name": "Photo",
             "is_public": true,
             "meta": []
         },
         {
-            "id": 5,
-            "link": "http:\/\/localhost\/test5.jpg",
-            "name": "Private photo",
-            "is_public": false,
+            "id": 4,
+            "link": "http:\/\/localhost\/test_preview_4.jpg",
+            "name": "preview_Photo",
+            "is_public": true,
             "meta": []
         },
         {
-            "id": 6,
-            "link": "http:\/\/localhost\/test6.jpg",
-            "name": "Product photo with owner 2",
+            "id": 5,
+            "link": "http:\/\/localhost\/test_preview_5.jpg",
+            "name": "preview_Private photo",
             "is_public": false,
             "meta": []
         }
     ],
     "links": {
         "first": "http:\/\/localhost\/media?page=1",
-        "last": "http:\/\/localhost\/media?page=1",
+        "last": "http:\/\/localhost\/media?page=2",
         "prev": null,
-        "next": null
+        "next": "http:\/\/localhost\/media?page=2"
     },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 1,
+        "last_page": 2,
         "links": [
             {
                 "url": null,
@@ -44,7 +44,12 @@
                 "active": true
             },
             {
-                "url": null,
+                "url": "http:\/\/localhost\/media?page=2",
+                "label": "2",
+                "active": false
+            },
+            {
+                "url": "http:\/\/localhost\/media?page=2",
                 "label": "Next &raquo;",
                 "active": false
             }
@@ -52,6 +57,6 @@
         "path": "http:\/\/localhost\/media",
         "per_page": 3,
         "to": 3,
-        "total": 3
+        "total": 6
     }
 }
