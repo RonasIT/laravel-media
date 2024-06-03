@@ -11,6 +11,7 @@ services:
       - .:/app
     links:
       - pgsql
+    user: root
 
   pgsql:
       image: ronasit/postgres:12.5
