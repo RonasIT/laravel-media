@@ -49,7 +49,7 @@ class TestCase extends BaseTest
             'host' => env('DB_HOST', 'pgsql'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
-            'password' => 'secret',
+            'password' => env('DB_PASSWORD', 'secret'),
         ]);
     }
 
