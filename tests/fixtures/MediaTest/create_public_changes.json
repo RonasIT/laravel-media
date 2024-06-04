@@ -5,7 +5,7 @@
             "id": 11,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
-            "link": "\/app\/vendor\/orchestra\/testbench-core\/laravel\/storage\/framework\/testing\/disks\/local\/preview_file.png",
+            "link": "\/storage\/preview_file.png",
             "name": "preview_file.png",
             "is_public": false,
             "owner_id": 2,

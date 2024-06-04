@@ -7,4 +7,4 @@ WORKDIR /app
 COPY . /app
 RUN chown -R application:www-data /app
 USER application
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader

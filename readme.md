@@ -1,5 +1,7 @@
 # Laravel Media plugin
 
+[![Coverage Status](https://coveralls.io/repos/github/RonasIT/laravel-media/badge.svg?branch=master)](https://coveralls.io/github/RonasIT/laravel-media?branch=master)
+
 ## Introduction
 
 This plugin adds the ability for users to work with media files.
