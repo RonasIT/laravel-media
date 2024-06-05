@@ -1,14 +1,14 @@
 {
     "data": [
         {
-            "id": 6,
+            "id": 5,
             "link": "http:\/\/localhost\/test_preview_6.jpg",
             "name": "preview_Product photo with owner 2",
             "is_public": false,
             "meta": []
         },
         {
-            "id": 12,
+            "id": 10,
             "link": "http:\/\/localhost\/test6.jpg",
             "name": "Product photo with owner 2",
             "is_public": false,
