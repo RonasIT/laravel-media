@@ -2,12 +2,35 @@
     "updated": [],
     "created": [
         {
+            "id": 11,
+            "created_at": "2024-01-01 00:00:00",
+            "updated_at": "2024-01-01 00:00:00",
+            "link": "\/storage\/preview_file1.png",
+            "name": "preview_file1.png",
+            "is_public": false,
+            "owner_id": 2,
+            "preview_id": null,
+            "meta": []
+        },
+        {
+            "id": 12,
+            "created_at": "2024-01-01 00:00:00",
+            "updated_at": "2024-01-01 00:00:00",
+            "link": "\/storage\/file1.png",
+            "name": "file1.png",
+            "is_public": false,
+            "owner_id": 2,
+            "preview_id": "11",
+            "meta": [
+                "test1"
+            ]
+        },
+        {
             "id": 13,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
-            "link": "\/storage\/preview_file1.png",
-            "name": "preview_file1.png",
+            "link": "\/storage\/preview_file2.png",
+            "name": "preview_file2.png",
             "is_public": false,
             "owner_id": 2,
             "preview_id": null,
@@ -17,38 +40,11 @@
             "id": 14,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
-            "link": "\/storage\/file1.png",
-            "name": "file1.png",
-            "is_public": false,
-            "owner_id": 2,
-            "preview_id": "13",
-            "meta": [
-                "test1"
-            ]
-        },
-        {
-            "id": 15,
-            "created_at": "2024-01-01 00:00:00",
-            "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
-            "link": "\/storage\/preview_file2.png",
-            "name": "preview_file2.png",
-            "is_public": false,
-            "owner_id": 2,
-            "preview_id": null,
-            "meta": []
-        },
-        {
-            "id": 16,
-            "created_at": "2024-01-01 00:00:00",
-            "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
             "link": "\/storage\/file2.png",
             "name": "file2.png",
             "is_public": false,
             "owner_id": 2,
-            "preview_id": "15",
+            "preview_id": "13",
             "meta": [
                 "test2"
             ]

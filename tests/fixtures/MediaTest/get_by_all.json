@@ -8,21 +8,21 @@
             "meta": []
         },
         {
-            "id": 4,
+            "id": 3,
             "link": "http:\/\/localhost\/test_preview_4.jpg",
             "name": "preview_Photo",
             "is_public": true,
             "meta": []
         },
         {
-            "id": 7,
+            "id": 6,
             "link": "http:\/\/localhost\/test.jpg",
             "name": "Product main photo",
             "is_public": true,
             "meta": []
         },
         {
-            "id": 10,
+            "id": 8,
             "link": "http:\/\/localhost\/test4.jpg",
             "name": "Photo",
             "is_public": true,

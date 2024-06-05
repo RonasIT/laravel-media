@@ -2,10 +2,9 @@
     "updated": [],
     "created": [
         {
-            "id": 13,
+            "id": 11,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
             "link": "\/storage\/preview_file.png",
             "name": "preview_file.png",
             "is_public": false,
@@ -14,15 +13,14 @@
             "meta": []
         },
         {
-            "id": 14,
+            "id": 12,
             "created_at": "2024-01-01 00:00:00",
             "updated_at": "2024-01-01 00:00:00",
-            "deleted_at": null,
             "link": "\/storage\/file.png",
             "name": "file.png",
             "is_public": true,
             "owner_id": 2,
-            "preview_id": "13",
+            "preview_id": "11",
             "meta": []
         }
     ],
