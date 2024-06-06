@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Tests;
 
 use Carbon\Carbon;
+use Dotenv\Dotenv;
 use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as BaseTest;
 use RonasIT\Media\MediaServiceProvider;
@@ -43,6 +44,20 @@ class TestCase extends BaseTest
 
     protected function getEnvironmentSetUp($app): void
     {
+        Dotenv::createImmutable(__DIR__ . '/..', '.env.testing')->load();
+
+        $this->setupDb($app);
+    }
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            MediaServiceProvider::class,
+        ];
+    }
+
+    protected function setupDb($app): void
+    {
         $app['config']->set('database.default', env('DB_DEFAULT', 'pgsql'));
         $app['config']->set('database.connections.pgsql', [
             'driver' => env('DB_DRIVER', 'pgsql'),
@@ -51,12 +66,5 @@ class TestCase extends BaseTest
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', 'secret'),
         ]);
-    }
-
-    protected function getPackageProviders($app): array
-    {
-        return [
-            MediaServiceProvider::class
-        ];
     }
 }
