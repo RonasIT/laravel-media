@@ -143,7 +143,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['all' => true],
-                'result' => 'get_by_all.json',
+                'fixture' => 'get_by_all.json',
             ],
         ];
     }
@@ -163,7 +163,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['query' => 'product'],
-                'result' => 'get_by_query.json',
+                'fixture' => 'get_by_query.json',
             ],
             [
                 'filter' => [
@@ -172,7 +172,7 @@ class MediaTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'result' => 'get_complex.json',
+                'fixture' => 'get_complex.json',
             ],
         ];
     }
