@@ -5,6 +5,7 @@ namespace RonasIT\Media\Tests;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
@@ -137,41 +138,17 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertNotChanged();
     }
 
-    public function getSearchFilters(): array
+    public static function getSearchFilters(): array
     {
         return [
             [
                 'filter' => ['all' => true],
-                'result' => 'get_by_all.json',
+                'fixture' => 'get_by_all.json',
             ],
         ];
     }
 
-    public function getUserSearchFilters(): array
-    {
-        return [
-            [
-                'filter' => ['query' => 'product'],
-                'result' => 'get_by_query.json',
-            ],
-            [
-                'filter' => [
-                    'query' => 'photo',
-                    'order_by' => 'name',
-                    'desc' => false,
-                    'per_page' => 3,
-                ],
-                'result' => 'get_complex.json',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider getSearchFilters
-     *
-     * @param array $filter
-     * @param string $fixture
-     */
+    #[DataProvider('getSearchFilters')]
     public function testSearch(array $filter, string $fixture): void
     {
         $response = $this->json('get', '/media', $filter);
@@ -181,12 +158,26 @@ class MediaTest extends TestCase
         $this->assertEqualsFixture($fixture, $response->json());
     }
 
-    /**
-     * @dataProvider getUserSearchFilters
-     *
-     * @param array $filter
-     * @param string $fixture
-     */
+    public static function getUserSearchFilters(): array
+    {
+        return [
+            [
+                'filter' => ['query' => 'product'],
+                'fixture' => 'get_by_query.json',
+            ],
+            [
+                'filter' => [
+                    'query' => 'photo',
+                    'order_by' => 'name',
+                    'desc' => false,
+                    'per_page' => 3,
+                ],
+                'fixture' => 'get_complex.json',
+            ],
+        ];
+    }
+
+    #[DataProvider('getUserSearchFilters')]
     public function testSearchWithAuth(array $filter, string $fixture): void
     {
         $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
@@ -196,7 +187,7 @@ class MediaTest extends TestCase
         $this->assertEqualsFixture($fixture, $response->json());
     }
 
-    public function getBadFiles(): array
+    public static function getBadFiles(): array
     {
         return [
             [
@@ -208,11 +199,7 @@ class MediaTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getBadFiles
-     *
-     * @param string $fileName
-     */
+    #[DataProvider('getBadFiles')]
     public function testUploadingBadFiles(string $fileName): void
     {
         self::$file = UploadedFile::fake()->create($fileName, 1024);
@@ -228,7 +215,7 @@ class MediaTest extends TestCase
         ]);
     }
 
-    public function getGoodFiles(): array
+    public static function getGoodFiles(): array
     {
         return [
             [
@@ -243,11 +230,7 @@ class MediaTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getGoodFiles
-     *
-     * @param string $fileName
-     */
+    #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
         $this->mockGenerateFilename();
