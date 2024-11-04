@@ -23,6 +23,10 @@ class MediaServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
+
+        $this->publishes([
+            __DIR__ . '/../config/media.php' => config_path('media.php'),
+        ], 'config');
     }
 
     public function register(): void
