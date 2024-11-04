@@ -8,8 +8,18 @@ This plugin adds the ability for users to work with media files.
 
 ## Installation
 
-1. Install the package using the following command: `composer require ronasit/laravel-media`
-2. Run `php artisan vendor:publish`
+1. Install the package using the following command:
+
+```sh
+composer require ronasit/laravel-media
+```
+
+2. Publish the package configuration:
+
+``` sh
+php artisan vendor:publish --provider=RonasIT\\Media\\MediaServiceProvider
+```
+
 3. For Laravel <= 5.5 add `RonasIT\Media\MediaServiceProvider::class` to config `app.providers` list.
 4. Set your project's User model to the `media.classes.user_model` config.
 
