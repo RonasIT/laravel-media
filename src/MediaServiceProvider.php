@@ -20,6 +20,7 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
+
     public function boot(): void
     {
         Route::mixin(new RouteMediaMethods);

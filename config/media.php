@@ -18,4 +18,6 @@ return [
         'width' => 250,
         'height' => 250,
     ],
+
+    'standard_routes_loaded' => false,
 ];
