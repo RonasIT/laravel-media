@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media;
 
+use Illuminate\Support\Facades\Route;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -23,6 +24,8 @@ class MediaServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
+
+        Route::mixin(new RouteMediaMethods);
     }
 
     public function register(): void
