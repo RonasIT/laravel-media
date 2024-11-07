@@ -17,15 +17,18 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
+
     public function boot(): void
     {
+        Route::mixin(new RouteMediaMethods);
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        if(!config('media.standard_routes_loaded', false)){
+            $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        }
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
-
-        Route::mixin(new RouteMediaMethods);
 
         $this->publishes([
             __DIR__ . '/../config/media.php' => config_path('media.php'),
