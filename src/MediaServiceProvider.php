@@ -26,6 +26,10 @@ class MediaServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
 
         Route::mixin(new RouteMediaMethods);
+
+        $this->publishes([
+            __DIR__ . '/../config/media.php' => config_path('media.php'),
+        ], 'config');
     }
 
     public function register(): void

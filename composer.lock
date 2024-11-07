@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0639179923f38716658cd130ffc06664",
+    "content-hash": "48ed90d4896cb8e6c4d42a0b1b747147",
     "packages": [
         {
             "name": "brick/math",
@@ -4289,38 +4289,37 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "dev-master",
+            "version": "3.0.0-beta",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "75d8f683fdf306229e6d257d186ca427fca644ac"
+                "reference": "b967de51d6a79cc8e18ee707cd8677900fecd304"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/75d8f683fdf306229e6d257d186ca427fca644ac",
-                "reference": "75d8f683fdf306229e6d257d186ca427fca644ac",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/b967de51d6a79cc8e18ee707cd8677900fecd304",
+                "reference": "b967de51d6a79cc8e18ee707cd8677900fecd304",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/guzzle": ">=6.0",
-                "laravel/framework": ">=10.48",
-                "maatwebsite/excel": "3.*",
-                "php": ">=8.1",
-                "php-mock/php-mock-phpunit": "^2.9",
-                "tecnickcom/tcpdf": "~6.7.4"
+                "guzzlehttp/guzzle": "^7.9.2",
+                "laravel/framework": "^11.20",
+                "maatwebsite/excel": "^3.1.55",
+                "php": ">=8.3",
+                "php-mock/php-mock-phpunit": "^2.10",
+                "tecnickcom/tcpdf": "^6.7.5"
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^3.0",
-                "fakerphp/faker": "^1.23",
-                "friendsofphp/php-cs-fixer": "^3.59",
-                "mockery/mockery": "1.*",
-                "mpyw/laravel-database-mock": "0.0.1-alpha5",
-                "orchestra/testbench": "^8.23",
-                "php-coveralls/php-coveralls": "^2.5",
-                "phpunit/phpunit": "9.*"
+                "fakerphp/faker": "^1.23.1",
+                "friendsofphp/php-cs-fixer": "^3.62",
+                "mockery/mockery": "^1.6.12",
+                "mpyw/laravel-database-mock": "^0.0.1-alpha5",
+                "orchestra/testbench": "^9.3",
+                "php-coveralls/php-coveralls": "^2.7",
+                "phpunit/phpunit": "^10.5.30"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -4366,9 +4365,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/master"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.0.0-beta"
             },
-            "time": "2024-08-06T12:26:52+00:00"
+            "time": "2024-08-22T13:20:06+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10378,7 +10377,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ronasit/laravel-helpers": 20
+        "ronasit/laravel-helpers": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
