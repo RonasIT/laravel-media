@@ -21,11 +21,13 @@ use Illuminate\Support\ServiceProvider;
 class MediaServiceProvider extends ServiceProvider
 {
 
+    public static bool $isBlockedBaseRoutes = false;
+
     public function boot(): void
     {
         Route::mixin(new RouteMediaMethods);
 
-        $this->isLoadRoutesBased();
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
@@ -34,11 +36,6 @@ class MediaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/media.php' => config_path('media.php'),
         ], 'config');
-    }
-
-    protected function isLoadRoutesBased()
-    {
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
     }
 
     public function register(): void

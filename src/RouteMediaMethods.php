@@ -12,8 +12,10 @@ class RouteMediaMethods
 
     public function media()
     {
-        return function (array $options)
-        {
+        return function (array $options) {
+
+            MediaServiceProvider::$isBlockedBaseRoutes = true;
+
             $options = [
                 'create' => $options['create'] ?? true,
                 'delete' => $options['delete'] ?? true,
@@ -22,31 +24,38 @@ class RouteMediaMethods
             ];
 
             $this->controller(MediaController::class)->group(function () use ($options) {
+                $this->group([], function () use ($options) {
 
-                $this->group([],function () use ($options){
-
-                    if(!$options['create']) return;
+                    if (!$options['create']) {
+                        return;
+                    }
 
                     $this->post('media', 'create')->name('media.create');
                 });
 
-                $this->group([],function () use ($options){
+                $this->group([], function () use ($options) {
 
-                    if(!$options['delete']) return;
+                    if (!$options['delete']) {
+                        return;
+                    }
 
                     $this->delete('media/{id}', 'delete')->name('media.delete');
                 });
 
-                $this->group([],function () use ($options){
+                $this->group([], function () use ($options) {
 
-                    if(!$options['bulk_create']) return;
+                    if (!$options['bulk_create']) {
+                        return;
+                    }
 
                     $this->post('media/bulk', 'bulkCreate')->name('media.bulk.create');
                 });
 
-                $this->group([],function () use ($options){
+                $this->group([], function () use ($options) {
 
-                    if(!$options['search']) return;
+                    if (!$options['search']) {
+                        return;
+                    }
 
                     $this->get('media', 'search')->name('media.search');
                 });
