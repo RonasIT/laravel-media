@@ -12,4 +12,3 @@ Route::group(['middleware' => BlockMiddleware::class], function (){
     });
     Route::get('media', [MediaController::class, 'search'])->name('media.base.search');
 });
-

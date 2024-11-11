@@ -12,7 +12,7 @@ class RouteMediaMethods
 
     public function media()
     {
-        return function (array $options) {
+        return function (array $options = []) {
 
             MediaServiceProvider::$isBlockedBaseRoutes = true;
 
@@ -24,6 +24,7 @@ class RouteMediaMethods
             ];
 
             $this->controller(MediaController::class)->group(function () use ($options) {
+
                 $this->group([], function () use ($options) {
 
                     if (!$options['create']) {

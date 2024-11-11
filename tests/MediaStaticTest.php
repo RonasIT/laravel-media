@@ -7,14 +7,13 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
-use RonasIT\Media\MediaServiceProvider;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
-class MediaTest extends TestCase
+class MediaStaticTest extends TestCase
 {
     use FilesUploadTrait;
     use MediaTestTrait;
@@ -33,7 +32,7 @@ class MediaTest extends TestCase
 
         Storage::fake();
 
-        MediaServiceProvider::$isBlockedBaseRoutes = false;
+        Route::media([]);
     }
 
     public function testCreate(): void
@@ -72,13 +71,6 @@ class MediaTest extends TestCase
         Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
 
         $this->clearUploadedFilesFolder();
-    }
-
-    public function testCreateNoAuth(): void
-    {
-        $response = $this->json('post', '/media', ['file' => self::$file]);
-
-        $response->assertUnauthorized();
     }
 
     public function testBulkCreate(): void
@@ -129,15 +121,6 @@ class MediaTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/1');
 
         $response->assertForbidden();
-
-        self::$mediaTestState->assertNotChanged();
-    }
-
-    public function testDeleteNoAuth(): void
-    {
-        $response = $this->json('delete', '/media/1');
-
-        $response->assertUnauthorized();
 
         self::$mediaTestState->assertNotChanged();
     }
@@ -246,62 +229,5 @@ class MediaTest extends TestCase
         $response->assertCreated();
 
         self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
-    }
-
-    public function testCreateWhenStaticDefined(): void
-    {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
-
-        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
-
-        $response->assertNotFound();
-
-        $response->assertJson(['message' => '']);
-
-        self::$mediaTestState->assertNotChanged();
-    }
-
-    public function testSearchStaticDefined(): void
-    {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
-
-        $response = $this->actingAs(self::$user)->json('get', '/media');
-
-        $response->assertNotFound();
-
-        $response->assertJson(['message' => '']);
-
-        self::$mediaTestState->assertNotChanged();
-    }
-
-    public function testDeleteWhenStaticDefined(): void
-    {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
-
-        $filePath = 'preview_Private photo';
-        Storage::put($filePath, 'content');
-
-        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
-
-        $response->assertNotFound();
-
-        $response->assertJson(['message' => '']);
-
-        Storage::assertExists($filePath);
-
-        self::$mediaTestState->assertNotChanged();
-    }
-
-    public function testCreateBulkWhenStaticDefined(): void
-    {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
-
-        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', ['file' => self::$file]);
-
-        $response->assertNotFound();
-
-        $response->assertJson(['message' => '']);
-
-        self::$mediaTestState->assertNotChanged();
     }
 }
