@@ -32,11 +32,20 @@ class MediaStaticTest extends TestCase
 
         Storage::fake();
 
-        Route::media([]);
+        Route::media([
+            'create' => false,
+            'delete' => false,
+            'bulk_create' => false,
+            'search' => false,
+        ]);
     }
 
     public function testCreate(): void
     {
+        Route::media([
+            'create' => true,
+        ]);
+
         $this->mockGenerateFilename();
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
@@ -46,8 +55,23 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
     }
 
+    public function testCreateWasCreateFalse(): void
+    {
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+
+        $response->assertNotFound();
+
+        $response->assertJson(['message' => '']);
+
+        self::$mediaTestState->assertNotChanged();
+    }
+
     public function testCreatePublic(): void
     {
+        Route::media([
+            'create' => true,
+        ]);
+
         $this->mockGenerateFilename();
 
         $response = $this->actingAs(self::$user)->json('post', '/media', [
@@ -62,6 +86,10 @@ class MediaStaticTest extends TestCase
 
     public function testCreateCheckFile(): void
     {
+        Route::media([
+            'create' => true,
+        ]);
+
         $this->mockGenerateFilename();
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
@@ -73,8 +101,34 @@ class MediaStaticTest extends TestCase
         $this->clearUploadedFilesFolder();
     }
 
+    public function testCreateBulkWasCreateBulkFalse(): void
+    {
+        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
+            'media' => [
+                [
+                    'file' => self::$file,
+                    'meta' => ['test1'],
+                ],
+                [
+                    'file' => self::$file,
+                    'meta' => ['test2'],
+                ],
+            ],
+        ]);
+
+        $response->assertNotFound();
+
+        $response->assertJson(['message' => '']);
+
+        self::$mediaTestState->assertNotChanged();
+    }
+
     public function testBulkCreate(): void
     {
+        Route::media([
+            'create_bulk' => true,
+        ]);
+
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
@@ -95,8 +149,28 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
     }
 
+    public function testDeleteWasDeleteFalse(): void
+    {
+        $filePath = 'preview_Private photo';
+        Storage::put($filePath, 'content');
+
+        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
+
+        $response->assertNotFound();
+
+        $response->assertJson(['message' => '']);
+
+        self::$mediaTestState->assertNotChanged();
+
+        Storage::assertExists($filePath);
+    }
+
     public function testDelete(): void
     {
+        Route::media([
+            'delete' => true,
+        ]);
+
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
 
@@ -111,6 +185,10 @@ class MediaStaticTest extends TestCase
 
     public function testDeleteNotExists(): void
     {
+        Route::media([
+            'delete' => true,
+        ]);
+
         $response = $this->actingAs(self::$user)->json('delete', '/media/0');
 
         $response->assertNotFound();
@@ -118,6 +196,10 @@ class MediaStaticTest extends TestCase
 
     public function testDeleteNoPermission(): void
     {
+        Route::media([
+            'delete' => true,
+        ]);
+
         $response = $this->actingAs(self::$user)->json('delete', '/media/1');
 
         $response->assertForbidden();
@@ -135,9 +217,22 @@ class MediaStaticTest extends TestCase
         ];
     }
 
+    public function testSearchWasSearchFalse(): void
+    {
+        $response = $this->actingAs(self::$user)->json('get', '/media');
+
+        $response->assertNotFound();
+
+        $response->assertJson(['message' => '']);
+    }
+
     #[DataProvider('getSearchFilters')]
     public function testSearch(array $filter, string $fixture): void
     {
+        Route::media([
+            'search' => true,
+        ]);
+
         $response = $this->json('get', '/media', $filter);
 
         $response->assertOk();
@@ -167,6 +262,10 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getUserSearchFilters')]
     public function testSearchWithAuth(array $filter, string $fixture): void
     {
+        Route::media([
+            'search' => true,
+        ]);
+
         $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
 
         $response->assertOk();
@@ -189,6 +288,10 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getBadFiles')]
     public function testUploadingBadFiles(string $fileName): void
     {
+        Route::media([
+            'search' => true,
+        ]);
+
         self::$file = UploadedFile::fake()->create($fileName, 1024);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
@@ -220,6 +323,10 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
+        Route::media([
+            'search' => true,
+        ]);
+
         $this->mockGenerateFilename();
 
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);

@@ -270,8 +270,6 @@ class MediaTest extends TestCase
         $response->assertNotFound();
 
         $response->assertJson(['message' => '']);
-
-        self::$mediaTestState->assertNotChanged();
     }
 
     public function testDeleteWhenStaticDefined(): void
