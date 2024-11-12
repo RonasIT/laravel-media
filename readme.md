@@ -25,7 +25,9 @@ php artisan vendor:publish --provider=RonasIT\\Media\\MediaServiceProvider
 
 ## Usage
 
-If you need basic media routes,they will be available after installing the package, but they can also be declared elsewhere:
+All media routes, will be automatically registered with the package installation.
+
+You can manually register package routes in any place in your app routes using `Route::media()` helper:
 
 ```php
 #routes/api.php
@@ -34,12 +36,16 @@ If you need basic media routes,they will be available after installing the packa
 
 use Illuminate\Support\Facades\Route;
 
-Route::media();
+Route::group(['middleware' => ['my_auth']], function () {
+    Route::media();
+});
 ```
+
+In this case automatically registered package routes will fails with the `404` code error.
 
 ## Customizing
 
-You can enable of disable features:
+You can register only necessary routes:
 
 ```php
 #routes/api.php

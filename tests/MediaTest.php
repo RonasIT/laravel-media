@@ -4,10 +4,9 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
-use RonasIT\Media\MediaServiceProvider;
+use RonasIT\Media\MediaRouter;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
@@ -33,7 +32,7 @@ class MediaTest extends TestCase
 
         Storage::fake();
 
-        MediaServiceProvider::$isBlockedBaseRoutes = false;
+        MediaRouter::$isBlockedBaseRoutes = false;
     }
 
     public function testCreate(): void
@@ -248,33 +247,33 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
     }
 
-    public function testCreateWhenStaticDefined(): void
+    public function testCreateBaseAutomaticallyRegistered(): void
     {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
+        MediaRouter::$isBlockedBaseRoutes = true;
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
     }
 
     public function testSearchStaticDefined(): void
     {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
+        MediaRouter::$isBlockedBaseRoutes = true;
 
         $response = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
     }
 
     public function testDeleteWhenStaticDefined(): void
     {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
+        MediaRouter::$isBlockedBaseRoutes = true;
 
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
@@ -283,7 +282,7 @@ class MediaTest extends TestCase
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         Storage::assertExists($filePath);
 
@@ -292,13 +291,13 @@ class MediaTest extends TestCase
 
     public function testCreateBulkWhenStaticDefined(): void
     {
-        MediaServiceProvider::$isBlockedBaseRoutes = true;
+        MediaRouter::$isBlockedBaseRoutes = true;
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', ['file' => self::$file]);
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
     }

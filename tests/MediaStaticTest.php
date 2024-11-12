@@ -55,13 +55,13 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
     }
 
-    public function testCreateWasCreateFalse(): void
+    public function testCreateWasCreateDisabled(): void
     {
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
     }
@@ -101,7 +101,7 @@ class MediaStaticTest extends TestCase
         $this->clearUploadedFilesFolder();
     }
 
-    public function testCreateBulkWasCreateBulkFalse(): void
+    public function testCreateBulkWasCreateBulkDisabled(): void
     {
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -118,7 +118,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
     }
@@ -149,7 +149,7 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
     }
 
-    public function testDeleteWasDeleteFalse(): void
+    public function testDeleteWasDeleteDisabled(): void
     {
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
@@ -158,7 +158,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
 
@@ -217,13 +217,13 @@ class MediaStaticTest extends TestCase
         ];
     }
 
-    public function testSearchWasSearchFalse(): void
+    public function testSearchWasSearchDisabled(): void
     {
         $response = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertNotFound();
 
-        $response->assertJson(['message' => '']);
+        $response->assertJson(['message' => 'Not found.']);
     }
 
     #[DataProvider('getSearchFilters')]

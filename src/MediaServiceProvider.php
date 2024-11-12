@@ -9,23 +9,24 @@ use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\SearchMediaRequestContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Http\Controllers\MediaController;
 use RonasIT\Media\Http\Requests\BulkCreateMediaRequest;
 use RonasIT\Media\Http\Requests\CreateMediaRequest;
 use RonasIT\Media\Http\Requests\DeleteMediaRequest;
 use RonasIT\Media\Http\Requests\SearchMediaRequest;
-use RonasIT\Media\Models\Media;
 use RonasIT\Media\Services\MediaService;
 use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
-
-    public static bool $isBlockedBaseRoutes = false;
-
     public function boot(): void
     {
-        Route::mixin(new RouteMediaMethods);
+        $when = function (bool $condition, callable $callback) {
+            return $condition ? $callback : false;
+        };
+
+        Route::mixin(new MediaRouter);
+
+        Route::macro('when', fn ($condition, $callback) => $when($condition,$callback));
 
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
