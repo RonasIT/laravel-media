@@ -21,7 +21,9 @@ class MediaServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $when = function (bool $condition, callable $callback) {
-            return $condition ? $callback : false;
+            if($condition){
+                return $callback();
+            }
         };
 
         Route::mixin(new MediaRouter);
