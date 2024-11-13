@@ -20,7 +20,8 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Route::mixin(new MediaRouter);
+        Route::mixin(new MediaRouter());
+
 
         Route::macro('when', fn ($condition, $callback) => ($condition) ? $callback() : null);
 
