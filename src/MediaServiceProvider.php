@@ -2,6 +2,8 @@
 
 namespace RonasIT\Media;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -18,9 +20,14 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        Route::mixin(new MediaRouter());
+
+
+        Route::macro('when', fn ($condition, $callback) => ($condition) ? $callback() : null);
 
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
 
