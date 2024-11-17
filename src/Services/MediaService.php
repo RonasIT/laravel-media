@@ -83,9 +83,7 @@ class MediaService extends EntityService implements MediaServiceContract
         $link = Storage::path($pathinfo['basename']);
         $name = "preview_{$pathinfo['basename']}";
 
-        $path = explode('/', $link);
-        array_pop($path);
-        $path = implode('/', $path) . "/{$name}";
+        $path = implode('/', [extract_last_part($link, '/')[1], $name]);
 
         Image::load($link)
             ->width(config('media.preview.width'))
