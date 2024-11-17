@@ -8,10 +8,59 @@ This plugin adds the ability for users to work with media files.
 
 ## Installation
 
-1. Install the package using the following command: `composer require ronasit/laravel-media`
-2. Run `php artisan vendor:publish`
+1. Install the package using the following command:
+
+```sh
+composer require ronasit/laravel-media
+```
+
+2. Publish the package configuration:
+
+``` sh
+php artisan vendor:publish --provider=RonasIT\\Media\\MediaServiceProvider
+```
+
 3. For Laravel <= 5.5 add `RonasIT\Media\MediaServiceProvider::class` to config `app.providers` list.
 4. Set your project's User model to the `media.classes.user_model` config.
+
+## Usage
+
+All media routes, will be automatically registered with the package installation.
+
+You can manually register package routes in any place in your app routes using `Route::media()` helper:
+
+```php
+#routes/api.php
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => ['my_auth']], function () {
+    Route::media();
+});
+```
+
+In this case automatically registered package routes will fails with the `404` code error.
+
+## Customizing
+
+You can register only necessary routes:
+
+```php
+#routes/api.php
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::media([
+    'create' => true,
+    'delete' => true,
+    'bulk_create' => false,
+    'search' => true,
+]);
+```
 
 ## Integration with [LaravelSwagger](https://github.com/RonasIT/laravel-swagger)
 

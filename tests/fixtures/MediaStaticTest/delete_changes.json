@@ -1,0 +1,17 @@
+{
+    "updated": [],
+    "created": [],
+    "deleted": [
+        {
+            "id": 4,
+            "created_at": "2016-10-20 11:05:00",
+            "updated_at": "2016-10-20 11:05:00",
+            "link": "http:\/\/localhost\/test_preview_5.jpg",
+            "name": "preview_Private photo",
+            "is_public": false,
+            "owner_id": 2,
+            "preview_id": null,
+            "meta": []
+        }
+    ]
+}
