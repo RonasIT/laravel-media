@@ -22,9 +22,6 @@ class MediaServiceProvider extends ServiceProvider
     {
         Route::mixin(new MediaRouter());
 
-
-        Route::macro('when', fn ($condition, $callback) => ($condition) ? $callback() : null);
-
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
