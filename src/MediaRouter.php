@@ -26,7 +26,7 @@ class MediaRouter
             if (empty($options)){
                 $options = array_fill_keys(array_keys($defaultOptions), true);
             } else {
-                $options = array_merge($defaultOptions, array_fill_keys(array_keys($defaultOptions), true));
+                $options = array_merge($defaultOptions, array_fill_keys(array_column($options, 'value'), true));
             }
 
             $this->controller(MediaController::class)->group(function () use ($options) {
