@@ -12,7 +12,7 @@ class MediaRouter
 
     public function media()
     {
-        return function (array $options = [])  {
+        return function (MediaRouteActionEnum ...$options)  {
 
             MediaRouter::$isBlockedBaseRoutes = true;
 

@@ -36,9 +36,7 @@ class MediaStaticTest extends TestCase
 
     public function testCreate(): void
     {
-        Route::media([
-            MediaRouteActionEnum::SingleUpload,
-        ]);
+        Route::media(MediaRouteActionEnum::SingleUpload,);
 
         $this->mockGenerateFilename();
 
@@ -62,9 +60,7 @@ class MediaStaticTest extends TestCase
 
     public function testCreatePublic(): void
     {
-        Route::media([
-            MediaRouteActionEnum::SingleUpload,
-        ]);
+        Route::media(MediaRouteActionEnum::SingleUpload,);
 
         $this->mockGenerateFilename();
 
@@ -80,9 +76,7 @@ class MediaStaticTest extends TestCase
 
     public function testCreateCheckFile(): void
     {
-        Route::media([
-            MediaRouteActionEnum::SingleUpload,
-        ]);
+        Route::media(MediaRouteActionEnum::SingleUpload);
 
         $this->mockGenerateFilename();
 
@@ -119,9 +113,7 @@ class MediaStaticTest extends TestCase
 
     public function testBulkCreate(): void
     {
-        Route::media([
-            MediaRouteActionEnum::BulkCreate,
-        ]);
+        Route::media(MediaRouteActionEnum::BulkCreate);
 
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
@@ -161,9 +153,7 @@ class MediaStaticTest extends TestCase
 
     public function testDelete(): void
     {
-        Route::media([
-            MediaRouteActionEnum::Delete,
-        ]);
+        Route::media(MediaRouteActionEnum::Delete);
 
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
@@ -179,9 +169,7 @@ class MediaStaticTest extends TestCase
 
     public function testDeleteNotExists(): void
     {
-        Route::media([
-            MediaRouteActionEnum::Delete,
-        ]);
+        Route::media(MediaRouteActionEnum::Delete);
 
         $response = $this->actingAs(self::$user)->json('delete', '/media/0');
 
@@ -190,9 +178,7 @@ class MediaStaticTest extends TestCase
 
     public function testDeleteNoPermission(): void
     {
-        Route::media([
-            MediaRouteActionEnum::Delete,
-        ]);
+        Route::media(MediaRouteActionEnum::Delete);
 
         $response = $this->actingAs(self::$user)->json('delete', '/media/1');
 
@@ -223,9 +209,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getSearchFilters')]
     public function testSearch(array $filter, string $fixture): void
     {
-        Route::media([
-            MediaRouteActionEnum::Search,
-        ]);
+        Route::media(MediaRouteActionEnum::Search);
 
         $response = $this->json('get', '/media', $filter);
 
@@ -256,9 +240,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getUserSearchFilters')]
     public function testSearchWithAuth(array $filter, string $fixture): void
     {
-        Route::media([
-            MediaRouteActionEnum::Search,
-        ]);
+        Route::media(MediaRouteActionEnum::Search);
 
         $response = $this->actingAs(self::$user)->json('get', '/media', $filter);
 
@@ -282,9 +264,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getBadFiles')]
     public function testUploadingBadFiles(string $fileName): void
     {
-        Route::media([
-            MediaRouteActionEnum::Search,
-        ]);
+        Route::media(MediaRouteActionEnum::Search);
 
         self::$file = UploadedFile::fake()->create($fileName, 1024);
 
@@ -317,9 +297,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
-        Route::media([
-            MediaRouteActionEnum::Search,
-        ]);
+        Route::media(MediaRouteActionEnum::Search);
 
         $this->mockGenerateFilename();
 
