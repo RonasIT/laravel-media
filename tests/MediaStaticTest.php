@@ -36,7 +36,7 @@ class MediaStaticTest extends TestCase
 
     public function testCreate(): void
     {
-        Route::media(MediaRouteActionEnum::SingleUpload,);
+        Route::media(MediaRouteActionEnum::SingleUpload);
 
         $this->mockGenerateFilename();
 
@@ -60,7 +60,7 @@ class MediaStaticTest extends TestCase
 
     public function testCreatePublic(): void
     {
-        Route::media(MediaRouteActionEnum::SingleUpload,);
+        Route::media(MediaRouteActionEnum::SingleUpload);
 
         $this->mockGenerateFilename();
 

@@ -23,7 +23,7 @@ class MediaRouter
                 'search' => false,
             ];
 
-            if(empty($options)){
+            if (empty($options)){
                 $options = array_fill_keys(array_keys($defaultOptions), true);
             } else {
                 $options = array_merge($defaultOptions, array_fill_keys(array_keys($defaultOptions), true));
