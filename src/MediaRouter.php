@@ -23,11 +23,16 @@ class MediaRouter
                 'search' => false,
             ];
 
+            $options = array_column($options, 'value');
+
+            $options = array_combine(array_values($options), array_values($options));
+
             if (empty($options)){
                 $options = array_fill_keys(array_keys($defaultOptions), true);
             } else {
-                $options = array_merge($defaultOptions, array_fill_keys(array_keys($defaultOptions), true));
+                $options = array_merge($defaultOptions, array_fill_keys(array_keys($options), true));
             }
+
 
             $this->controller(MediaController::class)->group(function () use ($options) {
                 when($options['create'], fn () => $this->post('media', 'create')->name('media.create'));
