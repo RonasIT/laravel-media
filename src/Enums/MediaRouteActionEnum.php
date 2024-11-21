@@ -10,5 +10,5 @@ enum MediaRouteActionEnum: string
 
     case Search = 'search';
 
-    case BulkCreate = 'bulk_create';
+    case BulkUpload = 'bulk_create';
 }

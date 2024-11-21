@@ -113,7 +113,7 @@ class MediaStaticTest extends TestCase
 
     public function testBulkCreate(): void
     {
-        Route::media(MediaRouteActionEnum::BulkCreate);
+        Route::media(MediaRouteActionEnum::BulkUpload);
 
         $this->mockGenerateFilename('file1.png', 'file2.png');
 
