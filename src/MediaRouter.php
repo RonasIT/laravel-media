@@ -3,6 +3,7 @@
 namespace RonasIT\Media;
 
 use Illuminate\Support\Facades\Route;
+use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Http\Controllers\MediaController;
 
 class MediaRouter
@@ -15,12 +16,18 @@ class MediaRouter
 
             MediaRouter::$isBlockedBaseRoutes = true;
 
-            $options = [
-                'create' => $options['create'] ?? true,
-                'delete' => $options['delete'] ?? true,
-                'bulk_create' => $options['bulk_create'] ?? true,
-                'search' => $options['search'] ?? true,
+            $defaultOptions = [
+                'create' => false,
+                'delete' => false,
+                'bulk_create' => false,
+                'search' => false,
             ];
+
+            if(empty($options)){
+                $options = array_fill_keys(array_keys($defaultOptions), true);
+            } else {
+                $options = array_merge($defaultOptions, array_fill_keys(array_keys($defaultOptions), true));
+            }
 
             $this->controller(MediaController::class)->group(function () use ($options) {
                 when($options['create'], fn () => $this->post('media', 'create')->name('media.create'));
