@@ -101,7 +101,7 @@ class MediaService extends EntityService implements MediaServiceContract
         if (!$this->isLocalStorageUsing()) {
             Storage::disk('local')->delete($filePath);
         }
-        
+
         Storage::disk('local')->delete($previewLocalPath);
 
         $previewFilename = "preview_{$filename}";
