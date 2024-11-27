@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Illuminate\Support\Facades\Http;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -79,14 +80,38 @@ class MediaService extends EntityService implements MediaServiceContract
     public function createPreview(string $link): Model
     {
         $pathinfo = pathinfo($link);
-        $link = Storage::path($pathinfo['basename']);
+        $filename = $pathinfo['basename'];
 
-        Image::load($link)
-            ->width(config('media.preview.width'))
-            ->height(config('media.preview.height'))
-            ->save();
+        if (Storage::getDefaultDriver() == 'gcs') {
+            $content = Http::get($link)
+                ->getBody()
+                ->getContents();
 
-        $name = "preview_{$pathinfo['basename']}";
+            $localPath = '/temp_files/' . $filename;
+
+            Storage::disk('local')->put($localPath, $content);
+
+            $previewLocalPath = '/temp_files/preview_' . $filename;
+
+            Image::load(Storage::disk('local')->path($localPath))
+                ->width(config('media.preview.width'))
+                ->height(config('media.preview.height'))
+                ->save(Storage::disk('local')->path($previewLocalPath));
+
+            Storage::put('preview_' . $filename, Storage::disk('local')->get($previewLocalPath));
+
+            unlink(Storage::disk('local')->path($localPath));
+            unlink(Storage::disk('local')->path($previewLocalPath));
+        } else {
+            $link = Storage::path($filename);
+
+            Image::load($link)
+                ->width(config('media.preview.width'))
+                ->height(config('media.preview.height'))
+                ->save();
+        }
+
+        $name = "preview_{$filename}";
         $data['name'] = $name;
         $data['link'] = "{$pathinfo['dirname']}/{$name}";
         $data['owner_id'] = Auth::id();
