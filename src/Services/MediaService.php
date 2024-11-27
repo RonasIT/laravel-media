@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Services;
 
 use Illuminate\Support\Facades\Http;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -77,39 +78,36 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createPreview(string $link): Model
+    public function createPreview(string $filename): Model
     {
+        $link = Storage::path($filename);
         $pathinfo = pathinfo($link);
-        $filename = $pathinfo['basename'];
 
-        if (Storage::getDefaultDriver() == 'gcs') {
-            $content = Http::get($link)
-                ->getBody()
-                ->getContents();
+        if (!Storage::getAdapter() instanceof (LocalFilesystemAdapter::class)) {
+            $content = Storage::get($filename);
 
             $localPath = '/temp_files/' . $filename;
 
             Storage::disk('local')->put($localPath, $content);
 
-            $previewLocalPath = '/temp_files/preview_' . $filename;
-
-            Image::load(Storage::disk('local')->path($localPath))
-                ->width(config('media.preview.width'))
-                ->height(config('media.preview.height'))
-                ->save(Storage::disk('local')->path($previewLocalPath));
-
-            Storage::put('preview_' . $filename, Storage::disk('local')->get($previewLocalPath));
-
-            unlink(Storage::disk('local')->path($localPath));
-            unlink(Storage::disk('local')->path($previewLocalPath));
+            $filePath = Storage::disk('local')->path($localPath);
         } else {
-            $link = Storage::path($filename);
-
-            Image::load($link)
-                ->width(config('media.preview.width'))
-                ->height(config('media.preview.height'))
-                ->save();
+            $filePath = Storage::path($filename);
         }
+
+        $previewLocalPath = '/temp_files/preview_' . $filename;
+
+        Image::load($filePath)
+            ->width(config('media.preview.width'))
+            ->height(config('media.preview.height'))
+            ->save(Storage::disk('local')->path($previewLocalPath));
+
+        Storage::put('preview_' . $filename, Storage::disk('local')->get($previewLocalPath));
+
+        if (!Storage::getAdapter() instanceof (LocalFilesystemAdapter::class)) {
+            Storage::disk('local')->delete($filePath);
+        }
+        Storage::disk('local')->delete($previewLocalPath);
 
         $name = "preview_{$filename}";
         $data['name'] = $name;
