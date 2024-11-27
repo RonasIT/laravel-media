@@ -81,6 +81,8 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $filePath = Storage::path($filename);
 
+        $previewFilename = "preview_{$filename}";
+
         if (!$this->isLocalStorageUsing()) {
             $content = Storage::get($filename);
 
@@ -89,14 +91,14 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path("/temp_files/{$filename}");
         }
 
-        $previewLocalPath = "/temp_files/preview_{$filename}";
+        $previewLocalPath = "/temp_files/$previewFilename";
 
         Image::load($filePath)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
             ->save(Storage::disk('local')->path($previewLocalPath));
 
-        Storage::put("preview_{$filename}", Storage::disk('local')->get($previewLocalPath));
+        Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
 
         if (!$this->isLocalStorageUsing()) {
             Storage::disk('local')->delete($filePath);
@@ -104,10 +106,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         Storage::disk('local')->delete($previewLocalPath);
 
-        $previewFilename = "preview_{$filename}";
-
-        $name = "preview_{$filename}";
-        $data['name'] = $name;
+        $data['name'] = $previewFilename;
         $data['link'] = Storage::url($previewFilename);
         $data['owner_id'] = Auth::id();
 
