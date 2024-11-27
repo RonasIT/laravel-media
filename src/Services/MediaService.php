@@ -79,40 +79,43 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createPreview(string $filename): Model
     {
-        $link = Storage::path($filename);
-        $pathinfo = pathinfo($link);
+        $filePath = Storage::path($filename);
 
-        if (!Storage::getAdapter() instanceof (LocalFilesystemAdapter::class)) {
+        if (!$this->isLocalStorageUsing()) {
             $content = Storage::get($filename);
 
-            $localPath = '/temp_files/' . $filename;
+            Storage::disk('local')->put("/temp_files/{$filename}", $content);
 
-            Storage::disk('local')->put($localPath, $content);
-
-            $filePath = Storage::disk('local')->path($localPath);
-        } else {
-            $filePath = Storage::path($filename);
+            $filePath = Storage::disk('local')->path("/temp_files/{$filename}");
         }
 
-        $previewLocalPath = '/temp_files/preview_' . $filename;
+        $previewLocalPath = "/temp_files/preview_{$filename}";
 
         Image::load($filePath)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
             ->save(Storage::disk('local')->path($previewLocalPath));
 
-        Storage::put('preview_' . $filename, Storage::disk('local')->get($previewLocalPath));
+        Storage::put("preview_{$filename}", Storage::disk('local')->get($previewLocalPath));
 
-        if (!Storage::getAdapter() instanceof (LocalFilesystemAdapter::class)) {
+        if (!$this->isLocalStorageUsing()) {
             Storage::disk('local')->delete($filePath);
         }
+        
         Storage::disk('local')->delete($previewLocalPath);
+
+        $previewFilename = "preview_{$filename}";
 
         $name = "preview_{$filename}";
         $data['name'] = $name;
-        $data['link'] = "{$pathinfo['dirname']}/{$name}";
+        $data['link'] = Storage::url($previewFilename);
         $data['owner_id'] = Auth::id();
 
         return $this->repository->create($data);
+    }
+
+    private function isLocalStorageUsing(): bool
+    {
+        return Storage::getAdapter() instanceof (LocalFilesystemAdapter::class);
     }
 }
