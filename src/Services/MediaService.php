@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Services;
 
-use Illuminate\Support\Facades\Http;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
