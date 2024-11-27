@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -76,21 +77,43 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createPreview(string $link): Model
+    public function createPreview(string $filename): Model
     {
-        $pathinfo = pathinfo($link);
-        $link = Storage::path($pathinfo['basename']);
+        $filePath = Storage::path($filename);
+        $previewFilename = "preview_{$filename}";
 
-        Image::load($link)
+        if (!$this->isLocalStorageUsing()) {
+            $content = Storage::get($filename);
+
+            Storage::disk('local')->put("/temp_files/{$filename}", $content);
+
+            $filePath = Storage::disk('local')->path("/temp_files/{$filename}");
+        }
+
+        $previewLocalPath = "/temp_files/$previewFilename";
+
+        Image::load($filePath)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
-            ->save();
+            ->save(Storage::disk('local')->path($previewLocalPath));
 
-        $name = "preview_{$pathinfo['basename']}";
-        $data['name'] = $name;
-        $data['link'] = "{$pathinfo['dirname']}/{$name}";
+        Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
+
+        if (!$this->isLocalStorageUsing()) {
+            Storage::disk('local')->delete($filePath);
+        }
+
+        Storage::disk('local')->delete($previewLocalPath);
+
+        $data['name'] = $previewFilename;
+        $data['link'] = Storage::url($previewFilename);
         $data['owner_id'] = Auth::id();
 
         return $this->repository->create($data);
+    }
+
+    private function isLocalStorageUsing(): bool
+    {
+        return Storage::getAdapter() instanceof (LocalFilesystemAdapter::class);
     }
 }
