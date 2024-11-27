@@ -80,7 +80,6 @@ class MediaService extends EntityService implements MediaServiceContract
     public function createPreview(string $filename): Model
     {
         $filePath = Storage::path($filename);
-
         $previewFilename = "preview_{$filename}";
 
         if (!$this->isLocalStorageUsing()) {
