@@ -25,14 +25,15 @@ class MediaRouter
             foreach ($options as $option) {
                 $defaultOptions[$option->value] = true;
             }
-            $options = array_merge($defaultOptions, array_fill_keys(array_keys($options), true));
 
-            $this->controller(MediaController::class)->group(function () use ($options) {
-                when($options['create'], fn() => $this->post('media', 'create')->name('media.create'));
-                when($options['delete'], fn() => $this->delete('media/{id}', 'delete')->name('media.delete'));
-                when($options['bulk_create'], fn() => $this->post('media/bulk', 'bulkCreate')->name('media.create.bulk')
+            $this->controller(MediaController::class)->group(function () use ($defaultOptions) {
+                when($defaultOptions['create'], fn() => $this->post('media', 'create')->name('media.create'));
+                when($defaultOptions['delete'], fn() => $this->delete('media/{id}', 'delete')->name('media.delete'));
+                when(
+                    $defaultOptions['bulk_create'],
+                    fn() => $this->post('media/bulk', 'bulkCreate')->name('media.create.bulk')
                 );
-                when($options['search'], fn() => $this->get('media', 'search')->name('media.search'));
+                when($defaultOptions['search'], fn() => $this->get('media', 'search')->name('media.search'));
             });
         };
     }
