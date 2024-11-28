@@ -26,8 +26,9 @@ class MediaRouter
             if (empty($options)){
                 $options = array_fill_keys(array_keys($defaultOptions), true);
             } else {
-                $options = array_column($options, 'value');
-                $options = array_fill_keys(array_values($options), array_keys($options));
+                foreach ($options as $option) {
+                    $defaultOptions[$option->value] = true;
+                }
                 $options = array_merge($defaultOptions, array_fill_keys(array_keys($options), true));
             }
 
