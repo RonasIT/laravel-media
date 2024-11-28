@@ -48,10 +48,11 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['preview_id'] = $this->createPreview($data['link'])->id;
+        $data['preview_id'] = $this->createPreview($data['name'])->id;
 
         return $this->repository->create($data);
     }
+
 
     public function bulkCreate(array $data): array
     {
@@ -100,7 +101,8 @@ class MediaService extends EntityService implements MediaServiceContract
         Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
 
         if (!$this->isLocalStorageUsing()) {
-            Storage::disk('local')->delete($filePath);
+            $relativePath = "/temp_files/{$filename}";
+            Storage::disk('local')->delete(Storage::path($relativePath));
         }
 
         Storage::disk('local')->delete($previewLocalPath);
