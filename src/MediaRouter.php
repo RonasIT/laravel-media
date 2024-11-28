@@ -27,13 +27,10 @@ class MediaRouter
             }
 
             $this->controller(MediaController::class)->group(function () use ($defaultOptions) {
-                when($defaultOptions['create'], fn() => $this->post('media', 'create')->name('media.create'));
-                when($defaultOptions['delete'], fn() => $this->delete('media/{id}', 'delete')->name('media.delete'));
-                when(
-                    $defaultOptions['bulk_create'],
-                    fn() => $this->post('media/bulk', 'bulkCreate')->name('media.create.bulk')
-                );
-                when($defaultOptions['search'], fn() => $this->get('media', 'search')->name('media.search'));
+                when($defaultOptions['create'], fn () => $this->post('media', 'create')->name('media.create'));
+                when($defaultOptions['delete'], fn () => $this->delete('media/{id}', 'delete')->name('media.delete'));
+                when($defaultOptions['bulk_create'], fn () => $this->post('media/bulk', 'bulkCreate')->name('media.create.bulk'));
+                when($defaultOptions['search'], fn () => $this->get('media', 'search')->name('media.search'));
             });
         };
     }
