@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Tests;
 
+use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
+
+        Storage::makeDirectory('temp_files');
+
+        FileFacade::chmod(Storage::path('temp_files'), 0777);
     }
 
     public function testCreate(): void
