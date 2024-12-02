@@ -33,10 +33,6 @@ class MediaTest extends TestCase
 
         Storage::fake();
 
-        Storage::makeDirectory('temp_files');
-
-        FileFacade::chmod(Storage::path('temp_files'), 0777);
-
         MediaRouter::$isBlockedBaseRoutes = false;
     }
 
