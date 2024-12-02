@@ -34,6 +34,58 @@ class MediaStaticTest extends TestCase
         Storage::fake();
     }
 
+    public function testEverythingDisabledExceptSearch(): void
+    {
+        Route::media(MediaRouteActionEnum::Search);
+
+        $response = $this->actingAs(self::$user)->json('get', '/media');
+        $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
+        $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
+        $responseDelete = $this->actingAs(self::$user)->json('delete', '/media/1');
+
+        $response->assertOk();
+
+        $responseCreate->assertNotFound();
+        $responseDelete->assertNotFound();
+        $responseCreateBulk->assertNotFound();
+    }
+
+    public function testEverythingDisabledExceptDelete(): void
+    {
+        Route::media(MediaRouteActionEnum::Delete);
+
+        $filePath = 'preview_Private photo';
+        Storage::put($filePath, 'content');
+
+        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
+        $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
+        $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
+        $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
+
+        $response->assertNoContent();
+        Storage::assertMissing($filePath);
+
+        $responseCreate->assertNotFound();
+        $responseSearch->assertNotFound();
+        $responseCreateBulk->assertNotFound();
+    }
+
+    public function testEverythingDisabledExceptCreate(): void
+    {
+        Route::media(MediaRouteActionEnum::SingleUpload);
+
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+        $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
+        $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
+        $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
+
+        $response->assertCreated();
+
+        $responseSearch->assertNotFound();
+        $responseSearch->assertNotFound();
+        $responseCreateBulk->assertNotFound();
+    }
+
     public function testCreate(): void
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
@@ -264,7 +316,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getBadFiles')]
     public function testUploadingBadFiles(string $fileName): void
     {
-        Route::media(MediaRouteActionEnum::Search);
+        Route::media(MediaRouteActionEnum::SingleUpload);
 
         self::$file = UploadedFile::fake()->create($fileName, 1024);
 
@@ -297,7 +349,7 @@ class MediaStaticTest extends TestCase
     #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
-        Route::media(MediaRouteActionEnum::Search);
+        Route::media(MediaRouteActionEnum::SingleUpload);
 
         $this->mockGenerateFilename();
 
