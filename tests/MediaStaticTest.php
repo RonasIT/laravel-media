@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Tests;
 
-use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;

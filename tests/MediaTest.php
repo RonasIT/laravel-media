@@ -4,7 +4,6 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\MediaRouter;

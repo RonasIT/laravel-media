@@ -15,6 +15,8 @@ use RonasIT\Support\Traits\FilesUploadTrait;
 use Spatie\Image\Image;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+use function PHPUnit\Framework\directoryExists;
+
 /**
  * @property MediaRepository $repository
  * @mixin MediaRepository
@@ -80,9 +82,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createPreview(string $filename): Model
     {
-        Storage::makeDirectory('temp_files');
-
-        FileFacade::chmod(Storage::path('temp_files'), 0777);
+        $this->createTempDir('/app/vendor/orchestra/testbench-core/laravel/storage/framework/testing/disks/local/temp_files');
 
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
@@ -120,5 +120,15 @@ class MediaService extends EntityService implements MediaServiceContract
     private function isLocalStorageUsing(): bool
     {
         return Storage::getAdapter() instanceof (LocalFilesystemAdapter::class);
+    }
+
+    protected function createTempDir(string $name)
+    {
+        if (!is_dir($name)) {
+            mkdir(
+                directory: $name,
+                recursive: true,
+            );
+        }
     }
 }
