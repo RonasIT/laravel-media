@@ -86,7 +86,8 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
-        $tempPreviewFilePath = "/temp_files/preview_{$filename}";
+        $tempPreviewFilePath = "/temp_files/{$previewFilename}";
+
         $tempFilePath = "/temp_files/{$filename}";
 
         $content = Storage::get($filename);
