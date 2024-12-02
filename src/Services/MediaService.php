@@ -82,7 +82,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createPreview(string $filename): Model
     {
-        $this->createTempDir('/app/vendor/orchestra/testbench-core/laravel/storage/framework/testing/disks/local/temp_files');
+        $this->createTempDir(Storage::path('temp_files'));
 
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
