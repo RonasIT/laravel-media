@@ -86,7 +86,9 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
+        $tempPreviewFilePath = "/temp_files/preview_{$filename}";
         $tempFilePath = "/temp_files/{$filename}";
+
         $content = Storage::get($filename);
 
         if (!$this->isLocalStorageUsing()) {
@@ -95,20 +97,18 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
-        $previewLocalPath = "/temp_files/$previewFilename";
-
         Image::load($filePath)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
-            ->save(Storage::disk('local')->path($previewLocalPath));
+            ->save(Storage::disk('local')->path($tempPreviewFilePath));
 
-        Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
+        Storage::put($previewFilename, Storage::disk('local')->get($tempPreviewFilePath));
 
         if (!$this->isLocalStorageUsing()) {
             Storage::disk('local')->delete(Storage::path($tempFilePath));
         }
 
-        Storage::disk('local')->delete($previewLocalPath);
+        Storage::disk('local')->delete($tempPreviewFilePath);
 
         $data['name'] = $previewFilename;
         $data['link'] = Storage::url($previewFilename);
@@ -122,7 +122,7 @@ class MediaService extends EntityService implements MediaServiceContract
         return Storage::getAdapter() instanceof (LocalFilesystemAdapter::class);
     }
 
-    protected function createTempDir(string $name)
+    protected function createTempDir(string $name): void
     {
         if (!is_dir($name)) {
             mkdir(
