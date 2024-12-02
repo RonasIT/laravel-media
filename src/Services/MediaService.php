@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Illuminate\Support\Facades\File as FileFacade;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,8 @@ use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
 use Spatie\Image\Image;
 use Spatie\MediaLibrary\InteractsWithMedia;
+
+use function PHPUnit\Framework\directoryExists;
 
 /**
  * @property MediaRepository $repository
@@ -48,7 +51,7 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['preview_id'] = $this->createPreview($data['link'])->id;
+        $data['preview_id'] = $this->createPreview($data['name'])->id;
 
         return $this->repository->create($data);
     }
@@ -79,31 +82,34 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createPreview(string $filename): Model
     {
+        $this->createTempDir(Storage::path('temp_files'));
+
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
+        $tempPreviewFilePath = "/temp_files/{$previewFilename}";
+
+        $tempFilePath = "/temp_files/{$filename}";
+
+        $content = Storage::get($filename);
 
         if (!$this->isLocalStorageUsing()) {
-            $content = Storage::get($filename);
+            Storage::disk('local')->put($tempFilePath, $content);
 
-            Storage::disk('local')->put("/temp_files/{$filename}", $content);
-
-            $filePath = Storage::disk('local')->path("/temp_files/{$filename}");
+            $filePath = Storage::disk('local')->path($tempFilePath);
         }
-
-        $previewLocalPath = "/temp_files/$previewFilename";
 
         Image::load($filePath)
             ->width(config('media.preview.width'))
             ->height(config('media.preview.height'))
-            ->save(Storage::disk('local')->path($previewLocalPath));
+            ->save(Storage::disk('local')->path($tempPreviewFilePath));
 
-        Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
+        Storage::put($previewFilename, Storage::disk('local')->get($tempPreviewFilePath));
 
         if (!$this->isLocalStorageUsing()) {
-            Storage::disk('local')->delete($filePath);
+            Storage::disk('local')->delete(Storage::path($tempFilePath));
         }
 
-        Storage::disk('local')->delete($previewLocalPath);
+        Storage::disk('local')->delete($tempPreviewFilePath);
 
         $data['name'] = $previewFilename;
         $data['link'] = Storage::url($previewFilename);
@@ -115,5 +121,15 @@ class MediaService extends EntityService implements MediaServiceContract
     private function isLocalStorageUsing(): bool
     {
         return Storage::getAdapter() instanceof (LocalFilesystemAdapter::class);
+    }
+
+    protected function createTempDir(string $name): void
+    {
+        if (!is_dir($name)) {
+            mkdir(
+                directory: $name,
+                recursive: true,
+            );
+        }
     }
 }
