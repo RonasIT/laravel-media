@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Illuminate\Support\Facades\File as FileFacade;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -53,7 +54,6 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->create($data);
     }
 
-
     public function bulkCreate(array $data): array
     {
         return array_map(function ($media) {
@@ -80,15 +80,19 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createPreview(string $filename): Model
     {
+        Storage::makeDirectory('temp_files');
+
+        FileFacade::chmod(Storage::path('temp_files'), 0777);
+
         $filePath = Storage::path($filename);
         $previewFilename = "preview_{$filename}";
+        $tempFilePath = "/temp_files/{$filename}";
+        $content = Storage::get($filename);
 
         if (!$this->isLocalStorageUsing()) {
-            $content = Storage::get($filename);
+            Storage::disk('local')->put($tempFilePath, $content);
 
-            Storage::disk('local')->put("/temp_files/{$filename}", $content);
-
-            $filePath = Storage::disk('local')->path("/temp_files/{$filename}");
+            $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
         $previewLocalPath = "/temp_files/$previewFilename";
@@ -101,8 +105,7 @@ class MediaService extends EntityService implements MediaServiceContract
         Storage::put($previewFilename, Storage::disk('local')->get($previewLocalPath));
 
         if (!$this->isLocalStorageUsing()) {
-            $relativePath = "/temp_files/{$filename}";
-            Storage::disk('local')->delete(Storage::path($relativePath));
+            Storage::disk('local')->delete(Storage::path($tempFilePath));
         }
 
         Storage::disk('local')->delete($previewLocalPath);
