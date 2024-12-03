@@ -15,10 +15,10 @@ class MediaFactory extends Factory
     {
         $faker = app(Faker::class);
 
-        $name = $faker->unique()->lexify('???????????????'). 'jpg';
+        $name = $faker->unique()->lexify('???????????????');
 
         return [
-            'name' => $name,
+            'name' => "{$name}.jpg",
             'link' => Storage::url($name),
         ];
     }
