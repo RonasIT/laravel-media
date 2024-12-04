@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Services;
 
-use Illuminate\Support\Facades\File as FileFacade;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -14,8 +13,6 @@ use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
 use Spatie\Image\Image;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
-use function PHPUnit\Framework\directoryExists;
 
 /**
  * @property MediaRepository $repository
@@ -51,9 +48,12 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['preview_id'] = $this->createPreview($data['name'])->id;
+        $preview = $this->createPreview($data['name']);
+        $data['preview_id'] = $preview->id;
 
-        return $this->repository->create($data);
+        $media = $this->repository->create($data);
+
+        return $media->setRelation('preview', $preview);
     }
 
     public function bulkCreate(array $data): array
