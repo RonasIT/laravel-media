@@ -34,6 +34,11 @@ class Media extends Model
         return $this->belongsTo(config('media.classes.user_model'));
     }
 
+    public function preview(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'preview_id');
+    }
+
     protected static function newFactory(): MediaFactory
     {
         return MediaFactory::new();

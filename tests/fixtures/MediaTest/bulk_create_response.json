@@ -1,0 +1,36 @@
+{
+    "data": [
+        {
+            "id": 12,
+            "link": "\/storage\/file1.png",
+            "name": "file1.png",
+            "is_public": false,
+            "meta": [
+                "test1"
+            ],
+            "preview": {
+                "id": 11,
+                "link": "\/storage\/preview_file1.png",
+                "name": "preview_file1.png",
+                "is_public": false,
+                "meta": []
+            }
+        },
+        {
+            "id": 14,
+            "link": "\/storage\/file2.png",
+            "name": "file2.png",
+            "is_public": false,
+            "meta": [
+                "test2"
+            ],
+            "preview": {
+                "id": 13,
+                "link": "\/storage\/preview_file2.png",
+                "name": "preview_file2.png",
+                "is_public": false,
+                "meta": []
+            }
+        }
+    ]
+}
