@@ -45,10 +45,12 @@ class MediaService extends EntityService implements MediaServiceContract
     public function create($content, string $fileName, array $data = []): Model
     {
         $fileName = $this->saveFile($fileName, $content);
+
+        $preview = $this->createPreview($fileName);
+
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $preview = $this->createPreview($data['name']);
         $data['preview_id'] = $preview->id;
 
         $media = $this->repository->create($data);
