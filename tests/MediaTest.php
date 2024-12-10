@@ -135,6 +135,17 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertNotChanged();
     }
 
+    public function testDeletePreview(): void
+    {
+        $response = $this->actingAs(self::$user)->json('delete', '/media/3');
+
+        $response->assertUnprocessable();
+
+        $response->assertJson(['message' => 'You can not delete a preview media']);
+
+        self::$mediaTestState->assertNotChanged();
+    }
+
     public function testDeleteNoAuth(): void
     {
         $response = $this->json('delete', '/media/1');

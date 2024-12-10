@@ -245,6 +245,19 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState->assertNotChanged();
     }
 
+    public function testDeletePreview(): void
+    {
+        Route::media(MediaRouteActionEnum::Delete);
+
+        $response = $this->actingAs(self::$user)->json('delete', '/media/3');
+
+        $response->assertUnprocessable();
+
+        $response->assertJson(['message' => 'You can not delete a preview media']);
+
+        self::$mediaTestState->assertNotChanged();
+    }
+
     public static function getSearchFilters(): array
     {
         return [
