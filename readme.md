@@ -45,7 +45,7 @@ In this case automatically registered package routes will fails with the `404` c
 
 ## Customizing
 
-You can register only necessary routes:
+You can register only necessary routes using MediaRouteActionEnum:
 
 ```php
 #routes/api.php
@@ -53,13 +53,9 @@ You can register only necessary routes:
 <?php
 
 use Illuminate\Support\Facades\Route;
+use RonasIT\Media\Enums\MediaRouteActionEnum;
 
-Route::media([
-    'create' => true,
-    'delete' => true,
-    'bulk_create' => false,
-    'search' => true,
-]);
+Route::media(MediaRouteActionEnum::SingleUpload, MediaRouteActionEnum::Delete);
 ```
 
 ## Integration with [LaravelSwagger](https://github.com/RonasIT/laravel-swagger)
