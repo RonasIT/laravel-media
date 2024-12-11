@@ -6,6 +6,7 @@ use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Support\BaseRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class DeleteMediaRequest extends BaseRequest implements DeleteMediaRequestContract
 {
@@ -22,6 +23,10 @@ class DeleteMediaRequest extends BaseRequest implements DeleteMediaRequestContra
 
         if (empty($this->media)) {
             throw new NotFoundHttpException(__('validation.exceptions.not_found', ['entity' => 'Media']));
+        }
+
+        if (str_contains($this->media->name, 'preview')) {
+            throw new UnprocessableEntityHttpException('You can not delete a preview media');
         }
 
         parent::validateResolved();
