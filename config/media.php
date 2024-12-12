@@ -8,9 +8,8 @@ return [
     | Permitted file types
     |--------------------------------------------------------------------------
     |
-    | The list of permitted file types which will be validated
+    | The list of permitted file types
     */
-
     'permitted_types' => [
         'jpg',
         'jpeg',
@@ -25,7 +24,6 @@ return [
     |
     | Authenticatable User model which will be used to create owner relation with Media
     */
-
     'classes' => [
         'user_model' => User::class,
     ],
@@ -47,7 +45,7 @@ return [
    | Max File Size
    |--------------------------------------------------------------------------
    |
-   | Max File size in kilobytes which will be validated
+   | Max File size in kilobytes
    */
     'max_file_size' => 5120,
 ];
