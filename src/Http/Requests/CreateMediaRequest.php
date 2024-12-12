@@ -10,9 +10,10 @@ class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContra
     public function rules(): array
     {
         $types = implode(',', config('media.permitted_types'));
+        $maxFileSize = config('media.max_file_size');
 
         return [
-            'file' => "file|required|max:5120|mimes:{$types}",
+            'file' => "file|required|max:{$maxFileSize}|mimes:{$types}",
             'meta' => 'array',
             'is_public' => 'boolean',
         ];
