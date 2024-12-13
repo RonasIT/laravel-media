@@ -19,12 +19,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Classes
+    | Max File Size
     |--------------------------------------------------------------------------
     |
-    | Authenticatable User model which will be used to create owner relation with Media
+    | Max file size in kilobytes
     */
+    'max_file_size' => 5120,
+
     'classes' => [
+        /*
+        |--------------------------------------------------------------------------
+        | User model
+        |--------------------------------------------------------------------------
+        |
+        | Authenticatable User model which will be used to create owner relation with Media
+        */
         'user_model' => User::class,
     ],
 
@@ -39,13 +48,4 @@ return [
         'width' => 250,
         'height' => 250,
     ],
-
-    /*
-   |--------------------------------------------------------------------------
-   | Max File Size
-   |--------------------------------------------------------------------------
-   |
-   | Max File size in kilobytes
-   */
-    'max_file_size' => 5120,
 ];
