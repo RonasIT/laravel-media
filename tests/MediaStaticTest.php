@@ -54,16 +54,19 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $filePath = 'preview_Private photo';
+        $filePath = 'Private photo';
+        $previewFilePath = "preview_{$filePath}";
         Storage::put($filePath, 'content');
+        Storage::put($previewFilePath, 'content');
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
         $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
         $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertNoContent();
         Storage::assertMissing($filePath);
+        Storage::assertMissing($previewFilePath);
 
         $responseCreate->assertNotFound();
         $responseSearch->assertNotFound();
@@ -211,16 +214,19 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $filePath = 'preview_Private photo';
+        $filePath = 'Private photo';
+        $previewFilePath = "preview_{$filePath}";
         Storage::put($filePath, 'content');
+        Storage::put($previewFilePath, 'content');
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/4');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
 
         $response->assertNoContent();
 
         self::$mediaTestState->assertChangesEqualsFixture('delete_changes.json');
 
         Storage::assertMissing($filePath);
+        Storage::missing($previewFilePath);
     }
 
     public function testDeleteNotExists(): void
@@ -236,9 +242,20 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/1');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/6');
 
         $response->assertForbidden();
+
+        self::$mediaTestState->assertNotChanged();
+    }
+
+    public function testDeletePreview(): void
+    {
+        Route::media(MediaRouteActionEnum::Delete);
+
+        $response = $this->actingAs(self::$user)->json('delete', '/media/3');
+
+        $response->assertBadRequest();
 
         self::$mediaTestState->assertNotChanged();
     }
