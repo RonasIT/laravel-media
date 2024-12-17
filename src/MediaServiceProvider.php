@@ -4,6 +4,7 @@ namespace RonasIT\Media;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
+use RonasIT\Media\Contracts\Repository\MediaRepositoryContract;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -13,6 +14,7 @@ use RonasIT\Media\Http\Requests\BulkCreateMediaRequest;
 use RonasIT\Media\Http\Requests\CreateMediaRequest;
 use RonasIT\Media\Http\Requests\DeleteMediaRequest;
 use RonasIT\Media\Http\Requests\SearchMediaRequest;
+use RonasIT\Media\Repositories\MediaRepository;
 use RonasIT\Media\Services\MediaService;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,5 +42,6 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
+        $this->app->bind(MediaRepositoryContract::class, MediaRepository::class);
     }
 }

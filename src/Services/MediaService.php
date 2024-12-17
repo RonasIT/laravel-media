@@ -3,7 +3,7 @@
 namespace RonasIT\Media\Services;
 
 use League\Flysystem\Local\LocalFilesystemAdapter;
-use RonasIT\Media\Repositories\MediaRepository;
+use RonasIT\Media\Contracts\Repository\MediaRepositoryContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +15,8 @@ use Spatie\Image\Image;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * @property MediaRepository $repository
- * @mixin MediaRepository
+ * @property MediaRepositoryContract $repository
+ * @mixin MediaRepositoryContract
  */
 class MediaService extends EntityService implements MediaServiceContract
 {
@@ -25,7 +25,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function __construct()
     {
-        $this->setRepository(MediaRepository::class);
+        $this->setRepository(MediaRepositoryContract::class);
     }
 
     public function search(array $filters): LengthAwarePaginator
