@@ -100,6 +100,8 @@ class MediaStaticTest extends TestCase
         $response->assertCreated();
 
         self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
+
+        $this->assertEqualsFixture('create_response.json', $response->json());
     }
 
     public function testCreateWasCreateDisabled(): void
@@ -188,6 +190,8 @@ class MediaStaticTest extends TestCase
         $response->assertOk();
 
         self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
+
+        $this->assertEqualsFixture('bulk_create_response.json', $response->json());
     }
 
     public function testDeleteWasDeleteDisabled(): void

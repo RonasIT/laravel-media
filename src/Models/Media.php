@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use RonasIT\Support\Traits\ModelTrait;
+use RonasIT\Media\Database\Factories\MediaFactory;
 
 class Media extends Model
 {
@@ -34,12 +35,13 @@ class Media extends Model
         return $this->belongsTo(config('media.classes.user_model'));
     }
 
-    public function preview(): HasOne
+    public function preview(): BelongsTo
     {
-        return $this->hasOne(
-            self::class,
-            'preview_id',
-            'id'
-        );
+        return $this->belongsTo(self::class, 'preview_id');
+    }
+
+    protected static function newFactory(): MediaFactory
+    {
+        return MediaFactory::new();
     }
 }
