@@ -255,7 +255,7 @@ class MediaStaticTest extends TestCase
 
         $response = $this->actingAs(self::$user)->json('delete', '/media/3');
 
-        $response->assertUnprocessable();
+        $response->assertBadRequest();
 
         self::$mediaTestState->assertNotChanged();
     }
