@@ -5,6 +5,7 @@ namespace RonasIT\Media\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use RonasIT\Support\Traits\ModelTrait;
 
 class Media extends Model
@@ -31,5 +32,14 @@ class Media extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(config('media.classes.user_model'));
+    }
+
+    public function preview(): HasOne
+    {
+        return $this->hasOne(
+            self::class,
+            'preview_id',
+            'id'
+        );
     }
 }

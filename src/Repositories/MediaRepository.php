@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use RonasIT\Media\Models\Media;
 use RonasIT\Support\Repositories\BaseRepository;
 

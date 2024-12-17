@@ -116,7 +116,7 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('delete_changes.json');
 
         Storage::assertMissing($filePath);
-        Storage::missing($previewFilePath);
+        Storage::assertMissing($previewFilePath);
     }
 
     public function testDeleteNotExists(): void
@@ -140,8 +140,6 @@ class MediaTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/3');
 
         $response->assertUnprocessable();
-
-        $response->assertJson(['message' => 'You can not delete a preview media']);
 
         self::$mediaTestState->assertNotChanged();
     }

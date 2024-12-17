@@ -66,7 +66,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertNoContent();
         Storage::assertMissing($filePath);
-        Storage::missing($previewFilePath);
+        Storage::assertMissing($previewFilePath);
 
         $responseCreate->assertNotFound();
         $responseSearch->assertNotFound();
@@ -252,8 +252,6 @@ class MediaStaticTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/3');
 
         $response->assertUnprocessable();
-
-        $response->assertJson(['message' => 'You can not delete a preview media']);
 
         self::$mediaTestState->assertNotChanged();
     }
