@@ -5,7 +5,6 @@ namespace RonasIT\Media\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use RonasIT\Support\Traits\ModelTrait;
 use RonasIT\Media\Database\Factories\MediaFactory;
 
@@ -38,6 +37,15 @@ class Media extends Model
     public function preview(): BelongsTo
     {
         return $this->belongsTo(self::class, 'preview_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(
+            related: self::class,
+            foreignKey: 'id',
+            ownerKey: 'preview_id',
+        );
     }
 
     protected static function newFactory(): MediaFactory

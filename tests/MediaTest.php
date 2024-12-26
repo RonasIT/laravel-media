@@ -144,7 +144,7 @@ class MediaTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/3');
 
         $response->assertBadRequest();
-
+        
         self::$mediaTestState->assertNotChanged();
     }
 

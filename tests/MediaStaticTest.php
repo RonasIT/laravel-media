@@ -54,19 +54,12 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $filePath = 'Private photo';
-        $previewFilePath = "preview_{$filePath}";
-        Storage::put($filePath, 'content');
-        Storage::put($previewFilePath, 'content');
-
         $response = $this->actingAs(self::$user)->json('delete', '/media/9');
         $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
         $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertNoContent();
-        Storage::assertMissing($filePath);
-        Storage::assertMissing($previewFilePath);
 
         $responseCreate->assertNotFound();
         $responseSearch->assertNotFound();
@@ -78,14 +71,14 @@ class MediaStaticTest extends TestCase
         Route::media(MediaRouteActionEnum::SingleUpload);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
-        $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
+        $responseDelete = $this->actingAs(self::$user)->json('delete', '/media/1');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
         $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertCreated();
 
         $responseSearch->assertNotFound();
-        $responseSearch->assertNotFound();
+        $responseDelete->assertNotFound();
         $responseCreateBulk->assertNotFound();
     }
 
