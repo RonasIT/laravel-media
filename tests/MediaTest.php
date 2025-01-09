@@ -128,6 +128,8 @@ class MediaTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/0');
 
         $response->assertNotFound();
+
+        $response->assertJson(['message' => 'Media does not exist']);
     }
 
     public function testDeleteNoPermission(): void
@@ -144,7 +146,9 @@ class MediaTest extends TestCase
         $response = $this->actingAs(self::$user)->json('delete', '/media/3');
 
         $response->assertBadRequest();
-        
+
+        $response->assertJson(['message' => 'Media is preview']);
+
         self::$mediaTestState->assertNotChanged();
     }
 

@@ -20,14 +20,14 @@ class DeleteMediaRequest extends BaseRequest implements DeleteMediaRequestContra
 
     public function validateResolved(): void
     {
-        $this->media = app(MediaServiceContract::class)->with(['parent'])->first($this->route('id'));
+        $this->media = app(MediaServiceContract::class)->with('parent')->first($this->route('id'));
 
         if (empty($this->media)) {
-            throw new NotFoundHttpException(__('validation.exceptions.not_found', ['entity' => 'Media']));
+            throw new NotFoundHttpException(__('media::validation.exceptions.not_found', ['entity' => 'Media']));
         }
 
         if (!empty($this->media->parent)) {
-            throw new BadRequestHttpException(__('validation.exceptions.preview_delete'));
+            throw new BadRequestHttpException(__('media::validation.exceptions.media_is_preview'));
         }
 
         parent::validateResolved();
