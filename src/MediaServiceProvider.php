@@ -35,7 +35,7 @@ class MediaServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../lang' => $this->app->langPath('vendor/media'),
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/media'),
         ], 'lang');
     }
 
