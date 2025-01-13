@@ -53,6 +53,6 @@ class MediaController extends Controller
     ): MediaListResourceContract {
         $result = $mediaService->bulkCreate($request->onlyValidated('media'));
 
-        return new MediaCollection($result);
+        return MediaCollection::make($result);
     }
 }
