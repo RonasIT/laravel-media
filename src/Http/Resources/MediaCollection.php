@@ -9,4 +9,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class MediaCollection extends ResourceCollection implements MediaCollectionContract, MediaListResourceContract
 {
     public $collects = MediaResource::class;
+
+    public static $wrap = null;
 }
