@@ -24,6 +24,8 @@ class MediaServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
 
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'media');
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
@@ -31,6 +33,10 @@ class MediaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/media.php' => config_path('media.php'),
         ], 'config');
+
+        $this->publishes([
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/media'),
+        ], 'lang');
     }
 
     public function register(): void

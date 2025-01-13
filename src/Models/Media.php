@@ -39,6 +39,15 @@ class Media extends Model
         return $this->belongsTo(self::class, 'preview_id');
     }
 
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(
+            related: self::class,
+            foreignKey: 'id',
+            ownerKey: 'preview_id',
+        );
+    }
+
     protected static function newFactory(): MediaFactory
     {
         return MediaFactory::new();

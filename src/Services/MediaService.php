@@ -72,6 +72,10 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $entity = $this->first($where);
 
+        if (!empty($entity->preview_id)) {
+            $this->delete($entity->preview_id);
+        }
+
         Storage::delete($entity->name);
 
         return $this->repository->delete($where);
