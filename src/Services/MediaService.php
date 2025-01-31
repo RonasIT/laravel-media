@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Illuminate\Support\Arr;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -23,9 +24,13 @@ class MediaService extends EntityService implements MediaServiceContract
     use FilesUploadTrait;
     use InteractsWithMedia;
 
+    protected $previewDrivers;
+
     public function __construct()
     {
         $this->setRepository(MediaRepository::class);
+
+        $this->previewDrivers = config('media.drivers');
     }
 
     public function search(array $filters): LengthAwarePaginator
@@ -46,16 +51,27 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $preview = $this->createPreview($fileName);
+        if (!Arr::get($data, 'preview_drivers', false)) {
+            $previews = $this->createPreviews($fileName);
+        } else {
+            $previews = $this->createPreviews($fileName, $data['preview_drivers']);
+        }
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['preview_id'] = $preview->id;
 
-        $media = $this->repository->create($data);
+        if (Arr::get($previews, 'file', false)) {
+            $preview = $previews['file'];
 
-        return $media->setRelation('preview', $preview);
+            $data['preview_id'] = $preview->id;
+
+            $media = $this->repository->create($data);
+
+            return $media->setRelation('preview', $preview);
+        }
+
+        return $this->repository->create($data);
     }
 
     public function bulkCreate(array $data): array
@@ -137,5 +153,22 @@ class MediaService extends EntityService implements MediaServiceContract
                 recursive: true,
             );
         }
+    }
+
+    protected function createPreviews(string $fileName, array $previewTypes = null): array
+    {
+        if (is_null($previewTypes)) {
+            $previewTypes = $this->previewDrivers;
+        }
+
+        $results = [];
+
+        foreach ($previewTypes as $type) {
+            $results[$type] = match ($type) {
+                'file' => $this->createPreview($fileName),
+            };
+        }
+
+        return $results;
     }
 }

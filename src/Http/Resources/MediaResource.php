@@ -15,6 +15,7 @@ class MediaResource extends BaseResource implements MediaResourceContract
             'is_public' => $this->resource->is_public,
             'meta' => $this->resource->meta,
             'preview' => MediaResource::make($this->whenLoaded('preview')),
+            'preview_hash' => $this->whenNotNull($this->resource->preview_hash),
         ];
     }
 }

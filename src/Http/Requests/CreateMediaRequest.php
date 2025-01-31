@@ -11,11 +11,19 @@ class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContra
     {
         $types = implode(',', config('media.permitted_types'));
         $maxFileSize = config('media.max_file_size');
+        $previewProviders = implode(',', $this->getPreviewProviders());
 
         return [
             'file' => "file|required|max:{$maxFileSize}|mimes:{$types}",
+            'preview_drivers' => 'array',
+            'preview_drivers.*' => "string|in:{$previewProviders}",
             'meta' => 'array',
             'is_public' => 'boolean',
         ];
+    }
+
+    protected function getPreviewProviders(): array
+    {
+        return config('media.drivers');
     }
 }
