@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Bepsvpt\Blurhash\Facades\BlurHash;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +53,8 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
         $data['preview_id'] = $preview->id;
+        $data['preview_hash'] = $this->createHashPreview($fileName);
+
 
         $media = $this->repository->create($data);
 
@@ -137,5 +140,12 @@ class MediaService extends EntityService implements MediaServiceContract
                 recursive: true,
             );
         }
+    }
+
+    protected function createHashPreview(string $fileName): string
+    {
+        $filePath = Storage::path($fileName);
+
+        return BlurHash::encode($filePath);
     }
 }

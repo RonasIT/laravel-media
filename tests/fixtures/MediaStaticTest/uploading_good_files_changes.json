@@ -10,7 +10,8 @@
             "is_public": false,
             "owner_id": 2,
             "preview_id": null,
-            "meta": []
+            "meta": [],
+            "preview_hash": null
         },
         {
             "id": 12,
@@ -21,7 +22,8 @@
             "is_public": false,
             "owner_id": 2,
             "preview_id": "11",
-            "meta": []
+            "meta": [],
+            "preview_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ"
         }
     ],
     "deleted": []
