@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use RonasIT\Media\Enums\PreviewDriverEnum;
 
 return [
     /*
@@ -58,6 +59,6 @@ return [
   */
 
     'drivers' => [
-        'file',
+        PreviewDriverEnum::File->value,
     ],
 ];

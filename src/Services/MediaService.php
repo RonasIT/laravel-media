@@ -24,7 +24,7 @@ class MediaService extends EntityService implements MediaServiceContract
     use FilesUploadTrait;
     use InteractsWithMedia;
 
-    protected $previewDrivers;
+    protected array $previewDrivers;
 
     public function __construct()
     {
@@ -51,11 +51,7 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        if (!Arr::get($data, 'preview_drivers', false)) {
-            $previews = $this->createPreviews($fileName);
-        } else {
-            $previews = $this->createPreviews($fileName, $data['preview_drivers']);
-        }
+        $previews = $this->createPreviews($fileName, Arr::get($data, 'preview_drivers'));
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
@@ -102,7 +98,7 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createPreview(string $filename): Model
+    public function createFilePreview(string $filename): Model
     {
         $this->createTempDir(Storage::disk('local')->path('temp_files'));
 
@@ -165,7 +161,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         foreach ($previewTypes as $type) {
             $results[$type] = match ($type) {
-                'file' => $this->createPreview($fileName),
+                'file' => $this->createFilePreview($fileName),
             };
         }
 
