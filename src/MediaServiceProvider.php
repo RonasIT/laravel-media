@@ -18,6 +18,8 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
+    protected static $blurHash;
+
     public function boot(): void
     {
         Route::mixin(new MediaRouter());
@@ -39,17 +41,6 @@ class MediaServiceProvider extends ServiceProvider
         ], 'lang');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/blurhash.php', 'blurhash');
-
-        $this->app->singleton('blurhash', function ($app) {
-            $config = $app['config']->get('blurhash');
-
-            return new BlurHash(
-                $config['driver'] ?? 'gd',
-                $config['components-x'],
-                $config['components-y'],
-                $config['resized-max-size'] ?? $config['resized-image-max-width'],
-            );
-        });
     }
 
     public function register(): void
@@ -59,5 +50,21 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
+    }
+
+    public static function blurHash(): BlurHash
+    {
+        if (!self::$blurHash) {
+            $config = config('blurhash');
+
+            self::$blurHash = new BlurHash(
+                $config['driver'],
+                $config['components-x'],
+                $config['components-y'],
+                $config['resized-max-size']
+            );
+        }
+
+        return self::$blurHash;
     }
 }

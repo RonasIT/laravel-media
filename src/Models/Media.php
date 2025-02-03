@@ -20,7 +20,7 @@ class Media extends Model
         'is_public',
         'meta',
         'preview_id',
-        'preview_hash',
+        'blur_hash',
     ];
 
     protected $casts = [

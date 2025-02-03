@@ -9,14 +9,14 @@ class AddBlurhashFieldToMediaTable extends Migration
     public function up()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->string('preview_hash')->nullable();
+            $table->string('blur_hash')->nullable();
         });
     }
 
     public function down()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->dropColumn('preview_hash');
+            $table->dropColumn('blur_hash');
         });
     }
 }

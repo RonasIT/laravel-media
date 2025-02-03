@@ -11,7 +11,7 @@
             "owner_id": 2,
             "preview_id": null,
             "meta": [],
-            "preview_hash": null
+            "blur_hash": null
         },
         {
             "id": 12,
@@ -23,7 +23,7 @@
             "owner_id": 2,
             "preview_id": "11",
             "meta": [],
-            "preview_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ"
+            "blur_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ"
         }
     ],
     "deleted": []

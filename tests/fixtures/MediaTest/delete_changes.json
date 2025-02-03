@@ -12,7 +12,7 @@
             "owner_id": 2,
             "preview_id": null,
             "meta": [],
-            "preview_hash": null
+            "blur_hash": null
         },
         {
             "id": 9,
@@ -24,7 +24,7 @@
             "owner_id": 2,
             "preview_id": "4",
             "meta": [],
-            "preview_hash": null
+            "blur_hash": null
         }
     ]
 }
