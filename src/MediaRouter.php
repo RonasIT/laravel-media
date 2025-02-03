@@ -2,28 +2,31 @@
 
 namespace RonasIT\Media;
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Arr;
 use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Http\Controllers\MediaController;
+use Closure;
 
 class MediaRouter
 {
     public static bool $isBlockedBaseRoutes = false;
 
-    public function media()
+    public function media(): Closure
     {
         return function (MediaRouteActionEnum ...$options) {
             MediaRouter::$isBlockedBaseRoutes = true;
 
             $defaultOptions = [
-                'create' => false,
-                'delete' => false,
-                'bulk_create' => false,
-                'search' => false,
+                'create' => true,
+                'delete' => true,
+                'bulk_create' => true,
+                'search' => true,
             ];
 
-            foreach ($options as $option) {
-                $defaultOptions[$option->value] = true;
+            if (!empty($options)) {
+                $options = collect($options);
+
+                $defaultOptions = Arr::map($defaultOptions, fn ($value, $defaultOption) => $options->contains('value', $defaultOption));
             }
 
             $this->controller(MediaController::class)->group(function () use ($defaultOptions) {
