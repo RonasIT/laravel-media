@@ -3,10 +3,9 @@
 namespace RonasIT\Media\Http\Requests;
 
 use Illuminate\Support\Arr;
-use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Support\BaseRequest;
 
-class BaseCreateMediaRequest extends BaseRequest implements BulkCreateMediaRequestContract
+class BaseCreateMediaRequest extends BaseRequest
 {
     protected function getPreviewProviders(): array
     {
