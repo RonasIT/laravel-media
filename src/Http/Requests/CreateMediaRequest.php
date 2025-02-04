@@ -3,9 +3,8 @@
 namespace RonasIT\Media\Http\Requests;
 
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
-use RonasIT\Support\BaseRequest;
 
-class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContract
+class CreateMediaRequest extends BaseCreateMediaRequest implements CreateMediaRequestContract
 {
     public function rules(): array
     {
@@ -22,8 +21,5 @@ class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContra
         ];
     }
 
-    protected function getPreviewProviders(): array
-    {
-        return config('media.drivers');
-    }
+
 }

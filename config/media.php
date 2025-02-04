@@ -59,6 +59,6 @@ return [
   */
 
     'drivers' => [
-        PreviewDriverEnum::File->value,
+        PreviewDriverEnum::File,
     ],
 ];

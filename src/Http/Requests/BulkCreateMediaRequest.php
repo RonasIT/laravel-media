@@ -3,9 +3,8 @@
 namespace RonasIT\Media\Http\Requests;
 
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
-use RonasIT\Support\BaseRequest;
 
-class BulkCreateMediaRequest extends BaseRequest implements BulkCreateMediaRequestContract
+class BulkCreateMediaRequest extends BaseCreateMediaRequest implements BulkCreateMediaRequestContract
 {
     public function rules(): array
     {
@@ -22,10 +21,5 @@ class BulkCreateMediaRequest extends BaseRequest implements BulkCreateMediaReque
             'media.*.meta' => 'array',
             'media.*.is_public' => 'boolean',
         ];
-    }
-
-    protected function getPreviewProviders(): array
-    {
-        return config('media.drivers');
     }
 }

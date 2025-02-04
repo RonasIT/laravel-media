@@ -4,6 +4,7 @@ namespace RonasIT\Media\Services;
 
 use Illuminate\Support\Arr;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,7 +31,7 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $this->setRepository(MediaRepository::class);
 
-        $this->previewDrivers = config('media.drivers');
+        $this->previewDrivers = Arr::map(config('media.drivers'), fn($driver) => $driver->value);
     }
 
     public function search(array $filters): LengthAwarePaginator
@@ -51,20 +52,16 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $previews = $this->createPreviews($fileName, Arr::get($data, 'preview_drivers'));
+        $this->createPreviews($fileName, $data, Arr::get($data, 'preview_drivers', []));
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
 
-        if (Arr::get($previews, 'file', false)) {
-            $preview = $previews['file'];
-
-            $data['preview_id'] = $preview->id;
-
+        if (Arr::get($data, 'preview_id', false)) {
             $media = $this->repository->create($data);
 
-            return $media->setRelation('preview', $preview);
+            return $media->load('preview');
         }
 
         return $this->repository->create($data);
@@ -151,20 +148,22 @@ class MediaService extends EntityService implements MediaServiceContract
         }
     }
 
-    protected function createPreviews(string $fileName, array $previewTypes = null): array
+    protected function createPreviews(string $fileName, array &$data, array $previewTypes = []): array
     {
-        if (is_null($previewTypes)) {
+        if (empty($previewTypes)) {
             $previewTypes = $this->previewDrivers;
         }
 
         $results = [];
 
         foreach ($previewTypes as $type) {
-            $results[$type] = match ($type) {
-                'file' => $this->createFilePreview($fileName),
+            $results['preview_id'] = match ($type) {
+                PreviewDriverEnum::File->value => $this->createFilePreview($fileName)->id,
             };
         }
 
-        return $results;
+        $data = array_merge($data, $results);
+
+        return $data;
     }
 }
