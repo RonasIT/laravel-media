@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -11,6 +12,7 @@ use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
 use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
 use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Http\Resources\MediaCollection;
 use RonasIT\Media\Http\Resources\MediaResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +25,10 @@ class MediaController extends Controller
     ): MediaResourceContract {
         $file = $request->file('file');
         $data = $request->onlyValidated();
+
+        if (Arr::get($data, 'preview_drivers', false)) {
+            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn($type) => PreviewDriverEnum::from($type));
+        }
 
         $content = file_get_contents($file->getPathname());
 
@@ -51,7 +57,13 @@ class MediaController extends Controller
         BulkCreateMediaRequestContract $request,
         MediaServiceContract $mediaService
     ): MediaListResourceContract {
-        $result = $mediaService->bulkCreate($request->onlyValidated('media'));
+        $data = $request->onlyValidated('media');
+
+        if (Arr::get($data, 'preview_drivers', false)) {
+            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn($type) => PreviewDriverEnum::from($type));
+        }
+
+        $result = $mediaService->bulkCreate($data);
 
         return MediaCollection::make($result);
     }

@@ -146,6 +146,8 @@ class MediaTest extends TestCase
 
     public function testBulkCreateWithPreviewType(): void
     {
+        $this->mockGenerateFilename('file1.png', 'file2.png');
+
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
                 [
@@ -158,15 +160,15 @@ class MediaTest extends TestCase
                 ],
             ],
             'preview_drivers' => [
-                'some_invalid_type',
+                'file',
             ],
         ]);
 
-        $response->assertUnprocessable();
+        $response->assertOk();
 
-        self::$mediaTestState->assertNotChanged();
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
 
-        $response->assertJson(['message' => 'The selected preview_drivers.0 is invalid.']);
+        $this->assertEqualsFixture('bulk_create_response.json', $response->json());
     }
 
     public function testBulkCreateWithInvalidPreviewType(): void
@@ -409,5 +411,4 @@ class MediaTest extends TestCase
 
         self::$mediaTestState->assertNotChanged();
     }
-
 }

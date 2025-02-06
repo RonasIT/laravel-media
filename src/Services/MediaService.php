@@ -25,13 +25,9 @@ class MediaService extends EntityService implements MediaServiceContract
     use FilesUploadTrait;
     use InteractsWithMedia;
 
-    protected array $previewDrivers;
-
     public function __construct()
     {
         $this->setRepository(MediaRepository::class);
-
-        $this->previewDrivers = Arr::map(config('media.drivers'), fn($driver) => $driver->value);
     }
 
     public function search(array $filters): LengthAwarePaginator
@@ -52,19 +48,18 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $this->createPreviews($fileName, $data, Arr::get($data, 'preview_drivers', []));
+        $previewDrivers = Arr::get($data, 'preview_drivers', null);
+
+        $this->createPreviews($fileName, $data, ...is_array($previewDrivers)
+            ? $previewDrivers : []);
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
 
-        if (Arr::get($data, 'preview_id', false)) {
-            $media = $this->repository->create($data);
-
-            return $media->load('preview');
-        }
-
-        return $this->repository->create($data);
+        return $this->repository
+            ->create($data)
+            ->load('preview');
     }
 
     public function bulkCreate(array $data): array
@@ -148,22 +143,18 @@ class MediaService extends EntityService implements MediaServiceContract
         }
     }
 
-    protected function createPreviews(string $fileName, array &$data, array $previewTypes = []): array
+    protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
-            $previewTypes = $this->previewDrivers;
+            $previewTypes = config('media.drivers');
         }
-
-        $results = [];
 
         foreach ($previewTypes as $type) {
-            $results['preview_id'] = match ($type) {
-                PreviewDriverEnum::File->value => $this->createFilePreview($fileName)->id,
-            };
+            if ($type === PreviewDriverEnum::File) {
+                $preview = $this->createFilePreview($fileName);
+
+                $data['preview_id'] = $preview->id;
+            }
         }
-
-        $data = array_merge($data, $results);
-
-        return $data;
     }
 }

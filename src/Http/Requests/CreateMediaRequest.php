@@ -20,6 +20,4 @@ class CreateMediaRequest extends BaseCreateMediaRequest implements CreateMediaRe
             'is_public' => 'boolean',
         ];
     }
-
-
 }
