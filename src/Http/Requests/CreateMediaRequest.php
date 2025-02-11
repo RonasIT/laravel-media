@@ -3,7 +3,7 @@
 namespace RonasIT\Media\Http\Requests;
 
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
-use RonasIT\Support\BaseRequest;
+use RonasIT\Support\Http\BaseRequest;
 
 class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContract
 {
