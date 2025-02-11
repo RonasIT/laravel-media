@@ -265,10 +265,12 @@ class MediaTest extends TestCase
     #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
-        $this->mockGenerateFilename([
-            'argument' => $fileName,
-            'result' => 'file.png',
-        ]);
+        $this->mockGenerateFilename(
+            [
+                'argument' => $fileName,
+                'result' => 'file.png',
+            ],
+        );
 
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);
 
