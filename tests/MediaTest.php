@@ -88,7 +88,7 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create_with_preview_types.json', true);
 
         $this->assertEqualsFixture('create_response.json', $response->json());
 
@@ -155,7 +155,16 @@ class MediaTest extends TestCase
 
     public function testBulkCreateWithPreviewType(): void
     {
-        $this->mockGenerateFilename('file1.png', 'file2.png');
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'file1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'file2.png',
+            ],
+        );
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -175,7 +184,7 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_with_preview_types.json', true);
 
         $this->assertEqualsFixture('bulk_create_response.json', $response->json());
     }

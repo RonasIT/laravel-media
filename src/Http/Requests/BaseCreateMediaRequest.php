@@ -3,7 +3,7 @@
 namespace RonasIT\Media\Http\Requests;
 
 use Illuminate\Support\Arr;
-use RonasIT\Support\BaseRequest;
+use RonasIT\Support\Http\BaseRequest;
 
 class BaseCreateMediaRequest extends BaseRequest
 {
