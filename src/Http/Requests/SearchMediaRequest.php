@@ -3,7 +3,7 @@
 namespace RonasIT\Media\Http\Requests;
 
 use RonasIT\Media\Contracts\Requests\SearchMediaRequestContract;
-use RonasIT\Support\BaseRequest;
+use RonasIT\Support\Http\BaseRequest;
 
 class SearchMediaRequest extends BaseRequest implements SearchMediaRequestContract
 {
