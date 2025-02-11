@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1a592c89b4d13c3d7ac5c63c77c0d2e",
+    "content-hash": "caea3dacd00de6f8a81ec7bf3a67f786",
     "packages": [
         {
             "name": "brick/math",
@@ -4294,16 +4294,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "3.0.1-beta",
+            "version": "3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "5bf2992029c1f71269d0fddd036a102822399925"
+                "reference": "508757e4e8e3c25ef9ea3d24b1701d300b1c2cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/5bf2992029c1f71269d0fddd036a102822399925",
-                "reference": "5bf2992029c1f71269d0fddd036a102822399925",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/508757e4e8e3c25ef9ea3d24b1701d300b1c2cd9",
+                "reference": "508757e4e8e3c25ef9ea3d24b1701d300b1c2cd9",
                 "shasum": ""
             },
             "require": {
@@ -4327,11 +4327,6 @@
             },
             "type": "library",
             "extra": {
-                "laravel": {
-                    "providers": [
-                        "RonasIT\\Support\\HelpersServiceProvider"
-                    ]
-                },
                 "hooks": {
                     "config": {
                         "stop-on-failure": [
@@ -4340,6 +4335,11 @@
                     },
                     "pre-commit": [
                         "docker-compose up -d php && docker-compose exec -T php vendor/bin/php-cs-fixer fix && docker-compose exec -T php vendor/bin/tlint"
+                    ]
+                },
+                "laravel": {
+                    "providers": [
+                        "RonasIT\\Support\\HelpersServiceProvider"
                     ]
                 }
             },
@@ -4370,9 +4370,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.0.1-beta"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.2"
             },
-            "time": "2024-11-04T10:52:30+00:00"
+            "time": "2025-01-15T15:41:59+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9647,9 +9647,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ronasit/laravel-helpers": 10
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
