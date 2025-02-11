@@ -9,17 +9,16 @@ class BulkCreateMediaRequest extends BaseCreateMediaRequest implements BulkCreat
     public function rules(): array
     {
         $types = implode(',', config('media.permitted_types'));
-        $previewProviders = implode(',', $this->getPreviewProviders());
         $maxFileSize = config('media.max_file_size');
 
-        return [
-            'preview_drivers' => 'array',
-            'preview_drivers.*' => "string|in:{$previewProviders}",
+        $rules = [
             'media' => 'required|array',
             'media.*' => 'array',
             'media.*.file' => "file|required|max:{$maxFileSize}|mimes:{$types}",
             'media.*.meta' => 'array',
             'media.*.is_public' => 'boolean',
         ];
+
+        return array_merge(parent::rules(), $rules);
     }
 }

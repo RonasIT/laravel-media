@@ -10,14 +10,13 @@ class CreateMediaRequest extends BaseCreateMediaRequest implements CreateMediaRe
     {
         $types = implode(',', config('media.permitted_types'));
         $maxFileSize = config('media.max_file_size');
-        $previewProviders = implode(',', $this->getPreviewProviders());
 
-        return [
+        $rules = [
             'file' => "file|required|max:{$maxFileSize}|mimes:{$types}",
-            'preview_drivers' => 'array',
-            'preview_drivers.*' => "string|in:{$previewProviders}",
             'meta' => 'array',
             'is_public' => 'boolean',
         ];
+
+        return array_merge(parent::rules(), $rules);
     }
 }

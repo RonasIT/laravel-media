@@ -48,10 +48,9 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $previewDrivers = Arr::get($data, 'preview_drivers', null);
+        $previewDrivers = Arr::get($data, 'preview_drivers', []);
 
-        $this->createPreviews($fileName, $data, ...is_array($previewDrivers)
-            ? $previewDrivers : []);
+        $this->createPreviews($fileName, $data, ...$previewDrivers);
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
