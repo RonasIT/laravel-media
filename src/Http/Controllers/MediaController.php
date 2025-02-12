@@ -26,7 +26,7 @@ class MediaController extends Controller
         $file = $request->file('file');
         $data = $request->onlyValidated();
 
-        if (Arr::get($data, 'preview_drivers', false)) {
+        if (!empty($data['preview_drivers'])) {
             $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn ($type) => PreviewDriverEnum::from($type));
         }
 
@@ -59,7 +59,7 @@ class MediaController extends Controller
     ): MediaListResourceContract {
         $data = $request->onlyValidated('media');
 
-        if (Arr::get($data, 'preview_drivers', false)) {
+        if (!empty($data['preview_drivers'])) {
             $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn ($type) => PreviewDriverEnum::from($type));
         }
 
