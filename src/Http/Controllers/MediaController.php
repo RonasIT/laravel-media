@@ -26,8 +26,8 @@ class MediaController extends Controller
         $file = $request->file('file');
         $data = $request->onlyValidated();
 
-        if (Arr::get($data, 'preview_drivers', false)) {
-            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn ($type) => PreviewDriverEnum::from($type));
+        if (!empty($data['preview_drivers'])) {
+            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn($type) => PreviewDriverEnum::from($type));
         }
 
         $content = file_get_contents($file->getPathname());
@@ -59,8 +59,8 @@ class MediaController extends Controller
     ): MediaListResourceContract {
         $data = $request->onlyValidated('media');
 
-        if (Arr::get($data, 'preview_drivers', false)) {
-            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn ($type) => PreviewDriverEnum::from($type));
+        if (!empty($data['preview_drivers'])) {
+            $data['preview_drivers'] = Arr::map($data['preview_drivers'], fn($type) => PreviewDriverEnum::from($type));
         }
 
         $result = $mediaService->bulkCreate($data);
