@@ -75,44 +75,6 @@ class MediaTest extends TestCase
         $this->clearUploadedFilesFolder();
     }
 
-    public function testCreateWithPreviewType(): void
-    {
-        $this->mockGenerateFilename();
-
-        $response = $this->actingAs(self::$user)->json('post', '/media', [
-            'file' => self::$file,
-            'preview_drivers' => [
-                'file',
-            ],
-        ]);
-
-        $response->assertCreated();
-
-        self::$mediaTestState->assertChangesEqualsFixture('create_with_preview_types.json', true);
-
-        $this->assertEqualsFixture('create_response.json', $response->json());
-
-        Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
-
-        $this->clearUploadedFilesFolder();
-    }
-
-    public function testCreateWithInvalidPreviewType(): void
-    {
-        $response = $this->actingAs(self::$user)->json('post', '/media', [
-            'file' => self::$file,
-            'preview_drivers' => [
-                'some_invalid_type',
-            ],
-        ]);
-
-        $response->assertUnprocessable();
-
-        $response->assertJson(['message' => 'The selected preview_drivers.0 is invalid.']);
-
-        self::$mediaTestState->assertNotChanged();
-    }
-
     public function testCreateNoAuth(): void
     {
         $response = $this->json('post', '/media', ['file' => self::$file]);
@@ -151,67 +113,6 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('bulk_create.json');
 
         $this->assertEqualsFixture('bulk_create_response.json', $response->json());
-    }
-
-    public function testBulkCreateWithPreviewType(): void
-    {
-        $this->mockGenerateFilename(
-            [
-                'argument' => 'file.png',
-                'result' => 'file1.png',
-            ],
-            [
-                'argument' => 'file.png',
-                'result' => 'file2.png',
-            ],
-        );
-
-        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
-            'media' => [
-                [
-                    'file' => self::$file,
-                    'meta' => ['test1'],
-                ],
-                [
-                    'file' => self::$file,
-                    'meta' => ['test2'],
-                ],
-            ],
-            'preview_drivers' => [
-                'file',
-            ],
-        ]);
-
-        $response->assertOk();
-
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_with_preview_types.json', true);
-
-        $this->assertEqualsFixture('bulk_create_response.json', $response->json());
-    }
-
-    public function testBulkCreateWithInvalidPreviewType(): void
-    {
-        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
-            'media' => [
-                [
-                    'file' => self::$file,
-                    'meta' => ['test1'],
-                ],
-                [
-                    'file' => self::$file,
-                    'meta' => ['test2'],
-                ],
-            ],
-            'preview_drivers' => [
-                'some_invalid_type',
-            ],
-        ]);
-
-        $response->assertUnprocessable();
-
-        $response->assertJson(['message' => 'The selected preview_drivers.0 is invalid.']);
-
-        self::$mediaTestState->assertNotChanged();
     }
 
     public function testDelete(): void

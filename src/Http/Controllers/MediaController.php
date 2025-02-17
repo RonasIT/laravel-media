@@ -53,9 +53,7 @@ class MediaController extends Controller
         BulkCreateMediaRequestContract $request,
         MediaServiceContract $mediaService
     ): MediaListResourceContract {
-        $data = $request->onlyValidated('media');
-
-        $result = $mediaService->bulkCreate($data);
+        $result = $mediaService->bulkCreate($request->onlyValidated('media'));
 
         return MediaCollection::make($result);
     }
