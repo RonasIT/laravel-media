@@ -55,7 +55,6 @@ return [
   | Preview drivers
   |--------------------------------------------------------------------------
   */
-
     'drivers' => [
         PreviewDriverEnum::File,
     ],

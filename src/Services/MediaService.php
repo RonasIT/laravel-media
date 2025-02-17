@@ -44,11 +44,9 @@ class MediaService extends EntityService implements MediaServiceContract
             ->getSearchResults();
     }
 
-    public function create($content, string $fileName, array $data = []): Model
+    public function create($content, string $fileName, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
         $fileName = $this->saveFile($fileName, $content);
-
-        $previewDrivers = Arr::get($data, 'preview_drivers', []);
 
         $this->createPreviews($fileName, $data, ...$previewDrivers);
 
@@ -61,13 +59,13 @@ class MediaService extends EntityService implements MediaServiceContract
             ->load('preview');
     }
 
-    public function bulkCreate(array $data): array
+    public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array
     {
-        return array_map(function ($media) {
+        return array_map(function ($media) use ($previewDrivers) {
             $file = $media['file'];
             $content = file_get_contents($file->getPathname());
 
-            return $this->create($content, $file->getClientOriginalName(), $media);
+            return $this->create($content, $file->getClientOriginalName(), $media, ...$previewDrivers);
         }, $data);
     }
 
