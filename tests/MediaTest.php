@@ -43,7 +43,7 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create.json');
 
         $this->assertEqualsFixture('create_response.json', $response->json());
     }
@@ -59,7 +59,7 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_public_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create_public.json');
     }
 
     public function testCreateCheckFile(): void
@@ -84,7 +84,16 @@ class MediaTest extends TestCase
 
     public function testBulkCreate(): void
     {
-        $this->mockGenerateFilename('file1.png', 'file2.png');
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'file1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'file2.png',
+            ],
+        );
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -101,7 +110,7 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create.json');
 
         $this->assertEqualsFixture('bulk_create_response.json', $response->json());
     }
@@ -117,7 +126,7 @@ class MediaTest extends TestCase
 
         $response->assertNoContent();
 
-        self::$mediaTestState->assertChangesEqualsFixture('delete_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('delete.json');
 
         Storage::assertMissing($filePath);
         Storage::assertMissing($previewFilePath);
@@ -256,7 +265,12 @@ class MediaTest extends TestCase
     #[DataProvider('getGoodFiles')]
     public function testUploadingGoodFiles(string $fileName): void
     {
-        $this->mockGenerateFilename();
+        $this->mockGenerateFilename(
+            [
+                'argument' => $fileName,
+                'result' => 'file.png',
+            ],
+        );
 
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);
 
@@ -264,7 +278,7 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files_changes.json');
+        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files.json');
     }
 
     public function testCreateBaseAutomaticallyRegistered(): void

@@ -3,7 +3,7 @@
 namespace RonasIT\Media\Http\Requests;
 
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
-use RonasIT\Support\BaseRequest;
+use RonasIT\Support\Http\BaseRequest;
 
 class BulkCreateMediaRequest extends BaseRequest implements BulkCreateMediaRequestContract
 {
