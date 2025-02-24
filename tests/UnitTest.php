@@ -53,7 +53,10 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)
-            ->create(file_get_contents(self::$file->getPathname()), self::$file->getClientOriginalName(), [], PreviewDriverEnum::File);
+            ->create(
+                content: file_get_contents(self::$file->getPathname()),
+                fileName: self::$file->getClientOriginalName(),
+                data: []);
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
     }
@@ -69,7 +72,10 @@ class UnitTest extends TestCase
         ];
 
         $media = app(MediaServiceContract::class)
-            ->bulkCreate($mediaArray, PreviewDriverEnum::File);
+            ->bulkCreate(
+                data: $mediaArray,
+                previewDrivers: PreviewDriverEnum::File
+            );
 
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
     }
@@ -85,7 +91,10 @@ class UnitTest extends TestCase
         ];
 
         $media = app(MediaServiceContract::class)
-            ->bulkCreate($mediaArray, PreviewDriverEnum::File);
+            ->bulkCreate(
+                data: $mediaArray,
+                previewDrivers: PreviewDriverEnum::File
+            );
 
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
     }
