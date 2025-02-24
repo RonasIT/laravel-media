@@ -3,7 +3,6 @@
 namespace RonasIT\Media\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -12,7 +11,6 @@ use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
 use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
 use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Http\Resources\MediaCollection;
 use RonasIT\Media\Http\Resources\MediaResource;
 use Symfony\Component\HttpFoundation\Response;

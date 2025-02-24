@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Services;
 
-use Illuminate\Support\Arr;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
