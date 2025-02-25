@@ -41,7 +41,7 @@ class UnitTest extends TestCase
             content: file_get_contents(self::$file->getPathname()),
             fileName: self::$file->getClientOriginalName(),
             data: [],
-            previewDrivers: PreviewDriverEnum::File
+            previewDrivers: PreviewDriverEnum::File,
         );
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
