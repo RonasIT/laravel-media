@@ -90,7 +90,7 @@ class UnitTest extends TestCase
 
         $media = app(MediaServiceContract::class)->bulkCreate(
             data: $mediaArray,
-            previewDrivers: PreviewDriverEnum::File
+            previewDrivers: PreviewDriverEnum::File,
         );
 
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
