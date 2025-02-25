@@ -54,7 +54,7 @@ class UnitTest extends TestCase
         $media = app(MediaServiceContract::class)->create(
             content: file_get_contents(self::$file->getPathname()),
             fileName: self::$file->getClientOriginalName(),
-            data: []
+            data: [],
         );
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
