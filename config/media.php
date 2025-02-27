@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use RonasIT\Media\Enums\PreviewDriverEnum;
 
 return [
     /*
@@ -47,5 +48,14 @@ return [
     'preview' => [
         'width' => 250,
         'height' => 250,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Preview drivers
+    |--------------------------------------------------------------------------
+    */
+    'drivers' => [
+        PreviewDriverEnum::File,
     ],
 ];

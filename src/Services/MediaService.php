@@ -5,6 +5,7 @@ namespace RonasIT\Media\Services;
 use Bepsvpt\Blurhash\Facades\BlurHash;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\MediaServiceProvider;
+use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -44,30 +45,29 @@ class MediaService extends EntityService implements MediaServiceContract
             ->getSearchResults();
     }
 
-    public function create($content, string $fileName, array $data = []): Model
+    public function create($content, string $fileName, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $preview = $this->createPreview($fileName);
+        $this->createPreviews($fileName, $data, ...$previewDrivers);
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['preview_id'] = $preview->id;
         $data['blur_hash'] = $this->createHashPreview($fileName);
 
-        $media = $this->repository->create($data);
-
-        return $media->setRelation('preview', $preview);
+        return $this->repository
+            ->create($data)
+            ->load('preview');
     }
 
-    public function bulkCreate(array $data): array
+    public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array
     {
-        return array_map(function ($media) {
+        return array_map(function ($media) use ($previewDrivers) {
             $file = $media['file'];
             $content = file_get_contents($file->getPathname());
 
-            return $this->create($content, $file->getClientOriginalName(), $media);
+            return $this->create($content, $file->getClientOriginalName(), $media, ...$previewDrivers);
         }, $data);
     }
 
@@ -89,7 +89,7 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createPreview(string $filename): Model
+    public function createFilePreview(string $filename): Model
     {
         $this->createTempDir(Storage::disk('local')->path('temp_files'));
 
@@ -149,5 +149,24 @@ class MediaService extends EntityService implements MediaServiceContract
         $filePath = Storage::path($fileName);
 
         return $blurHash->encode($filePath);
+    }
+
+    protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void {
+        if (empty($previewTypes)) {
+            $previewTypes = config('media.drivers');
+        }
+
+        foreach ($previewTypes as $type) {
+            if ($type === PreviewDriverEnum::File) {
+                $preview = $this->createFilePreview($fileName);
+
+                $data['preview_id'] = $preview->id;
+            }
+            if($type === PreviewDriverEnum::Hash){
+                $blurHash = $this->createHashPreview($fileName);
+
+                $data['blur_hash'] = $blurHash;
+            }
+        }
     }
 }
