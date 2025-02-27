@@ -2,7 +2,7 @@
 
 namespace RonasIT\Media;
 
-use Illuminate\Database\Eloquent\Model;
+use Bepsvpt\Blurhash\BlurHash;
 use Illuminate\Support\Facades\Route;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
@@ -18,6 +18,8 @@ use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
+    protected static $blurHash;
+
     public function boot(): void
     {
         Route::mixin(new MediaRouter());
@@ -37,6 +39,8 @@ class MediaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/media'),
         ], 'lang');
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/blurhash.php', 'blurhash');
     }
 
     public function register(): void
@@ -46,5 +50,21 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
+    }
+
+    public static function blurHash(): BlurHash
+    {
+        if (!self::$blurHash) {
+            $config = config('blurhash');
+
+            self::$blurHash = new BlurHash(
+                $config['driver'],
+                $config['components-x'],
+                $config['components-y'],
+                $config['resized-max-size']
+            );
+        }
+
+        return self::$blurHash;
     }
 }
