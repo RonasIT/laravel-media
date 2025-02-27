@@ -19,6 +19,7 @@ class UnitTest extends TestCase
     use MediaTestTrait;
 
     protected static File $file;
+    protected static File $secondFile;
     protected static ModelTestState $mediaTestState;
 
     public function setUp(): void
@@ -26,6 +27,8 @@ class UnitTest extends TestCase
         parent::setUp();
 
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
+        self::$secondFile ??= UploadedFile::fake()->image('file.png', 600, 600);
+
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
@@ -43,6 +46,8 @@ class UnitTest extends TestCase
             data: [],
             previewDrivers: PreviewDriverEnum::File,
         );
+
+        Storage::assertExists('preview_file.png');
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
     }
@@ -62,37 +67,69 @@ class UnitTest extends TestCase
 
     public function testCreateBulkMediaWithSetPreviewDrivers()
     {
-        $this->mockGenerateFilename();
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'file1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'file2.png',
+            ],
+        );
 
         $mediaArray = [
             'media' => [
-                'file' => self::$file,
+                [
+                    'file' => self::$file,
+                ],
+                [
+                    'file' => self::$file,
+                ]
             ],
         ];
 
         $media = app(MediaServiceContract::class)->bulkCreate(
-            data: $mediaArray,
+            data: $mediaArray['media'],
             previewDrivers: PreviewDriverEnum::File,
         );
 
-        $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
+        $result = array_map(fn($item) => $item->toArray(), $media);
+
+        $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
     }
 
     public function testCreateBulkMediaWithDefaultPreviewDrivers()
     {
-        $this->mockGenerateFilename();
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'file1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'file2.png',
+            ],
+        );
 
         $mediaArray = [
             'media' => [
-                'file' => self::$file,
+                [
+                    'file' => self::$file,
+                ],
+                [
+                    'file' => self::$file,
+                ]
             ],
         ];
 
         $media = app(MediaServiceContract::class)->bulkCreate(
-            data: $mediaArray,
+            data: $mediaArray['media'],
             previewDrivers: PreviewDriverEnum::File,
         );
 
-        $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
+        $result = array_map(fn($item) => $item->toArray(), $media);
+
+        $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
     }
 }
