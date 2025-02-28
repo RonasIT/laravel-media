@@ -7,7 +7,6 @@
         "meta": [
             "test1"
         ],
-        "blur_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ",
         "preview": {
             "id": 11,
             "link": "\/storage\/preview_file1.png",
@@ -24,7 +23,6 @@
         "meta": [
             "test2"
         ],
-        "blur_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ",
         "preview": {
             "id": 13,
             "link": "\/storage\/preview_file2.png",

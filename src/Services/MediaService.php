@@ -54,7 +54,6 @@ class MediaService extends EntityService implements MediaServiceContract
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
         $data['owner_id'] = Auth::id();
-        $data['blur_hash'] = $this->createHashPreview($fileName);
 
         return $this->repository
             ->create($data)
@@ -162,6 +161,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
                 $data['preview_id'] = $preview->id;
             }
+
             if($type === PreviewDriverEnum::Hash){
                 $blurHash = $this->createHashPreview($fileName);
 

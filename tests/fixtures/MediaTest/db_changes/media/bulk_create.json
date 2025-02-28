@@ -25,7 +25,7 @@
             "meta": [
                 "test1"
             ],
-            "blur_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ"
+            "blur_hash": null
         },
         {
             "id": 13,
@@ -51,7 +51,7 @@
             "meta": [
                 "test2"
             ],
-            "blur_hash": "L00000fQfQfQfQfQfQfQfQfQfQfQ"
+            "blur_hash": null
         }
     ],
     "deleted": []
