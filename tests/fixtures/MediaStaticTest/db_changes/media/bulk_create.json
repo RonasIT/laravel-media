@@ -10,7 +10,8 @@
             "is_public": false,
             "owner_id": 2,
             "preview_id": null,
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         },
         {
             "id": 12,
@@ -23,7 +24,8 @@
             "preview_id": "11",
             "meta": [
                 "test1"
-            ]
+            ],
+            "blur_hash": null
         },
         {
             "id": 13,
@@ -34,7 +36,8 @@
             "is_public": false,
             "owner_id": 2,
             "preview_id": null,
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         },
         {
             "id": 14,
@@ -47,7 +50,8 @@
             "preview_id": "13",
             "meta": [
                 "test2"
-            ]
+            ],
+            "blur_hash": null
         }
     ],
     "deleted": []
