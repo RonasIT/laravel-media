@@ -50,6 +50,8 @@ class UnitTest extends TestCase
         Storage::assertExists('preview_file.png');
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers.json');
     }
 
     public function testCreateMediaWithDefaultPreviewDrivers()
@@ -63,6 +65,10 @@ class UnitTest extends TestCase
         );
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
+
+        Storage::assertExists('preview_file.png');
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_default_preview_drivers.json');
     }
 
     public function testCreateBulkMediaWithSetPreviewDrivers()
@@ -96,7 +102,11 @@ class UnitTest extends TestCase
 
         $result = array_map(fn($item) => $item->toArray(), $media);
 
+        Storage::assertExists(['preview_file1.png', 'preview_file2.png']);
+
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_set_preview_drivers.json');
     }
 
     public function testCreateBulkMediaWithDefaultPreviewDrivers()
@@ -130,6 +140,10 @@ class UnitTest extends TestCase
 
         $result = array_map(fn($item) => $item->toArray(), $media);
 
+        Storage::assertExists(['preview_file1.png', 'preview_file2.png']);
+
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_default_preview_drivers.json');
     }
 }
