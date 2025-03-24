@@ -25,6 +25,8 @@ class MediaService extends EntityService implements MediaServiceContract
     use FilesUploadTrait;
     use InteractsWithMedia;
 
+    protected static BlurHash $blurHash;
+
     public function __construct()
     {
         $this->setRepository(MediaRepository::class);
@@ -142,16 +144,17 @@ class MediaService extends EntityService implements MediaServiceContract
 
     protected function createHashPreview(string $fileName): string
     {
-        $blurHash = new BlurHash(
+        self::$blurHash ??= new BlurHash(
             config('blurhash.driver'),
             config('blurhash.components-x'),
             config('blurhash.components-y'),
             config('blurhash.resized-max-size')
         );
 
+
         $filePath = Storage::path($fileName);
 
-        return $blurHash->encode($filePath);
+        return self::$blurHash->encode($filePath);
     }
 
     protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void
