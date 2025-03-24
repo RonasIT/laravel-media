@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media;
 
-use Bepsvpt\Blurhash\BlurHash;
 use Illuminate\Support\Facades\Route;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;

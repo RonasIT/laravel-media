@@ -4,7 +4,6 @@ namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
 use League\Flysystem\Local\LocalFilesystemAdapter;
-use RonasIT\Media\MediaServiceProvider;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
