@@ -151,7 +151,6 @@ class MediaService extends EntityService implements MediaServiceContract
             config('blurhash.resized-max-size')
         );
 
-
         $filePath = Storage::path($fileName);
 
         return self::$blurHash->encode($filePath);
