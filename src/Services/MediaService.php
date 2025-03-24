@@ -2,7 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
-use Bepsvpt\Blurhash\Facades\BlurHash;
+use Bepsvpt\Blurhash\BlurHash;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\MediaServiceProvider;
 use RonasIT\Media\Enums\PreviewDriverEnum;
@@ -143,9 +143,16 @@ class MediaService extends EntityService implements MediaServiceContract
 
     protected function createHashPreview(string $fileName): string
     {
+        $blurHash = new BlurHash(
+            config('blurhash.driver'),
+            config('blurhash.components-x'),
+            config('blurhash.components-y'),
+            config('blurhash.resized-max-size')
+        );
+
         $filePath = Storage::path($fileName);
 
-        return MediaServiceProvider::blurHash()->encode($filePath);
+        return $blurHash->encode($filePath);
     }
 
     protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void

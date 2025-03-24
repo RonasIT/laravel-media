@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
      * The image driver is used for encoding and decoding blurhash.
      *
@@ -32,5 +31,4 @@ return [
      */
 
     'resized-max-size' => 64,
-
 ];
