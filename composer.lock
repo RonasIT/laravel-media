@@ -4,34 +4,34 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "296d5272134317c5f14d90cfb3094df3",
+    "content-hash": "64b576e2acc25c6cd52690e3e077e782",
     "packages": [
         {
             "name": "bepsvpt/blurhash",
-            "version": "3.0.1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bepsvpt/blurhash.git",
-                "reference": "dc58974c2543998e09cdf246566165727123a140"
+                "reference": "8b47934784395afee879980cdac65134864c33f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bepsvpt/blurhash/zipball/dc58974c2543998e09cdf246566165727123a140",
-                "reference": "dc58974c2543998e09cdf246566165727123a140",
+                "url": "https://api.github.com/repos/bepsvpt/blurhash/zipball/8b47934784395afee879980cdac65134864c33f7",
+                "reference": "8b47934784395afee879980cdac65134864c33f7",
                 "shasum": ""
             },
             "require": {
                 "ext-exif": "*",
-                "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0",
                 "php": "^8.0"
             },
             "require-dev": {
-                "ergebnis/composer-normalize": "^2.42",
-                "jcupitt/vips": "^2.3",
-                "larastan/larastan": "^2.9",
-                "laravel/pint": "^1.14",
-                "orchestra/testbench": "^6.43 || ^7.41 || ^8.22 || ^9.0",
-                "phpunit/phpunit": "^9.6"
+                "ergebnis/composer-normalize": "^2.45",
+                "jcupitt/vips": "^2.4",
+                "larastan/larastan": "^3.2",
+                "laravel/pint": "^1.21",
+                "orchestra/testbench": "^6.47 || ^7.53 || ^8.34 || ^9.12 || ^10.1",
+                "phpunit/phpunit": "^9.6 || ^10.5 || ^11.5 || ^12.0"
             },
             "suggest": {
                 "ext-ffi": "Required to use php-vips driver.",
@@ -73,9 +73,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bepsvpt/blurhash/issues",
-                "source": "https://github.com/bepsvpt/blurhash/tree/3.0.1"
+                "source": "https://github.com/bepsvpt/blurhash/tree/4.0.0"
             },
-            "time": "2024-03-27T00:15:44+00:00"
+            "time": "2025-03-16T03:22:19+00:00"
         },
         {
             "name": "brick/math",
