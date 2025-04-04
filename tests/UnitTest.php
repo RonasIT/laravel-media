@@ -73,6 +73,8 @@ class UnitTest extends TestCase
         );
 
         $this->assertEqualsFixture('create_media_with_set_blurhash_driver.json', $media->toArray());
+
+        $this->assertTrue(Storage::missing('tmp_file.png'));
     }
 
     public function testCreateWithSetFileDriver(): void
