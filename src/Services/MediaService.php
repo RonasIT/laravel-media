@@ -144,9 +144,19 @@ class MediaService extends EntityService implements MediaServiceContract
 
     protected function createHashPreview(string $fileName): string
     {
-        $filePath = Storage::path($fileName);
+        $localStorage = Storage::disk('local');
 
-        return $this->getBlurHashEncoder()->encode($filePath);
+        $tmpFilename = "tmp_{$fileName}";
+
+        $localStorage->put($tmpFilename, Storage::get($fileName));
+
+        $blurHash = $this
+            ->getBlurHashEncoder()
+            ->encode($localStorage->path($tmpFilename));
+
+        $localStorage->delete($tmpFilename);
+
+       return $blurHash;
     }
 
     protected function getBlurHashEncoder(): BlurHash
