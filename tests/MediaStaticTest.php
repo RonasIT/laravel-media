@@ -353,7 +353,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertJson([
             'errors' => [
-                'file' => ['The file field must be a file of type: jpg, jpeg, bmp, png.'],
+                'file' => ['The file field must be a file of type: jpg, jpeg, bmp, png, heic.'],
             ],
         ]);
     }
