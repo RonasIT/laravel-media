@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
@@ -37,6 +36,8 @@ class MediaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/media'),
         ], 'lang');
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/blurhash.php', 'blurhash');
     }
 
     public function register(): void

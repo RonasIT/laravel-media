@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Services;
 
+use Bepsvpt\Blurhash\BlurHash;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
@@ -23,6 +24,8 @@ class MediaService extends EntityService implements MediaServiceContract
 {
     use FilesUploadTrait;
     use InteractsWithMedia;
+
+    protected BlurHash $blurHash;
 
     public function __construct()
     {
@@ -139,6 +142,33 @@ class MediaService extends EntityService implements MediaServiceContract
         }
     }
 
+    protected function createHashPreview(string $fileName): string
+    {
+        $localStorage = Storage::disk('local');
+
+        $tmpFilename = "tmp_{$fileName}";
+
+        $localStorage->put($tmpFilename, Storage::get($fileName));
+
+        $blurHash = $this
+            ->getBlurHashEncoder()
+            ->encode($localStorage->path($tmpFilename));
+
+        $localStorage->delete($tmpFilename);
+
+       return $blurHash;
+    }
+
+    protected function getBlurHashEncoder(): BlurHash
+    {
+        return $this->blurHash ??= new BlurHash(
+            config('blurhash.driver'),
+            config('blurhash.components-x'),
+            config('blurhash.components-y'),
+            config('blurhash.resized-max-size')
+        );
+    }
+
     protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
@@ -150,6 +180,10 @@ class MediaService extends EntityService implements MediaServiceContract
                 $preview = $this->createFilePreview($fileName);
 
                 $data['preview_id'] = $preview->id;
+            }
+
+            if ($type === PreviewDriverEnum::Hash) {
+                $data['blur_hash'] = $this->createHashPreview($fileName);
             }
         }
     }
