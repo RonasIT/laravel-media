@@ -7,7 +7,7 @@ return [
      * Supported drivers include "gd", "imagick", and "php-vips".
      */
 
-    'driver' => 'gd',
+    'driver' => 'imagick',
 
     /*
      * Components are selected from the image's x and y axis.
