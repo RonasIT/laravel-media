@@ -54,7 +54,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
-        $data['owner_id'] = Auth::id();
+        $data['owner_id'] = Auth::check() ? Auth::id() : null;
 
         return $this->repository
             ->create($data)
@@ -89,7 +89,7 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createFilePreview(string $filename): Model
+    protected function createFilePreview(string $filename): Model
     {
         $this->createTempDir(Storage::disk('local')->path('temp_files'));
 
@@ -122,7 +122,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $data['name'] = $previewFilename;
         $data['link'] = Storage::url($previewFilename);
-        $data['owner_id'] = Auth::id();
+        $data['owner_id'] = Auth::check() ? Auth::id() : null;
 
         return $this->repository->create($data);
     }
