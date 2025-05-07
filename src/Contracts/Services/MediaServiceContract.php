@@ -10,7 +10,7 @@ interface MediaServiceContract
 {
     public function search(array $filters): LengthAwarePaginator;
 
-    public function create(string $content, string $fileName, array $data, PreviewDriverEnum ...$previewDrivers): Model;
+    public function create(string $content, string $fileName, array $data, ?int $ownerId, PreviewDriverEnum ...$previewDrivers): Model;
 
     public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array;
 
