@@ -51,7 +51,7 @@ class MediaService extends EntityService implements MediaServiceContract
         $fileName = $this->saveFile($fileName, $content);
 
         if (empty($data['owner_id'])){
-            $data['owner_id'] = (Auth::check()) ? Auth::id() : null;
+            $data['owner_id'] = Auth::check() ? Auth::id() : null;
         }
 
         $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
