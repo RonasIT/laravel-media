@@ -134,8 +134,9 @@ class UnitTest extends TestCase
         $media = app(MediaServiceContract::class)->create(
             content: file_get_contents(self::$file->getPathname()),
             fileName: self::$file->getClientOriginalName(),
-            data: [],
-            ownerId: 1,
+            data: [
+                'owner_id' => 1,
+            ],
         );
 
         $this->assertEqualsFixture('create_media_with_set_owner_id.json', $media->toArray());

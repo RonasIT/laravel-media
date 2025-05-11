@@ -46,19 +46,18 @@ class MediaService extends EntityService implements MediaServiceContract
             ->getSearchResults();
     }
 
-    public function create($content, string $fileName, array $data = [], ?int $ownerId = null, PreviewDriverEnum ...$previewDrivers): Model
+    public function create($content, string $fileName, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        if (empty($ownerId)){
-            $ownerId = Auth::check() ? Auth::id() : null;
+        if (empty($data['owner_id'])){
+            $data['owner_id'] = (Auth::check()) ? Auth::id() : null;
         }
 
-        $this->createPreviews($fileName, $data, $ownerId, ...$previewDrivers);
+        $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
-        $data['owner_id'] = $ownerId;
 
         return $this->repository
             ->create($data)
