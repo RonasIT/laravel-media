@@ -50,11 +50,14 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        $this->createPreviews($fileName, $data, ...$previewDrivers);
+        if (empty($data['owner_id'])){
+            $data['owner_id'] = Auth::check() ? Auth::id() : null;
+        }
+
+        $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
-        $data['owner_id'] = Auth::id();
 
         return $this->repository
             ->create($data)
@@ -89,7 +92,7 @@ class MediaService extends EntityService implements MediaServiceContract
         return $this->repository->first($where);
     }
 
-    public function createFilePreview(string $filename): Model
+    protected function createFilePreview(string $filename, ?int $ownerId = null): Model
     {
         $this->createTempDir(Storage::disk('local')->path('temp_files'));
 
@@ -122,7 +125,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $data['name'] = $previewFilename;
         $data['link'] = Storage::url($previewFilename);
-        $data['owner_id'] = Auth::id();
+        $data['owner_id'] = $ownerId;
 
         return $this->repository->create($data);
     }
@@ -169,7 +172,7 @@ class MediaService extends EntityService implements MediaServiceContract
         );
     }
 
-    protected function createPreviews(string $fileName, array &$data, PreviewDriverEnum ...$previewTypes): void
+    protected function createPreviews(string $fileName, array &$data, int $ownerId = null, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
             $previewTypes = config('media.drivers');
@@ -177,7 +180,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         foreach ($previewTypes as $type) {
             if ($type === PreviewDriverEnum::File) {
-                $preview = $this->createFilePreview($fileName);
+                $preview = $this->createFilePreview($fileName, $ownerId);
 
                 $data['preview_id'] = $preview->id;
             }

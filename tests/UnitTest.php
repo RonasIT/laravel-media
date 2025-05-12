@@ -126,4 +126,29 @@ class UnitTest extends TestCase
 
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $media['media']->toArray());
     }
+
+    public function testCreateMediaWithSetOwnerId()
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: ['owner_id' => 1],
+        );
+
+        $this->assertEqualsFixture('create_media_with_set_owner_id.json', $media->toArray());
+    }
+
+    public function testCreateMediaWithNullOwnerId()
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+        );
+
+        $this->assertEqualsFixture('create_media_with_null_owner_id.json', $media->toArray());
+    }
 }
