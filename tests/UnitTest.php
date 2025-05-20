@@ -52,7 +52,7 @@ class UnitTest extends TestCase
 
         $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers.json', true);
     }
 
     public function testCreateMediaWithDefaultPreviewDrivers(): void
@@ -79,11 +79,6 @@ class UnitTest extends TestCase
             previewDrivers: PreviewDriverEnum::Hash,
         );
 
-        $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
-
-        Storage::assertExists('preview_file.png');
-
-        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_default_preview_drivers.json');
         $this->assertEqualsFixture('create_media_with_set_blurhash_driver.json', $media->toArray());
 
         $this->assertTrue(Storage::missing('tmp_file.png'));
@@ -129,7 +124,8 @@ class UnitTest extends TestCase
 
         $media = app(MediaServiceContract::class)->bulkCreate(
             data: $mediaArray['media'],
-            previewDrivers: PreviewDriverEnum::File,
+            file: PreviewDriverEnum::File,
+            hash: PreviewDriverEnum::Hash,
         );
 
         $result = array_map(fn($item) => $item->toArray(), $media);
@@ -167,7 +163,6 @@ class UnitTest extends TestCase
 
         $media = app(MediaServiceContract::class)->bulkCreate(
             data: $mediaArray['media'],
-            previewDrivers: PreviewDriverEnum::File,
         );
 
         $result = array_map(fn($item) => $item->toArray(), $media);

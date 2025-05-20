@@ -10,7 +10,8 @@
             "is_public": false,
             "owner_id": null,
             "preview_id": null,
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         },
         {
             "id": 2,
@@ -21,7 +22,8 @@
             "is_public": false,
             "owner_id": null,
             "preview_id": "1",
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         },
         {
             "id": 3,
@@ -32,7 +34,8 @@
             "is_public": false,
             "owner_id": null,
             "preview_id": null,
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         },
         {
             "id": 4,
@@ -43,7 +46,8 @@
             "is_public": false,
             "owner_id": null,
             "preview_id": "3",
-            "meta": []
+            "meta": [],
+            "blur_hash": null
         }
     ],
     "deleted": []
