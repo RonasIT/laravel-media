@@ -16,6 +16,7 @@ return [
         'jpeg',
         'bmp',
         'png',
+        'heic',
     ],
 
     /*

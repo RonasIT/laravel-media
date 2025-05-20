@@ -36,7 +36,60 @@ class UnitTest extends TestCase
         MediaRouter::$isBlockedBaseRoutes = false;
     }
 
-    public function testCreateMediaWithSetPreviewDrivers()
+    public function testCreateMediaWithSetPreviewDrivers(): void
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: [],
+            file: PreviewDriverEnum::File,
+            hash: PreviewDriverEnum::Hash
+        );
+
+        Storage::assertExists('preview_file.png');
+
+        $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers.json');
+    }
+
+    public function testCreateMediaWithDefaultPreviewDrivers(): void
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: [],
+        );
+
+        $this->assertEqualsFixture('create_media_with_default_preview_drivers.json', $media->toArray());
+    }
+
+    public function testCreateWithSetBlurhashDriver(): void
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: [],
+            previewDrivers: PreviewDriverEnum::Hash,
+        );
+
+        $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
+
+        Storage::assertExists('preview_file.png');
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_default_preview_drivers.json');
+        $this->assertEqualsFixture('create_media_with_set_blurhash_driver.json', $media->toArray());
+
+        $this->assertTrue(Storage::missing('tmp_file.png'));
+    }
+
+    public function testCreateWithSetFileDriver(): void
     {
         $this->mockGenerateFilename();
 
@@ -47,28 +100,7 @@ class UnitTest extends TestCase
             previewDrivers: PreviewDriverEnum::File,
         );
 
-        Storage::assertExists('preview_file.png');
-
-        $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
-
-        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers.json');
-    }
-
-    public function testCreateMediaWithDefaultPreviewDrivers()
-    {
-        $this->mockGenerateFilename();
-
-        $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
-            data: [],
-        );
-
-        $this->assertEqualsFixture('create_media_with_set_preview_drivers.json', $media->toArray());
-
-        Storage::assertExists('preview_file.png');
-
-        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_default_preview_drivers.json');
+        $this->assertEqualsFixture('create_media_with_set_file_driver.json', $media->toArray());
     }
 
     public function testCreateBulkMediaWithSetPreviewDrivers()
@@ -109,7 +141,7 @@ class UnitTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_set_preview_drivers.json');
     }
 
-    public function testCreateBulkMediaWithDefaultPreviewDrivers()
+    public function testCreateBulkMediaWithDefaultPreviewDrivers(): void
     {
         $this->mockGenerateFilename(
             [
@@ -145,5 +177,30 @@ class UnitTest extends TestCase
         $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
 
         self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_default_preview_drivers.json');
+    }
+
+    public function testCreateMediaWithSetOwnerId()
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: ['owner_id' => 1],
+        );
+
+        $this->assertEqualsFixture('create_media_with_set_owner_id.json', $media->toArray());
+    }
+
+    public function testCreateMediaWithNullOwnerId()
+    {
+        $this->mockGenerateFilename();
+
+        $media = app(MediaServiceContract::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+        );
+
+        $this->assertEqualsFixture('create_media_with_null_owner_id.json', $media->toArray());
     }
 }
