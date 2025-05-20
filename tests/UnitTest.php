@@ -169,7 +169,7 @@ class UnitTest extends TestCase
 
         Storage::assertExists(['preview_file1.png', 'preview_file2.png']);
 
-        $this->assertEqualsFixture('bulk_create_media_with_set_preview_drivers.json', $result);
+        $this->assertEqualsFixture('bulk_create_media_with_default_preview_drivers.json', $result);
 
         self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_default_preview_drivers.json');
     }
