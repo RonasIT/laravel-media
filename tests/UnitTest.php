@@ -127,7 +127,6 @@ class UnitTest extends TestCase
         );
 
         $result = array_map(fn ($item) => $item->toArray(), $media);
-        dd($result);
 
         Storage::assertExists(['preview_file1.png', 'preview_file2.png']);
 
