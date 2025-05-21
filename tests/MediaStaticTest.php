@@ -92,9 +92,9 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create');
 
-        $this->assertEqualsFixture('create_response.json', $response->json());
+        $this->assertEqualsFixture('create_response', $response->json());
     }
 
     public function testCreateWasCreateDisabled(): void
@@ -121,7 +121,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_public.json');
+        self::$mediaTestState->assertChangesEqualsFixture('create_public');
     }
 
     public function testCreateCheckFile(): void
@@ -191,9 +191,9 @@ class MediaStaticTest extends TestCase
 
         $response->assertOk();
 
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create.json');
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create');
 
-        $this->assertEqualsFixture('bulk_create_response.json', $response->json());
+        $this->assertEqualsFixture('bulk_create_response', $response->json());
     }
 
     public function testDeleteWasDeleteDisabled(): void
@@ -225,7 +225,7 @@ class MediaStaticTest extends TestCase
 
         $response->assertNoContent();
 
-        self::$mediaTestState->assertChangesEqualsFixture('delete.json');
+        self::$mediaTestState->assertChangesEqualsFixture('delete');
 
         Storage::assertMissing($filePath);
         Storage::missing($previewFilePath);
@@ -391,6 +391,6 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files.json');
+        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files');
     }
 }
