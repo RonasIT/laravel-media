@@ -12,11 +12,14 @@ return [
     | The list of permitted file types
     */
     'permitted_types' => [
-        'jpg',
-        'jpeg',
-        'bmp',
-        'png',
-        'heic',
+        'images' => [
+            'jpg',
+            'jpeg',
+            'bmp',
+            'png',
+            'heic',
+        ],
+        'other' => [],
     ],
 
     /*

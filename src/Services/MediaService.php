@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
+use Illuminate\Support\Facades\File;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
@@ -54,7 +55,9 @@ class MediaService extends EntityService implements MediaServiceContract
             $data['owner_id'] = Auth::check() ? Auth::id() : null;
         }
 
-        $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
+        if (in_array(File::extension(Storage::path($fileName)), config('media.permitted_types.images'))) {
+            $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
+        }
 
         $data['name'] = $fileName;
         $data['link'] = Storage::url($data['name']);
