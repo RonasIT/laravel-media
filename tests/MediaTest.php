@@ -284,6 +284,11 @@ class MediaTest extends TestCase
 
     public function testCreateNotImageMedia(): void
     {
+        $this->mockGenerateFilename([
+            'argument' => 'document.pdf',
+            'result' => 'document.pdf',
+        ]);
+
         Config::push('media.permitted_types.other', 'pdf');
 
         self::$file = UploadedFile::fake()->create('document.pdf', 1024);
