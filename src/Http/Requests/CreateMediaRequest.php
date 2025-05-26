@@ -2,6 +2,7 @@
 
 namespace RonasIT\Media\Http\Requests;
 
+use Illuminate\Support\Arr;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Support\Http\BaseRequest;
 
@@ -9,7 +10,7 @@ class CreateMediaRequest extends BaseRequest implements CreateMediaRequestContra
 {
     public function rules(): array
     {
-        $types = implode(',', array_merge(config('media.permitted_types.images'), config('media.permitted_types.other')));
+        $types = implode(',', Arr::collapse(config('media.permitted_types')));
         $maxFileSize = config('media.max_file_size');
 
         return [
