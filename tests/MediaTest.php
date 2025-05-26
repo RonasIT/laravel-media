@@ -289,7 +289,7 @@ class MediaTest extends TestCase
             'result' => 'document.pdf',
         ]);
 
-        Config::push('media.permitted_types.other', 'pdf');
+        Config::push('media.permitted_types', 'pdf');
 
         self::$file = UploadedFile::fake()->create('document.pdf', 1024);
 

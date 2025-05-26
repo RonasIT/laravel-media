@@ -10,7 +10,7 @@ class BulkCreateMediaRequest extends BaseRequest implements BulkCreateMediaReque
 {
     public function rules(): array
     {
-        $types = implode(',', Arr::collapse(config('media.permitted_types')));
+        $types = implode(',', config('media.permitted_types'));
         $maxFileSize = config('media.max_file_size');
 
         return [
