@@ -3,7 +3,6 @@
 namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
-use Illuminate\Support\Str;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;

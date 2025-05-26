@@ -2,7 +2,6 @@
 
 namespace RonasIT\Media\Http\Requests;
 
-use Illuminate\Support\Arr;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Support\Http\BaseRequest;
 
