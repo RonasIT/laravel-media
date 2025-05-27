@@ -54,9 +54,10 @@ class MediaService extends EntityService implements MediaServiceContract
             $data['owner_id'] = Auth::check() ? Auth::id() : null;
         }
 
-        $isImage = strpos(Storage::mimeType($fileName), 'image');
+        $isImage = str_starts_with(Storage::mimeType($fileName), 'image');
 
-        if ($isImage !== false) {
+        if ($isImage) {
+
             $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
         }
 
