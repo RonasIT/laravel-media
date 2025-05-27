@@ -4,6 +4,7 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\MediaRouter;
@@ -279,6 +280,26 @@ class MediaTest extends TestCase
         $response->assertCreated();
 
         self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files');
+    }
+
+    public function testCreateNotImageMedia(): void
+    {
+        $this->mockGenerateFilename([
+            'argument' => 'document.pdf',
+            'result' => 'document.pdf',
+        ]);
+
+        Config::push('media.permitted_types', 'pdf');
+
+        self::$file = UploadedFile::fake()->create('document.pdf', 1024);
+
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+
+        $response->assertCreated();
+
+        self::$mediaTestState->assertChangesEqualsFixture('uploading_not_image_file');
+
+        $this->assertEqualsFixture('uploading_not_image_file.json', $response->json());
     }
 
     public function testCreateBaseAutomaticallyRegistered(): void
