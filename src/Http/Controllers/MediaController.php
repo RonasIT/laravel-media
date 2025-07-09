@@ -19,7 +19,7 @@ class MediaController extends Controller
 {
     public function create(
         CreateMediaRequestContract $request,
-        MediaServiceContract $mediaService
+        MediaServiceContract $mediaService,
     ): MediaResourceContract {
         $file = $request->file('file');
         $data = $request->onlyValidated();
@@ -40,7 +40,7 @@ class MediaController extends Controller
 
     public function search(
         SearchMediaRequestContract $request,
-        MediaServiceContract $mediaService
+        MediaServiceContract $mediaService,
     ): MediaCollectionContract {
         $result = $mediaService->search($request->onlyValidated());
 
@@ -49,7 +49,7 @@ class MediaController extends Controller
 
     public function bulkCreate(
         BulkCreateMediaRequestContract $request,
-        MediaServiceContract $mediaService
+        MediaServiceContract $mediaService,
     ): MediaListResourceContract {
         $result = $mediaService->bulkCreate($request->onlyValidated('media'));
 

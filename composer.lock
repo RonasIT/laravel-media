@@ -4792,16 +4792,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "3.4.3",
+            "version": "3.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "829e475f7775ef614f84706ccfbe7a6be0b5909b"
+                "reference": "d680d000497286a7b8de0d197cecd8baf16fb8d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/829e475f7775ef614f84706ccfbe7a6be0b5909b",
-                "reference": "829e475f7775ef614f84706ccfbe7a6be0b5909b",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/d680d000497286a7b8de0d197cecd8baf16fb8d4",
+                "reference": "d680d000497286a7b8de0d197cecd8baf16fb8d4",
                 "shasum": ""
             },
             "require": {
@@ -4867,9 +4867,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.4.3"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.4.5"
             },
-            "time": "2025-06-02T05:03:03+00:00"
+            "time": "2025-06-23T08:22:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",

@@ -271,7 +271,7 @@ class MediaStaticTest extends TestCase
         return [
             [
                 'filter' => ['all' => true],
-                'fixture' => 'get_by_all.json',
+                'fixture' => 'get_by_all',
             ],
         ];
     }
@@ -302,7 +302,7 @@ class MediaStaticTest extends TestCase
         return [
             [
                 'filter' => ['query' => 'product'],
-                'fixture' => 'get_by_query.json',
+                'fixture' => 'get_by_query',
             ],
             [
                 'filter' => [
@@ -311,7 +311,7 @@ class MediaStaticTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'fixture' => 'get_complex.json',
+                'fixture' => 'get_complex',
             ],
         ];
     }

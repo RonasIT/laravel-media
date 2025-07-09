@@ -176,7 +176,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['all' => true],
-                'fixture' => 'get_by_all.json',
+                'fixture' => 'get_by_all',
             ],
         ];
     }
@@ -196,7 +196,7 @@ class MediaTest extends TestCase
         return [
             [
                 'filter' => ['query' => 'product'],
-                'fixture' => 'get_by_query.json',
+                'fixture' => 'get_by_query',
             ],
             [
                 'filter' => [
@@ -205,7 +205,7 @@ class MediaTest extends TestCase
                     'desc' => false,
                     'per_page' => 3,
                 ],
-                'fixture' => 'get_complex.json',
+                'fixture' => 'get_complex',
             ],
         ];
     }
@@ -299,7 +299,7 @@ class MediaTest extends TestCase
 
         self::$mediaTestState->assertChangesEqualsFixture('uploading_not_image_file');
 
-        $this->assertEqualsFixture('uploading_not_image_file.json', $response->json());
+        $this->assertEqualsFixture('uploading_not_image_file', $response->json());
     }
 
     public function testCreateBaseAutomaticallyRegistered(): void
