@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50e0334d02c68f30ddc2f97ca8f59cfc",
+    "content-hash": "50df5f8391c95073c9b1e8ed060bea76",
     "packages": [
         {
             "name": "bepsvpt/blurhash",
