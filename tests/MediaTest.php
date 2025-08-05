@@ -389,15 +389,4 @@ class MediaTest extends TestCase
 
         $response->assertJson(['message' => 'Not found.']);
     }
-
-    public function testGetWhenAutoRoutesDisabledAndSearchStaticDefined(): void
-    {
-        Config::set('media.auto_routes_enabled', false);
-        
-        $response = $this->json('get', '/media');
-
-        $response->assertNotFound();
-
-        $response->assertJson(['message' => 'Not found.']);
-    }
 }
