@@ -11,6 +11,10 @@ class CheckManuallyRegisteredRoutesMiddleware
 {
     public function handle($request, Closure $next)
     {
+        if (!config('media.auto_routes_enabled')) {
+            throw new NotFoundHttpException('Not found.');
+        }
+        
         if (MediaRouter::$isBlockedBaseRoutes) {
             throw new NotFoundHttpException('Not found.');
         }
