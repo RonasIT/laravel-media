@@ -6,12 +6,10 @@ use RonasIT\Media\Enums\PreviewDriverEnum;
 return [
     /*
     |--------------------------------------------------------------------------
-    | Enable or disable automatic route registration
+    | Automatic API routes registration
     |--------------------------------------------------------------------------
     |
-    | This option controls whether the package should automatically register
-    | its default routes. Set to `true` to enable auto-registration, or
-    | `false` to disable.
+    | Enabling automatically registration of the [default API routes](https://github.com/RonasIT/laravel-media/blob/master/src/Enums/MediaRouteActionEnum.php)
     |
     */
     'api_enable' => true,
