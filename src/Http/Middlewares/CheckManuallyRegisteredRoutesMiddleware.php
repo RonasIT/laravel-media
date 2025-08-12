@@ -11,7 +11,7 @@ class CheckManuallyRegisteredRoutesMiddleware
 {
     public function handle($request, Closure $next)
     {
-        if (!config('media.auto_routes_enabled')) {
+        if (!config('media.api_enable')) {
             throw new NotFoundHttpException('Not found.');
         }
         

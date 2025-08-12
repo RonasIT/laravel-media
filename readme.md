@@ -45,7 +45,7 @@ In this case automatically registered package routes will fails with the `404` c
 
 ## Disable media routes
 
-If you want to disable the automatically registered routes, you can set the `auto_routes_enabled` option to false in the `config/media.php` file:
+If you want to disable the automatically registered routes, you can set the `api_enable` option to false in the `config/media.php` file:
 
 ```php
 #config/media.php
@@ -53,7 +53,7 @@ If you want to disable the automatically registered routes, you can set the `aut
 return [
     ...
 
-    'auto_routes_enabled' => false,
+    'api_enable' => false,
 ];
 ```
 

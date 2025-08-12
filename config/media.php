@@ -6,6 +6,18 @@ use RonasIT\Media\Enums\PreviewDriverEnum;
 return [
     /*
     |--------------------------------------------------------------------------
+    | Enable or disable automatic route registration
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether the package should automatically register
+    | its default routes. Set to `true` to enable auto-registration, or
+    | `false` to disable.
+    |
+    */
+    'api_enable' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Permitted file types
     |--------------------------------------------------------------------------
     |
@@ -59,16 +71,4 @@ return [
     'drivers' => [
         PreviewDriverEnum::File,
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Enable or disable automatic route registration
-    |--------------------------------------------------------------------------
-    |
-    | This option controls whether the package should automatically register
-    | its default routes. Set to `true` to enable auto-registration, or
-    | `false` to disable.
-    |
-    */
-    'auto_routes_enabled' => true,
 ];

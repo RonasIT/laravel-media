@@ -359,7 +359,7 @@ class MediaTest extends TestCase
 
     public function testGetWhenAutoRoutesDisabled(): void
     {
-        Config::set('media.auto_routes_enabled', false);
+        Config::set('media.api_enable', false);
         
         $response = $this->json('get', '/media');
 
@@ -370,7 +370,7 @@ class MediaTest extends TestCase
 
     public function testPostWhenAutoRoutesDisabled(): void
     {
-        Config::set('media.auto_routes_enabled', false);
+        Config::set('media.api_enable', false);
         
         $response = $this->json('post', '/media/bulk', ['file' => self::$file]);
 
@@ -381,7 +381,7 @@ class MediaTest extends TestCase
 
     public function testDeleteWhenAutoRoutesDisabled(): void
     {
-        Config::set('media.auto_routes_enabled', false);
+        Config::set('media.api_enable', false);
         
         $response = $this->json('delete', '/media/4');
         
