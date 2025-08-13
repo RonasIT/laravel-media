@@ -27,10 +27,6 @@ class MediaTest extends TestCase
     {
         parent::setUp();
 
-        self::$apiEnable = true;
-
-        $this->refreshApplication();
-
         self::$user ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
         self::$mediaTestState ??= new ModelTestState(Media::class);
@@ -360,4 +356,37 @@ class MediaTest extends TestCase
 
         self::$mediaTestState->assertNotChanged();
     }
+
+    // public function testGetWhenAutoRoutesDisabled(): void
+    // {
+    //     Config::set('media.api_enable', false);
+        
+    //     $response = $this->json('get', '/media');
+
+    //     $response->assertNotFound();
+
+    //     $response->assertJson(['message' => 'Not found.']);
+    // }
+
+    // public function testPostWhenAutoRoutesDisabled(): void
+    // {
+    //     Config::set('media.api_enable', false);
+        
+    //     $response = $this->json('post', '/media/bulk', ['file' => self::$file]);
+
+    //     $response->assertNotFound();
+
+    //     $response->assertJson(['message' => 'Not found.']);
+    // }
+
+    // public function testDeleteWhenAutoRoutesDisabled(): void
+    // {
+    //     Config::set('media.api_enable', false);
+        
+    //     $response = $this->json('delete', '/media/4');
+        
+    //     $response->assertNotFound();
+
+    //     $response->assertJson(['message' => 'Not found.']);
+    // }
 }

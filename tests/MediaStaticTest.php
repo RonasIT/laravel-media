@@ -27,10 +27,6 @@ class MediaStaticTest extends TestCase
     {
         parent::setUp();
 
-        self::$apiEnable = true;
-
-        $this->refreshApplication();
-        
         self::$user ??= User::find(2);
         self::$file ??= UploadedFile::fake()->image('file.png', 600, 600);
         self::$mediaTestState ??= new ModelTestState(Media::class);

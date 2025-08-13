@@ -18,8 +18,6 @@ class TestCase extends BaseTest
 
     protected bool $globalExportMode = false;
 
-    protected static bool $apiEnable = true;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,8 +44,6 @@ class TestCase extends BaseTest
 
     protected function getEnvironmentSetUp($app): void
     {
-        Config::set('media.api_enable', self::$apiEnable);
-
         Dotenv::createImmutable(__DIR__ . '/..', '.env.testing')->load();
 
         $this->setupDb($app);
