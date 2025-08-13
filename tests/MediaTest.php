@@ -356,37 +356,4 @@ class MediaTest extends TestCase
 
         self::$mediaTestState->assertNotChanged();
     }
-
-    // public function testGetWhenAutoRoutesDisabled(): void
-    // {
-    //     Config::set('media.api_enable', false);
-        
-    //     $response = $this->json('get', '/media');
-
-    //     $response->assertNotFound();
-
-    //     $response->assertJson(['message' => 'Not found.']);
-    // }
-
-    // public function testPostWhenAutoRoutesDisabled(): void
-    // {
-    //     Config::set('media.api_enable', false);
-        
-    //     $response = $this->json('post', '/media/bulk', ['file' => self::$file]);
-
-    //     $response->assertNotFound();
-
-    //     $response->assertJson(['message' => 'Not found.']);
-    // }
-
-    // public function testDeleteWhenAutoRoutesDisabled(): void
-    // {
-    //     Config::set('media.api_enable', false);
-        
-    //     $response = $this->json('delete', '/media/4');
-        
-    //     $response->assertNotFound();
-
-    //     $response->assertJson(['message' => 'Not found.']);
-    // }
 }
