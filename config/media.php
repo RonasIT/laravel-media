@@ -9,8 +9,8 @@ return [
     | Automatic API routes registration
     |--------------------------------------------------------------------------
     |
-    | Enabling automatically registration of the [default API routes](https://github.com/RonasIT/laravel-media/blob/master/src/Enums/MediaRouteActionEnum.php)
-    |
+    | Enabling automatically registration of the
+    | [default API routes](https://github.com/RonasIT/laravel-media/blob/master/src/Enums/MediaRouteActionEnum.php)
     */
     'api_enable' => true,
 
