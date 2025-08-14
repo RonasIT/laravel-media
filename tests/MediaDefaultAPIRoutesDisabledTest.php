@@ -4,14 +4,14 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Support\Facades\Config;
 
-class MediaDisabledApiTest extends TestCase
+class MediaDefaultAPIRoutesDisabledTest extends TestCase
 {
     protected function beforeEnvironmentSetUpHook(): void
     {
         Config::set('media.api_enable', false);
     }
 
-    public function testGetWhenAutoRoutesDisabled(): void
+    public function testSearch(): void
     {
         $response = $this->json('get', '/media');
 
@@ -20,7 +20,7 @@ class MediaDisabledApiTest extends TestCase
         $response->assertJson(['message' => 'The route media could not be found.']);
     }
 
-    public function testPostWhenAutoRoutesDisabled(): void
+    public function testSingleUpload(): void
     {
         $response = $this->json('post', '/media');
 
@@ -29,7 +29,7 @@ class MediaDisabledApiTest extends TestCase
         $response->assertJson(['message' => 'The route media could not be found.']);
     }
 
-    public function testPostBulkWhenAutoRoutesDisabled(): void
+    public function testBulkUpload(): void
     {
         $response = $this->json('post', '/media/bulk');
 
@@ -38,7 +38,7 @@ class MediaDisabledApiTest extends TestCase
         $response->assertJson(['message' => 'The route media/bulk could not be found.']);
     }
 
-    public function testDeleteWhenAutoRoutesDisabled(): void
+    public function testDelete(): void
     {   
         $response = $this->json('delete', '/media/4');
         
