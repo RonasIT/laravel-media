@@ -99,6 +99,8 @@ class MediaStaticTest extends TestCase
 
     public function testCreateWasCreateDisabled(): void
     {
+        Route::media(MediaRouteActionEnum::Search);
+
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertNotFound();
@@ -141,6 +143,8 @@ class MediaStaticTest extends TestCase
 
     public function testCreateBulkWasCreateBulkDisabled(): void
     {
+        Route::media(MediaRouteActionEnum::Search);
+
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
                 [
@@ -198,6 +202,8 @@ class MediaStaticTest extends TestCase
 
     public function testDeleteWasDeleteDisabled(): void
     {
+        Route::media(MediaRouteActionEnum::Search);
+
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
 
@@ -278,6 +284,8 @@ class MediaStaticTest extends TestCase
 
     public function testSearchWasSearchDisabled(): void
     {
+        Route::media(MediaRouteActionEnum::Delete);
+
         $response = $this->actingAs(self::$user)->json('get', '/media');
 
         $response->assertNotFound();

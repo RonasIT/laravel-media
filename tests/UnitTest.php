@@ -32,8 +32,6 @@ class UnitTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
-
-        MediaRouter::$isBlockedBaseRoutes = false;
     }
 
     public function testCreateMediaWithSetPreviewDrivers(): void

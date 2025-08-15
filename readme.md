@@ -43,6 +43,20 @@ Route::group(['middleware' => ['my_auth']], function () {
 
 In this case automatically registered package routes will fails with the `404` code error.
 
+## Disable media routes
+
+If you want to disable the automatically registered routes, you can set the `api_enable` option to false in the `config/media.php` file:
+
+```php
+#config/media.php
+
+return [
+    ...
+
+    'api_enable' => false,
+];
+```
+
 ## Customizing
 
 You can register only necessary routes using MediaRouteActionEnum:

@@ -32,8 +32,6 @@ class MediaTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
-
-        MediaRouter::$isBlockedBaseRoutes = false;
     }
 
     public function testCreate(): void
@@ -304,7 +302,7 @@ class MediaTest extends TestCase
 
     public function testCreateBaseAutomaticallyRegistered(): void
     {
-        MediaRouter::$isBlockedBaseRoutes = true;
+        Config::set('media.api_enable', false);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
@@ -317,7 +315,7 @@ class MediaTest extends TestCase
 
     public function testSearchStaticDefined(): void
     {
-        MediaRouter::$isBlockedBaseRoutes = true;
+        Config::set('media.api_enable', false);
 
         $response = $this->actingAs(self::$user)->json('get', '/media');
 
@@ -328,7 +326,7 @@ class MediaTest extends TestCase
 
     public function testDeleteWhenStaticDefined(): void
     {
-        MediaRouter::$isBlockedBaseRoutes = true;
+        Config::set('media.api_enable', false);
 
         $filePath = 'preview_Private photo';
         Storage::put($filePath, 'content');
@@ -346,7 +344,7 @@ class MediaTest extends TestCase
 
     public function testCreateBulkWhenStaticDefined(): void
     {
-        MediaRouter::$isBlockedBaseRoutes = true;
+        Config::set('media.api_enable', false);
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', ['file' => self::$file]);
 
