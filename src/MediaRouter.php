@@ -5,16 +5,15 @@ namespace RonasIT\Media;
 use Illuminate\Support\Arr;
 use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Http\Controllers\MediaController;
+use Illuminate\Support\Facades\Config;
 use Closure;
 
 class MediaRouter
 {
-    public static bool $isBlockedBaseRoutes = false;
-
     public function media(): Closure
     {
         return function (MediaRouteActionEnum ...$options) {
-            MediaRouter::$isBlockedBaseRoutes = true;
+            Config::set('media.api_enable', false);
 
             $defaultOptions = [
                 'create' => true,
