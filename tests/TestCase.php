@@ -44,9 +44,15 @@ class TestCase extends BaseTest
 
     protected function getEnvironmentSetUp($app): void
     {
+        $this->beforeEnvironmentSetUpHook();
+
         Dotenv::createImmutable(__DIR__ . '/..', '.env.testing')->load();
 
         $this->setupDb($app);
+    }
+    
+    protected function beforeEnvironmentSetUpHook(): void
+    {
     }
 
     protected function getPackageProviders($app): array

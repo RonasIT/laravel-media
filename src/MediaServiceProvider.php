@@ -19,10 +19,6 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Route::mixin(new MediaRouter());
-
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
-
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'media');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
@@ -38,6 +34,12 @@ class MediaServiceProvider extends ServiceProvider
         ], 'lang');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/blurhash.php', 'blurhash');
+
+        Route::mixin(new MediaRouter());
+
+        if (config('media.api_enable')) {
+            $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
+        }
     }
 
     public function register(): void
