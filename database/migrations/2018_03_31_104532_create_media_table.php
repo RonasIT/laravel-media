@@ -9,13 +9,13 @@ class CreateMediaTable extends Migration
     public function up()
     {
         Schema::create('media', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->string('link');
             $table->string('name')->unique();
             $table->boolean('is_public')->default(false);
             $table->integer('owner_id')->nullable();
-            $table->string('preview_id')->nullable();
+            $table->foreignId('preview_id')->nullable();
 
             if (config('database.default') == 'mysql') {
                 $table->jsonb('meta')->nullable();
