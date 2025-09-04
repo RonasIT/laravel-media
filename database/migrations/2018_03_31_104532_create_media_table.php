@@ -14,20 +14,24 @@ class CreateMediaTable extends Migration
             $table->string('link');
             $table->string('name')->unique();
             $table->boolean('is_public')->default(false);
-            $table->integer('owner_id')->nullable();
-            $table->foreignId('preview_id')->nullable();
+            $table
+                ->foreignId('owner_id')
+                ->nullable()
+                ->references('id')
+                ->on(app(config('media.classes.user_model'))->getTable())
+                ->onDelete('cascade');
+            $table
+                ->foreignId('preview_id')
+                ->nullable()
+                ->references('id')
+                ->on('media')
+                ->onDelete('cascade');
 
             if (config('database.default') == 'mysql') {
                 $table->jsonb('meta')->nullable();
             } else {
                 $table->jsonb('meta')->default('{}');
             }
-
-            $table
-                ->foreign('owner_id')
-                ->references('id')
-                ->on(app(config('media.classes.user_model'))->getTable())
-                ->onDelete('cascade');
         });
     }
 
