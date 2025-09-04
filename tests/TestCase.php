@@ -64,13 +64,23 @@ class TestCase extends BaseTest
 
     protected function setupDb($app): void
     {
-        $app['config']->set('database.default', env('DB_DEFAULT', 'pgsql'));
-        $app['config']->set('database.connections.pgsql', [
-            'driver' => env('DB_DRIVER', 'pgsql'),
-            'host' => env('DB_HOST', 'pgsql'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', 'secret'),
-        ]);
+        $dbDefault = env('DB_DEFAULT', 'pgsql');
+        $app['config']->set('database.default', $dbDefault);
+        
+        if ($dbDefault === 'sqlite') {
+            $app['config']->set('database.connections.sqlite', [
+                'driver' => 'sqlite',
+                'database' => env('DB_DATABASE', ':memory:'),
+                'prefix' => '',
+            ]);
+        } else {
+            $app['config']->set('database.connections.pgsql', [
+                'driver' => env('DB_DRIVER', 'pgsql'),
+                'host' => env('DB_HOST', 'pgsql'),
+                'database' => env('DB_DATABASE', 'forge'),
+                'username' => env('DB_USERNAME', 'forge'),
+                'password' => env('DB_PASSWORD', 'secret'),
+            ]);
+        }
     }
 }
