@@ -26,7 +26,7 @@ class CreateMediaTable extends Migration
                 ->nullable()
                 ->references('id')
                 ->on(app(config('media.classes.user_model'))->getTable())
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table
                 ->foreignId('preview_id')
