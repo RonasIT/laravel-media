@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
+use Illuminate\Http\UploadedFile;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
@@ -46,22 +47,23 @@ class MediaService extends EntityService implements MediaServiceContract
             ->getSearchResults();
     }
 
-    public function create($content, string $fileName, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
+    public function create(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
-        $fileName = $this->saveFile($fileName, $content);
+        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
 
-        if (empty($data['owner_id'])){
+        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
+
+        if (empty($data['owner_id'])) {
             $data['owner_id'] = Auth::check() ? Auth::id() : null;
         }
 
-        $isImage = str_starts_with(Storage::mimeType($fileName), 'image');
+        $isImage = str_starts_with(Storage::mimeType($filePath), 'image');
 
         if ($isImage) {
-
-            $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
+            $this->createPreviews($filePath, $data, $data['owner_id'], ...$previewDrivers);
         }
 
-        $data['name'] = $fileName;
+        $data['name'] = $filePath;
         $data['link'] = Storage::url($data['name']);
 
         return $this->repository
@@ -72,10 +74,7 @@ class MediaService extends EntityService implements MediaServiceContract
     public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array
     {
         return array_map(function ($media) use ($previewDrivers) {
-            $file = $media['file'];
-            $content = file_get_contents($file->getPathname());
-
-            return $this->create($content, $file->getClientOriginalName(), $media, ...$previewDrivers);
+            return $this->create($media['file'], $media, ...$previewDrivers);
         }, $data);
     }
 

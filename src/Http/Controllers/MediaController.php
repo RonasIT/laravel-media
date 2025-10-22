@@ -24,9 +24,7 @@ class MediaController extends Controller
         $file = $request->file('file');
         $data = $request->onlyValidated();
 
-        $content = file_get_contents($file->getPathname());
-
-        $media = $mediaService->create($content, $file->getClientOriginalName(), $data);
+        $media = $mediaService->create($file, $data);
 
         return MediaResource::make($media);
     }

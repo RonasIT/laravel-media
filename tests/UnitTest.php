@@ -7,7 +7,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Enums\PreviewDriverEnum;
-use RonasIT\Media\MediaRouter;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
@@ -39,11 +38,10 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
             data: [],
             file: PreviewDriverEnum::File,
-            hash: PreviewDriverEnum::Hash
+            hash: PreviewDriverEnum::Hash,
         );
 
         Storage::assertExists('preview_file.png');
@@ -58,8 +56,7 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
             data: [],
         );
 
@@ -71,8 +68,7 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
             data: [],
             previewDrivers: PreviewDriverEnum::Hash,
         );
@@ -87,8 +83,7 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
             data: [],
             previewDrivers: PreviewDriverEnum::File,
         );
@@ -173,8 +168,7 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
             data: ['owner_id' => 1],
         );
 
@@ -186,8 +180,7 @@ class UnitTest extends TestCase
         $this->mockGenerateFilename();
 
         $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+            uploadedFile: self::$file,
         );
 
         $this->assertEqualsFixture('create_media_with_null_owner_id', $media->toArray());
