@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Models\Media;
+use RonasIT\Media\Services\MediaService;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
@@ -33,7 +34,7 @@ class MediaTest extends TestCase
         Storage::fake();
     }
 
-    public function testCreate(): void
+    public function testCreateFromStream(): void
     {
         $this->mockGenerateFilename();
 
@@ -80,6 +81,22 @@ class MediaTest extends TestCase
         $response->assertUnauthorized();
     }
 
+    public function testCreateRawFileContent(): void
+    {
+        $this->mockGenerateFilename();
+
+        app(MediaService::class)->create(
+            content: file_get_contents(self::$file->getPathname()),
+            fileName: self::$file->getClientOriginalName(),
+            data: [
+                'is_public' => true,
+                'owner_id' => 2,
+            ],
+        );
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_public');
+    }
+
     public function testBulkCreate(): void
     {
         $this->mockGenerateFilename(
@@ -111,6 +128,35 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('bulk_create');
 
         $this->assertEqualsFixture('bulk_create_response', $response->json());
+    }
+
+    public function testBulkCreateRawFileContent(): void
+    {
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'file1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'file2.png',
+            ],
+        );
+
+        app(MediaService::class)->bulkCreate([
+            [
+                'file' => self::$file,
+                'meta' => ['test1'],
+                'owner_id' => 2,
+            ],
+            [
+                'file' => self::$file,
+                'meta' => ['test2'],
+                'owner_id' => 2,
+            ],
+        ]);
+
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create');
     }
 
     public function testDelete(): void

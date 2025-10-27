@@ -47,24 +47,13 @@ class MediaService extends EntityService implements MediaServiceContract
             ->getSearchResults();
     }
 
-    public function create(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
+    public function create($content, string $fileName, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
-        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
+        $fileName = $this->saveFile($fileName, $content);
 
-        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
+        $data = $this->prepareMediaData($data, $fileName);
 
-        if (empty($data['owner_id'])) {
-            $data['owner_id'] = Auth::check() ? Auth::id() : null;
-        }
-
-        $isImage = str_starts_with(Storage::mimeType($filePath), 'image');
-
-        if ($isImage) {
-            $this->createPreviews($filePath, $data, $data['owner_id'], ...$previewDrivers);
-        }
-
-        $data['name'] = $filePath;
-        $data['link'] = Storage::url($data['name']);
+        $this->createImagePreviews($fileName, $data, $previewDrivers);
 
         return $this->repository
             ->create($data)
@@ -74,7 +63,32 @@ class MediaService extends EntityService implements MediaServiceContract
     public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array
     {
         return array_map(function ($media) use ($previewDrivers) {
-            return $this->create($media['file'], $media, ...$previewDrivers);
+            $file = $media['file'];
+            $content = file_get_contents($file->getPathname());
+
+            return $this->create($content, $file->getClientOriginalName(), $media, ...$previewDrivers);
+        }, $data);
+    }
+
+    public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
+    {
+        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
+
+        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
+
+        $data = $this->prepareMediaData($data, $filePath);
+
+        $this->createImagePreviews($filePath, $data, $previewDrivers);
+
+        return $this->repository
+            ->create($data)
+            ->load('preview');
+    }
+
+    public function bulkCreateFromStream(array $data, PreviewDriverEnum ...$previewDrivers): array
+    {
+        return array_map(function ($media) use ($previewDrivers) {
+            return $this->createFromStream($media['file'], $media, ...$previewDrivers);
         }, $data);
     }
 
@@ -192,6 +206,27 @@ class MediaService extends EntityService implements MediaServiceContract
             if ($type === PreviewDriverEnum::Hash) {
                 $data['blur_hash'] = $this->createHashPreview($fileName);
             }
+        }
+    }
+
+    protected function prepareMediaData(array $data, string $filePath): array
+    {
+        if (empty($data['owner_id'])) {
+            $data['owner_id'] = Auth::check() ? Auth::id() : null;
+        }
+
+        $data['name'] = $filePath;
+        $data['link'] = Storage::url($data['name']);
+
+        return $data;
+    }
+
+    protected function createImagePreviews(string $fileName, array &$data, array $previewDrivers): void
+    {
+        $isImage = str_starts_with(Storage::mimeType($fileName), 'image');
+
+        if ($isImage) {
+            $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
         }
     }
 }
