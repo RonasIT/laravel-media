@@ -7,8 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
+use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Models\Media;
-use RonasIT\Media\Services\MediaService;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
@@ -85,7 +85,7 @@ class MediaTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        app(MediaService::class)->create(
+        app(MediaServiceContract::class)->create(
             content: file_get_contents(self::$file->getPathname()),
             fileName: self::$file->getClientOriginalName(),
             data: [
@@ -143,7 +143,7 @@ class MediaTest extends TestCase
             ],
         );
 
-        app(MediaService::class)->bulkCreate([
+        app(MediaServiceContract::class)->bulkCreate([
             [
                 'file' => self::$file,
                 'meta' => ['test1'],

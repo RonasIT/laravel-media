@@ -37,7 +37,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
             data: [],
             file: PreviewDriverEnum::File,
@@ -55,7 +55,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
             data: [],
         );
@@ -67,7 +67,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
             data: [],
             previewDrivers: PreviewDriverEnum::Hash,
@@ -82,7 +82,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
             data: [],
             previewDrivers: PreviewDriverEnum::File,
@@ -167,7 +167,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
             data: ['owner_id' => 1],
         );
@@ -179,7 +179,7 @@ class UnitTest extends TestCase
     {
         $this->mockGenerateFilename();
 
-        $media = app(MediaServiceContract::class)->create(
+        $media = app(MediaServiceContract::class)->createFromStream(
             uploadedFile: self::$file,
         );
 
