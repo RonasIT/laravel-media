@@ -99,8 +99,6 @@ class MediaTest extends TestCase
         Str::createRandomStringsUsingSequence([
             'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
             'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
-            'sEaVc0RREVfBXwzY5aw2XAr6hDyWTeBDKulXYxPZ',
-            'cqJGCiMP1EdMdVKzUuPUnXKGzufQmtttg4aQXHk5',
         ]);
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
@@ -118,9 +116,9 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_from_stream', 1);
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_from_stream');
 
-        $this->assertEqualsFixture('bulk_create_from_stream_response', $response->json(), 1);
+        $this->assertEqualsFixture('bulk_create_from_stream_response', $response->json());
     }
 
     public function testBulkCreateRawFileContent(): void
