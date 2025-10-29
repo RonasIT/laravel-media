@@ -6,6 +6,7 @@ use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Models\Media;
@@ -32,25 +33,23 @@ class MediaTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
+
+        Str::createRandomStringsUsing(fn () => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
     }
 
     public function testCreateFromStream(): void
     {
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('create');
+        self::$mediaTestState->assertChangesEqualsFixture('create_from_stream');
 
-        $this->assertEqualsFixture('create_response', $response->json());
+        $this->assertEqualsFixture('create_from_stream_response', $response->json());
     }
 
     public function testCreatePublic(): void
     {
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', [
             'file' => self::$file,
             'is_public' => true,
@@ -63,13 +62,11 @@ class MediaTest extends TestCase
 
     public function testCreateCheckFile(): void
     {
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
+        Storage::disk('local')->assertExists($this->getFilePathFromUrl('WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png'));
 
         $this->clearUploadedFilesFolder();
     }
@@ -94,21 +91,17 @@ class MediaTest extends TestCase
             ],
         );
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_public');
+        self::$mediaTestState->assertChangesEqualsFixture('create_public_raw_content');
     }
 
     public function testBulkCreate(): void
     {
-        $this->mockGenerateFilename(
-            [
-                'argument' => 'file.png',
-                'result' => 'file1.png',
-            ],
-            [
-                'argument' => 'file.png',
-                'result' => 'file2.png',
-            ],
-        );
+        Str::createRandomStringsUsingSequence([
+            'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
+            'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
+            'sEaVc0RREVfBXwzY5aw2XAr6hDyWTeBDKulXYxPZ',
+            'cqJGCiMP1EdMdVKzUuPUnXKGzufQmtttg4aQXHk5',
+        ]);
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -117,7 +110,7 @@ class MediaTest extends TestCase
                     'meta' => ['test1'],
                 ],
                 [
-                    'file' => self::$file,
+                    'file' => UploadedFile::fake()->image('file2.png', 600, 600),
                     'meta' => ['test2'],
                 ],
             ],
@@ -125,9 +118,9 @@ class MediaTest extends TestCase
 
         $response->assertOk();
 
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create');
+        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_from_stream', 1);
 
-        $this->assertEqualsFixture('bulk_create_response', $response->json());
+        $this->assertEqualsFixture('bulk_create_from_stream_response', $response->json(), 1);
     }
 
     public function testBulkCreateRawFileContent(): void
@@ -296,42 +289,33 @@ class MediaTest extends TestCase
         return [
             [
                 'fileName' => 'image.jpg',
+                'fixture' => 'uploading_good_files_jpg',
             ],
             [
                 'fileName' => 'image.png',
+                'fixture' => 'uploading_good_files_png',
             ],
             [
                 'fileName' => 'image.bmp',
+                'fixture' => 'uploading_good_files_bmp',
             ],
         ];
     }
 
     #[DataProvider('getGoodFiles')]
-    public function testUploadingGoodFiles(string $fileName): void
+    public function testUploadingGoodFiles(string $fileName, string $fixture): void
     {
-        $this->mockGenerateFilename(
-            [
-                'argument' => $fileName,
-                'result' => 'file.png',
-            ],
-        );
-
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files');
+        self::$mediaTestState->assertChangesEqualsFixture($fixture, 1);
     }
 
     public function testCreateNotImageMedia(): void
     {
-        $this->mockGenerateFilename([
-            'argument' => 'document.pdf',
-            'result' => 'document.pdf',
-        ]);
-
         Config::push('media.permitted_types', 'pdf');
 
         self::$file = UploadedFile::fake()->create('document.pdf', 1024);

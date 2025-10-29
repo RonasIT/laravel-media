@@ -53,7 +53,9 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $data = $this->prepareMediaData($data, $fileName);
 
-        $this->createImagePreviews($fileName, $data, $previewDrivers);
+        if ($this->shouldCreatePreview($fileName)) {
+            $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
+        }
 
         return $this->repository
             ->create($data)
@@ -72,13 +74,13 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
-        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
-
-        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
+        $filePath = Storage::putFile('', $uploadedFile);
 
         $data = $this->prepareMediaData($data, $filePath);
 
-        $this->createImagePreviews($filePath, $data, $previewDrivers);
+        if ($this->shouldCreatePreview($filePath)) {
+            $this->createPreviews($filePath, $data, $data['owner_id'], ...$previewDrivers);
+        }
 
         return $this->repository
             ->create($data)
@@ -87,9 +89,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function bulkCreateFromStream(array $data, PreviewDriverEnum ...$previewDrivers): array
     {
-        return array_map(function ($media) use ($previewDrivers) {
-            return $this->createFromStream($media['file'], $media, ...$previewDrivers);
-        }, $data);
+        return array_map(fn ($media) => $this->createFromStream($media['file'], $media, ...$previewDrivers), $data);
     }
 
     public function delete($where): int
@@ -221,12 +221,8 @@ class MediaService extends EntityService implements MediaServiceContract
         return $data;
     }
 
-    protected function createImagePreviews(string $fileName, array &$data, array $previewDrivers): void
+    protected function shouldCreatePreview(string $fileName): bool
     {
-        $isImage = str_starts_with(Storage::mimeType($fileName), 'image');
-
-        if ($isImage) {
-            $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
-        }
+        return str_starts_with(Storage::mimeType($fileName), 'image');
     }
 }
