@@ -87,11 +87,6 @@ class MediaService extends EntityService implements MediaServiceContract
             ->load('preview');
     }
 
-    public function bulkCreateFromStream(array $data, PreviewDriverEnum ...$previewDrivers): array
-    {
-        return array_map(fn ($media) => $this->createFromStream($media['file'], $media, ...$previewDrivers), $data);
-    }
-
     public function delete($where): int
     {
         $entity = $this->first($where);

@@ -155,37 +155,6 @@ class UnitTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_set_preview_drivers');
     }
 
-    public function testCreateFromStreamBulkMediaWithSetPreviewDrivers()
-    {
-        Str::createRandomStringsUsingSequence([
-            'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
-            'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
-        ]);
-
-        $mediaArray = [
-            [
-                'file' => self::$file,
-            ],
-            [
-                'file' => self::$secondFile,
-            ]
-        ];
-
-        $media = app(MediaServiceContract::class)->bulkCreateFromStream(
-            data: $mediaArray,
-            file: PreviewDriverEnum::File,
-            hash: PreviewDriverEnum::Hash,
-        );
-
-        $result = array_map(fn ($item) => $item->toArray(), $media);
-
-        Storage::assertExists(['preview_WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png', 'preview_iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed.png']);
-
-        $this->assertEqualsFixture('bulk_create_from_stream_media_with_set_preview_drivers', $result, 1);
-
-        self::$mediaTestState->assertChangesEqualsFixture('bulk_create_from_stream_media_with_set_preview_drivers', 1);
-    }
-
     public function testCreateBulkMediaWithDefaultPreviewDrivers(): void
     {
         $this->mockGenerateFilename(
@@ -219,35 +188,6 @@ class UnitTest extends TestCase
         $this->assertEqualsFixture('bulk_create_media_with_default_preview_drivers', $result);
 
         self::$mediaTestState->assertChangesEqualsFixture('create_bulk_media_with_default_preview_drivers');
-    }
-
-    public function testCreateBulkFromStreamMediaWithDefaultPreviewDrivers(): void
-    {
-        Str::createRandomStringsUsingSequence([
-            'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
-            'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
-        ]);
-
-        $mediaArray = [
-            [
-                'file' => self::$file,
-            ],
-            [
-                'file' => self::$secondFile,
-            ]
-        ];
-
-        $media = app(MediaServiceContract::class)->bulkCreateFromStream(
-            data: $mediaArray,
-        );
-
-        $result = array_map(fn ($item) => $item->toArray(), $media);
-
-        Storage::assertExists(['preview_WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png', 'preview_iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed.png']);
-
-        $this->assertEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers', $result, 1);
-
-        self::$mediaTestState->assertChangesEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers', 1);
     }
 
     public function testCreateMediaWithSetOwnerId()
