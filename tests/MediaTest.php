@@ -309,7 +309,7 @@ class MediaTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture($fixture, 1);
+        self::$mediaTestState->assertChangesEqualsFixture($fixture);
     }
 
     public function testCreateNotImageMedia(): void

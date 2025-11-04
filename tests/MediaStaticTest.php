@@ -362,18 +362,21 @@ class MediaStaticTest extends TestCase
         return [
             [
                 'fileName' => 'image.jpg',
+                'fixture' => 'upload_good_files_jpg',
             ],
             [
                 'fileName' => 'image.png',
+                'fixture' => 'upload_good_files_png',
             ],
             [
                 'fileName' => 'image.bmp',
+                'fixture' => 'upload_good_files_bmp',
             ],
         ];
     }
 
     #[DataProvider('getGoodFiles')]
-    public function testUploadingGoodFiles(string $fileName): void
+    public function testUploadingGoodFiles(string $fileName, string $fixture): void
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
@@ -383,6 +386,6 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files', 1);
+        self::$mediaTestState->assertChangesEqualsFixture($fixture);
     }
 }
