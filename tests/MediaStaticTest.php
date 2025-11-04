@@ -383,6 +383,6 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files', 1);
+        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files');
     }
 }
