@@ -262,9 +262,7 @@ class UnitTest extends TestCase
 
     public function testCreateMediaWithNullOwnerId()
     {
-        $media = app(MediaServiceContract::class)->createFromStream(
-            uploadedFile: self::$file,
-        );
+        $media = app(MediaServiceContract::class)->createFromStream(self::$file);
 
         $this->assertEqualsFixture('create_media_with_null_owner_id', $media->toArray());
     }
