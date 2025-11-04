@@ -245,9 +245,9 @@ class UnitTest extends TestCase
 
         Storage::assertExists(['preview_WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png', 'preview_iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed.png']);
 
-        $this->assertEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers', $result, 1);
+        $this->assertEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers', $result);
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers', 1);
+        self::$mediaTestState->assertChangesEqualsFixture('create_bulk_from_stream_media_with_default_preview_drivers');
     }
 
     public function testCreateMediaWithSetOwnerId()
