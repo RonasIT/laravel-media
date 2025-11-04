@@ -82,7 +82,8 @@ class MediaService extends EntityService implements MediaServiceContract
             $this->createPreviews($filePath, $data, $data['owner_id'], ...$previewDrivers);
         }
 
-        return $this->repository
+        return $this
+            ->repository
             ->create($data)
             ->load('preview');
     }
