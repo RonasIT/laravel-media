@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
+use Illuminate\Http\UploadedFile;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 use RonasIT\Media\Repositories\MediaRepository;
@@ -50,21 +51,14 @@ class MediaService extends EntityService implements MediaServiceContract
     {
         $fileName = $this->saveFile($fileName, $content);
 
-        if (empty($data['owner_id'])){
-            $data['owner_id'] = Auth::check() ? Auth::id() : null;
-        }
+        $data = $this->prepareMediaData($data, $fileName);
 
-        $isImage = str_starts_with(Storage::mimeType($fileName), 'image');
-
-        if ($isImage) {
-
+        if ($this->shouldCreatePreview($fileName)) {
             $this->createPreviews($fileName, $data, $data['owner_id'], ...$previewDrivers);
         }
 
-        $data['name'] = $fileName;
-        $data['link'] = Storage::url($data['name']);
-
-        return $this->repository
+        return $this
+            ->repository
             ->create($data)
             ->load('preview');
     }
@@ -77,6 +71,22 @@ class MediaService extends EntityService implements MediaServiceContract
 
             return $this->create($content, $file->getClientOriginalName(), $media, ...$previewDrivers);
         }, $data);
+    }
+
+    public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
+    {
+        $filePath = Storage::putFile('', $uploadedFile);
+
+        $data = $this->prepareMediaData($data, $filePath);
+
+        if ($this->shouldCreatePreview($filePath)) {
+            $this->createPreviews($filePath, $data, $data['owner_id'], ...$previewDrivers);
+        }
+
+        return $this
+            ->repository
+            ->create($data)
+            ->load('preview');
     }
 
     public function delete($where): int
@@ -173,7 +183,7 @@ class MediaService extends EntityService implements MediaServiceContract
             config('blurhash.driver'),
             config('blurhash.components-x'),
             config('blurhash.components-y'),
-            config('blurhash.resized-max-size')
+            config('blurhash.resized-max-size'),
         );
     }
 
@@ -194,5 +204,22 @@ class MediaService extends EntityService implements MediaServiceContract
                 $data['blur_hash'] = $this->createHashPreview($fileName);
             }
         }
+    }
+
+    protected function prepareMediaData(array $data, string $filePath): array
+    {
+        if (empty($data['owner_id'])) {
+            $data['owner_id'] = (Auth::check()) ? Auth::id() : null;
+        }
+
+        $data['name'] = $filePath;
+        $data['link'] = Storage::url($data['name']);
+
+        return $data;
+    }
+
+    protected function shouldCreatePreview(string $fileName): bool
+    {
+        return str_starts_with(Storage::mimeType($fileName), 'image');
     }
 }

@@ -5,9 +5,9 @@ namespace RonasIT\Media\Tests;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Enums\PreviewDriverEnum;
-use RonasIT\Media\MediaRouter;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
@@ -32,9 +32,27 @@ class UnitTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
+
+        Str::createRandomStringsUsing(fn() => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
     }
 
     public function testCreateMediaWithSetPreviewDrivers(): void
+    {
+        $media = app(MediaServiceContract::class)->createFromStream(
+            uploadedFile: self::$file,
+            data: [],
+            file: PreviewDriverEnum::File,
+            hash: PreviewDriverEnum::Hash,
+        );
+
+        Storage::assertExists('WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png');
+
+        $this->assertEqualsFixture('create_media_with_set_preview_drivers', $media->toArray());
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers');
+    }
+
+    public function testCreateRawContentMediaWithSetPreviewDrivers(): void
     {
         $this->mockGenerateFilename();
 
@@ -46,27 +64,24 @@ class UnitTest extends TestCase
             hash: PreviewDriverEnum::Hash
         );
 
-        Storage::assertExists('preview_file.png');
+        Storage::assertExists('file.png');
 
-        $this->assertEqualsFixture('create_media_with_set_preview_drivers', $media->toArray());
+        $this->assertEqualsFixture('create_media_raw_content_with_set_preview_drivers', $media->toArray());
 
-        self::$mediaTestState->assertChangesEqualsFixture('create_media_with_set_preview_drivers');
+        self::$mediaTestState->assertChangesEqualsFixture('create_media_raw_content_with_set_preview_drivers');
     }
 
     public function testCreateMediaWithDefaultPreviewDrivers(): void
     {
-        $this->mockGenerateFilename();
-
-        $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+        $media = app(MediaServiceContract::class)->createFromStream(
+            uploadedFile: self::$file,
             data: [],
         );
 
         $this->assertEqualsFixture('create_media_with_default_preview_drivers', $media->toArray());
     }
 
-    public function testCreateWithSetBlurhashDriver(): void
+    public function testCreateRawContentMediaWithDefaultPreviewDrivers(): void
     {
         $this->mockGenerateFilename();
 
@@ -74,21 +89,28 @@ class UnitTest extends TestCase
             content: file_get_contents(self::$file->getPathname()),
             fileName: self::$file->getClientOriginalName(),
             data: [],
+        );
+
+        $this->assertEqualsFixture('bulk_create_raw_content_media_with_default_preview_drivers', $media->toArray());
+    }
+
+    public function testCreateWithSetBlurhashDriver(): void
+    {
+        $media = app(MediaServiceContract::class)->createFromStream(
+            uploadedFile: self::$file,
+            data: [],
             previewDrivers: PreviewDriverEnum::Hash,
         );
 
         $this->assertEqualsFixture('create_media_with_set_blurhash_driver', $media->toArray());
 
-        $this->assertTrue(Storage::missing('tmp_file.png'));
+        $this->assertTrue(Storage::missing('tmp_WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png'));
     }
 
     public function testCreateWithSetFileDriver(): void
     {
-        $this->mockGenerateFilename();
-
-        $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+        $media = app(MediaServiceContract::class)->createFromStream(
+            uploadedFile: self::$file,
             data: [],
             previewDrivers: PreviewDriverEnum::File,
         );
@@ -170,11 +192,8 @@ class UnitTest extends TestCase
 
     public function testCreateMediaWithSetOwnerId()
     {
-        $this->mockGenerateFilename();
-
-        $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
+        $media = app(MediaServiceContract::class)->createFromStream(
+            uploadedFile: self::$file,
             data: ['owner_id' => 1],
         );
 
@@ -183,12 +202,7 @@ class UnitTest extends TestCase
 
     public function testCreateMediaWithNullOwnerId()
     {
-        $this->mockGenerateFilename();
-
-        $media = app(MediaServiceContract::class)->create(
-            content: file_get_contents(self::$file->getPathname()),
-            fileName: self::$file->getClientOriginalName(),
-        );
+        $media = app(MediaServiceContract::class)->createFromStream(self::$file);
 
         $this->assertEqualsFixture('create_media_with_null_owner_id', $media->toArray());
     }

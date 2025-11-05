@@ -3,6 +3,7 @@
 namespace RonasIT\Media\Contracts\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use RonasIT\Media\Enums\PreviewDriverEnum;
 
@@ -21,4 +22,6 @@ interface MediaServiceContract
     public function delete($where): int;
 
     public function first(int|array $where = []): ?Model;
+
+    public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model;
 }

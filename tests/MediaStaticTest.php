@@ -6,6 +6,7 @@ use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Models\Media;
@@ -32,6 +33,8 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
+
+        Str::createRandomStringsUsing(fn () => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
     }
 
     public function testEverythingDisabledExceptSearch(): void
@@ -86,8 +89,6 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
@@ -114,8 +115,6 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', [
             'file' => self::$file,
             'is_public' => true,
@@ -130,13 +129,11 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
-        $this->mockGenerateFilename();
-
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        Storage::disk('local')->assertExists($this->getFilePathFromUrl('file.png'));
+        Storage::disk('local')->assertExists($this->getFilePathFromUrl('WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png'));
 
         $this->clearUploadedFilesFolder();
     }
@@ -169,16 +166,10 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::BulkUpload);
 
-        $this->mockGenerateFilename(
-            [
-                'argument' => 'file.png',
-                'result' => 'file1.png',
-            ],
-            [
-                'argument' => 'file.png',
-                'result' => 'file2.png',
-            ],
-        );
+        Str::createRandomStringsUsingSequence([
+            'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
+            'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
+        ]);
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -187,7 +178,7 @@ class MediaStaticTest extends TestCase
                     'meta' => ['test1'],
                 ],
                 [
-                    'file' => self::$file,
+                    'file' => UploadedFile::fake()->image('file.png', 600, 600),
                     'meta' => ['test2'],
                 ],
             ],
@@ -371,27 +362,23 @@ class MediaStaticTest extends TestCase
         return [
             [
                 'fileName' => 'image.jpg',
+                'fixture' => 'upload_good_files_jpg',
             ],
             [
                 'fileName' => 'image.png',
+                'fixture' => 'upload_good_files_png',
             ],
             [
                 'fileName' => 'image.bmp',
+                'fixture' => 'upload_good_files_bmp',
             ],
         ];
     }
 
     #[DataProvider('getGoodFiles')]
-    public function testUploadingGoodFiles(string $fileName): void
+    public function testUploadingGoodFiles(string $fileName, string $fixture): void
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
-
-        $this->mockGenerateFilename(
-            [
-                'argument' => $fileName,
-                'result' => 'file.png',
-            ],
-        );
 
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);
 
@@ -399,6 +386,6 @@ class MediaStaticTest extends TestCase
 
         $response->assertCreated();
 
-        self::$mediaTestState->assertChangesEqualsFixture('uploading_good_files');
+        self::$mediaTestState->assertChangesEqualsFixture($fixture);
     }
 }
