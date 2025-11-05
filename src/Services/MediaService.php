@@ -183,7 +183,7 @@ class MediaService extends EntityService implements MediaServiceContract
             config('blurhash.driver'),
             config('blurhash.components-x'),
             config('blurhash.components-y'),
-            config('blurhash.resized-max-size')
+            config('blurhash.resized-max-size'),
         );
     }
 
