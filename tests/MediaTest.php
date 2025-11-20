@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Models\Media;
+use RonasIT\Media\Tests\Models\custom\CustomUser;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
@@ -46,6 +47,32 @@ class MediaTest extends TestCase
         self::$mediaTestState->assertChangesEqualsFixture('create_from_stream');
 
         $this->assertEqualsFixture('create_from_stream_response', $response->json());
+    }
+
+    public function testCreateNotConfigUserModel(): void
+    {
+        Config::set('media.classes.user_model', 'RonasIT\Tests\Models\User');
+
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+
+        $response->assertCreated();
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_null_owner_id');
+
+        $this->assertEqualsFixture('create_null_owner_id', $response->json());
+    }
+
+    public function testCreateCustomAuthProvider()
+    {
+        $user = new CustomUser(354665, 'Sam', '123456');
+
+        $response = $this->actingAs($user)->json('post', '/media', ['file' => self::$file]);
+
+        $response->assertCreated();
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_null_owner_id');
+
+        $this->assertEqualsFixture('create_null_owner_id', $response->json());
     }
 
     public function testCreatePublic(): void
