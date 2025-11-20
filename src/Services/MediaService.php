@@ -209,7 +209,11 @@ class MediaService extends EntityService implements MediaServiceContract
     protected function prepareMediaData(array $data, string $filePath): array
     {
         if (empty($data['owner_id'])) {
-            $data['owner_id'] = (Auth::check()) ? Auth::id() : null;
+            $user = Auth::user();
+
+            $data['owner_id'] = ($user && (config('media.classes.user_model') === get_class($user)))
+                ? $user->getAuthIdentifier()
+                : null;
         }
 
         $data['name'] = $filePath;
