@@ -40,6 +40,10 @@ class MediaServiceProvider extends ServiceProvider
         if (config('media.api_enable')) {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         }
+
+        $this->publishes([
+            __DIR__ . '/../database/additional' => database_path('migrations'),
+        ], 'change-on-delete-constraint');
     }
 
     public function register(): void
