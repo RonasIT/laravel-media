@@ -9,46 +9,51 @@ return new class extends Migration
     public function up()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->dropForeign(['owner_id']);
+            $deleteConstraint = config('media.on_delete_constraint', 'no action');
 
-            $table
-                ->foreignId('owner_id')
-                ->nullable()
-                ->references('id')
-                ->on(app(config('media.classes.user_model'))->getTable())
-                ->onDelete(config('media.on_delete_constraint', 'no action'));
-
-            $table->dropForeign(['preview_id']);
-
-            $table
-                ->foreignId('preview_id')
-                ->nullable()
-                ->references('id')
-                ->on('media')
-                ->onDelete(config('media.on_delete_constraint', 'no action'));
+            $this->changeForeignKeyConstraint(
+                table: $table,
+                keyColumnName: 'owner_id',
+                referencedTable: app(config('media.classes.user_model'))->getTable(),
+                deleteConstraint: $deleteConstraint,
+            );
+            $this->changeForeignKeyConstraint(
+                table: $table,
+                keyColumnName: 'preview_id',
+                referencedTable: 'media',
+                deleteConstraint: $deleteConstraint,
+            );
         });
     }
 
     public function down()
     {
         Schema::table('media', function (Blueprint $table) {
-            $table->dropForeign(['owner_id']);
-
-            $table
-                ->foreignId('owner_id')
-                ->nullable()
-                ->references('id')
-                ->on(app(config('media.classes.user_model'))->getTable())
-                ->noActionOnDelete();
-
-            $table->dropForeign(['preview_id']);
-
-            $table
-                ->foreignId('preview_id')
-                ->nullable()
-                ->references('id')
-                ->on('media')
-                ->noActionOnDelete();
+            $this->changeForeignKeyConstraint(
+                table: $table,
+                keyColumnName: 'owner_id',
+                referencedTable: app(config('media.classes.user_model'))->getTable(),
+            );
+            $this->changeForeignKeyConstraint(
+                table: $table,
+                keyColumnName: 'preview_id',
+                referencedTable: 'media',
+            );
         });
+    }
+
+    protected function changeForeignKeyConstraint(
+        Blueprint $table,
+        string $keyColumnName,
+        string $referencedTable,
+        string $deleteConstraint = 'no action',
+    ): void {
+        $table->dropForeign([$keyColumnName]);
+
+        $table
+            ->foreign($keyColumnName)
+            ->references('id')
+            ->on($referencedTable)
+            ->onDelete($deleteConstraint);
     }
 };
