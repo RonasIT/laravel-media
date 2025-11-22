@@ -42,7 +42,8 @@
   "extra": {
       "laravel": {
           "providers": [
-              "RonasIT\\Media\\MediaServiceProvider"
+              "RonasIT\\Media\\MediaServiceProvider",
+              "RonasIT\\Media\\ChangeMediaConstraintServiceProvider"
           ]
       }
   }
