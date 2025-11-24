@@ -72,6 +72,11 @@ use RonasIT\Media\Enums\MediaRouteActionEnum;
 Route::media(MediaRouteActionEnum::SingleUpload, MediaRouteActionEnum::Delete);
 ```
 
+By default, media table foreign keys have `no-action` on delete constraint. To change it, specify desired constraint in `media.on_delete_constraint` config and publish migration by running
+```sh
+php artisan vendor:publish --tag=change-on-delete-constraint
+```
+
 ## Integration with [LaravelSwagger](https://github.com/RonasIT/laravel-swagger)
 
 This package includes OpenAPI documentation file. To include it to your project's documentation, you need to register it in the `auto-doc.additional_paths` config:
