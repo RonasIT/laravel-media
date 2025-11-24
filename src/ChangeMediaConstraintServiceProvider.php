@@ -8,6 +8,8 @@ class ChangeMediaConstraintServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/additional');
+        $this->publishes([
+            __DIR__ . '/../database/additional' => database_path('migrations'),
+        ], 'change-on-delete-constraint');
     }
 }
