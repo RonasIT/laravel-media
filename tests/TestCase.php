@@ -23,9 +23,11 @@ class TestCase extends BaseTest
         parent::setUp();
 
         Config::set('media.classes.user_model', User::class);
+        Config::set('media.on_delete_constraint', 'cascade');
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/additional');
         $this->loadTestDump();
 
         if (config('database.default') === 'pgsql') {
