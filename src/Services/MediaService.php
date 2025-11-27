@@ -211,9 +211,9 @@ class MediaService extends EntityService implements MediaServiceContract
         if (empty($data['owner_id'])) {
             $user = Auth::user();
 
-            $data['owner_id'] = ($user && (config('media.classes.user_model') === get_class($user)))
-                ? $user->getAuthIdentifier()
-                : null;
+            $isUserModel = (!empty($user) && get_class($user) === config('media.classes.user_model'));
+
+            $data['owner_id'] = when($isUserModel, $user->getAuthIdentifier());
         }
 
         $data['name'] = $filePath;

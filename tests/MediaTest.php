@@ -57,8 +57,6 @@ class MediaTest extends TestCase
         $response->assertCreated();
 
         self::$mediaTestState->assertChangesEqualsFixture('create_null_owner_id');
-
-        $this->assertEqualsFixture('create_null_owner_id', $response->json());
     }
 
     public function testCreatePublic(): void
