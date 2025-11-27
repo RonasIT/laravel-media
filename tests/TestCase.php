@@ -27,7 +27,6 @@ class TestCase extends BaseTest
 
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/additional');
         $this->loadTestDump();
 
         if (config('database.default') === 'pgsql') {
