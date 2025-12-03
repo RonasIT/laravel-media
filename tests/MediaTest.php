@@ -48,6 +48,17 @@ class MediaTest extends TestCase
         $this->assertEqualsFixture('create_from_stream_response', $response->json());
     }
 
+    public function testCreateNotConfigUserModel(): void
+    {
+        Config::set('media.classes.user_model', 'RonasIT\Tests\Models\User');
+
+        $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
+
+        $response->assertCreated();
+
+        self::$mediaTestState->assertChangesEqualsFixture('create_null_owner_id');
+    }
+
     public function testCreatePublic(): void
     {
         $response = $this->actingAs(self::$user)->json('post', '/media', [
