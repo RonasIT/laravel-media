@@ -14,8 +14,7 @@ This plugin adds the ability for users to work with media files.
 composer require ronasit/laravel-media
 ```
 
-2. Specify desired database media table foreign keys (`owner_id`, `preview_id`) constraint in `media.on_delete_constraint` config.
-3. Publish the package configuration:
+2. Publish the package configuration:
 
 ``` sh
 php artisan vendor:publish --provider=RonasIT\\Media\\MediaServiceProvider
