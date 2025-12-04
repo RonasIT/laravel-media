@@ -21,21 +21,19 @@ class CreateMediaTable extends Migration
                 $table->jsonb('meta')->default('{}');
             }
 
-            $onDeleteConstraint = config('media.on_delete_constraint');
-
             $table
                 ->foreignId('owner_id')
                 ->nullable()
                 ->references('id')
                 ->on(app(config('media.classes.user_model'))->getTable())
-                ->onDelete($onDeleteConstraint);
+                ->noActionOnDelete();
 
             $table
                 ->foreignId('preview_id')
                 ->nullable()
                 ->references('id')
                 ->on('media')
-                ->onDelete($onDeleteConstraint);
+                ->noActionOnDelete();
         });
     }
 

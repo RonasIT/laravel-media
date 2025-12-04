@@ -69,13 +69,4 @@ return [
     'drivers' => [
         PreviewDriverEnum::File,
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Media table constraints
-    |--------------------------------------------------------------------------
-    |
-    | Database media table foreign keys on delete constraint
-    */
-    'on_delete_constraint' => 'no action',
 ];

@@ -5,6 +5,7 @@ namespace RonasIT\Media\Tests;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -152,6 +153,8 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
+        DB::statement('ALTER TABLE media DISABLE TRIGGER ALL');
+
         $filePath = 'Private photo';
         $previewFilePath = "preview_{$filePath}";
         Storage::put($filePath, 'content');
@@ -165,6 +168,8 @@ class MediaTest extends TestCase
 
         Storage::assertMissing($filePath);
         Storage::assertMissing($previewFilePath);
+
+        DB::statement('ALTER TABLE media ENABLE TRIGGER ALL');
     }
 
     public function testDeleteNotExists(): void
