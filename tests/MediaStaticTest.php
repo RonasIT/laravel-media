@@ -4,7 +4,6 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -56,11 +55,9 @@ class MediaStaticTest extends TestCase
 
     public function testEverythingDisabledExceptDelete(): void
     {
-        DB::statement('ALTER TABLE media DISABLE TRIGGER ALL');
-
         Route::media(MediaRouteActionEnum::Delete);
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/11');
         $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
         $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
@@ -70,8 +67,6 @@ class MediaStaticTest extends TestCase
         $responseCreate->assertNotFound();
         $responseSearch->assertNotFound();
         $responseCreateBulk->assertNotFound();
-
-        DB::statement('ALTER TABLE media ENABLE TRIGGER ALL');
     }
 
     public function testEverythingDisabledExceptCreate(): void
@@ -216,25 +211,18 @@ class MediaStaticTest extends TestCase
 
     public function testDelete(): void
     {
-        DB::statement('ALTER TABLE media DISABLE TRIGGER ALL');
-
         Route::media(MediaRouteActionEnum::Delete);
 
-        $filePath = 'Private photo';
-        $previewFilePath = "preview_{$filePath}";
+        $filePath = 'Main photo without preview';
         Storage::put($filePath, 'content');
-        Storage::put($previewFilePath, 'content');
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/11');
 
         $response->assertNoContent();
 
         self::$mediaTestState->assertChangesEqualsFixture('delete');
 
         Storage::assertMissing($filePath);
-        Storage::missing($previewFilePath);
-
-        DB::statement('ALTER TABLE media DISABLE TRIGGER ALL');
     }
 
     public function testDeleteNotExists(): void

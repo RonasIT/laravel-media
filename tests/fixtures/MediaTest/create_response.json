@@ -1,11 +1,11 @@
 {
-    "id": 12,
+    "id": 13,
     "link": "\/storage\/file.png",
     "name": "file.png",
     "is_public": false,
     "meta": [],
     "preview": {
-        "id": 11,
+        "id": 12,
         "link": "\/storage\/preview_file.png",
         "name": "preview_file.png",
         "is_public": false,

@@ -1,6 +1,13 @@
 {
     "data": [
         {
+            "id": 11,
+            "link": "http:\/\/localhost\/test11.jpg",
+            "name": "Main photo without preview",
+            "is_public": false,
+            "meta": []
+        },
+        {
             "id": 8,
             "link": "http:\/\/localhost\/test4.jpg",
             "name": "Photo",
@@ -13,25 +20,18 @@
             "name": "preview_Photo",
             "is_public": true,
             "meta": []
-        },
-        {
-            "id": 4,
-            "link": "http:\/\/localhost\/test_preview_5.jpg",
-            "name": "preview_Private photo",
-            "is_public": false,
-            "meta": []
         }
     ],
     "links": {
         "first": "http:\/\/localhost\/media?page=1",
-        "last": "http:\/\/localhost\/media?page=2",
+        "last": "http:\/\/localhost\/media?page=3",
         "prev": null,
         "next": "http:\/\/localhost\/media?page=2"
     },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 2,
+        "last_page": 3,
         "links": [
             {
                 "url": null,
@@ -49,6 +49,11 @@
                 "active": false
             },
             {
+                "url": "http:\/\/localhost\/media?page=3",
+                "label": "3",
+                "active": false
+            },
+            {
                 "url": "http:\/\/localhost\/media?page=2",
                 "label": "Next &raquo;",
                 "active": false
@@ -57,6 +62,6 @@
         "path": "http:\/\/localhost\/media",
         "per_page": 3,
         "to": 3,
-        "total": 6
+        "total": 7
     }
 }
