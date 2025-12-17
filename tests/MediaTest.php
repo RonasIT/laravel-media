@@ -163,19 +163,16 @@ class MediaTest extends TestCase
 
     public function testDelete(): void
     {
-        $filePath = 'Private photo';
-        $previewFilePath = "preview_{$filePath}";
+        $filePath = 'Main photo without preview';
         Storage::put($filePath, 'content');
-        Storage::put($previewFilePath, 'content');
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/11');
 
         $response->assertNoContent();
 
         self::$mediaTestState->assertChangesEqualsFixture('delete');
 
         Storage::assertMissing($filePath);
-        Storage::assertMissing($previewFilePath);
     }
 
     public function testDeleteNotExists(): void

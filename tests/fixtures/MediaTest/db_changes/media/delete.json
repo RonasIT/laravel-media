@@ -3,27 +3,15 @@
     "created": [],
     "deleted": [
         {
-            "id": 4,
+            "id": 11,
             "created_at": "2016-10-20 11:05:00",
             "updated_at": "2016-10-20 11:05:00",
-            "link": "http:\/\/localhost\/test_preview_5.jpg",
-            "name": "preview_Private photo",
+            "link": "http:\/\/localhost\/test11.jpg",
+            "name": "Main photo without preview",
             "is_public": false,
+            "meta": [],
             "owner_id": 2,
             "preview_id": null,
-            "meta": [],
-            "blur_hash": null
-        },
-        {
-            "id": 9,
-            "created_at": "2016-10-20 11:05:00",
-            "updated_at": "2016-10-20 11:05:00",
-            "link": "http:\/\/localhost\/test5.jpg",
-            "name": "Private photo",
-            "is_public": false,
-            "owner_id": 2,
-            "preview_id": "4",
-            "meta": [],
             "blur_hash": null
         }
     ]

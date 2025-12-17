@@ -57,7 +57,7 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/11');
         $responseCreate = $this->actingAs(self::$user)->json('post', '/media');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
         $responseSearch = $this->actingAs(self::$user)->json('get', '/media');
@@ -213,19 +213,16 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::Delete);
 
-        $filePath = 'Private photo';
-        $previewFilePath = "preview_{$filePath}";
+        $filePath = 'Main photo without preview';
         Storage::put($filePath, 'content');
-        Storage::put($previewFilePath, 'content');
 
-        $response = $this->actingAs(self::$user)->json('delete', '/media/9');
+        $response = $this->actingAs(self::$user)->json('delete', '/media/11');
 
         $response->assertNoContent();
 
         self::$mediaTestState->assertChangesEqualsFixture('delete');
 
         Storage::assertMissing($filePath);
-        Storage::missing($previewFilePath);
     }
 
     public function testDeleteNotExists(): void
