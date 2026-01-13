@@ -39,9 +39,9 @@ class MediaDefaultAPIRoutesDisabledTest extends TestCase
     }
 
     public function testDelete(): void
-    {   
+    {
         $response = $this->json('delete', '/media/4');
-        
+
         $response->assertNotFound();
 
         $response->assertJson(['message' => 'The route media/4 could not be found.']);

@@ -27,7 +27,7 @@ trait MediaTestTrait
                 name: 'generateName',
                 arguments: Arr::wrap($fileName['argument']),
                 result: $fileName['result'],
-            ), $mockData)
+            ), $mockData),
         );
     }
 }

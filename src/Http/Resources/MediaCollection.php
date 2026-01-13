@@ -2,9 +2,9 @@
 
 namespace RonasIT\Media\Http\Resources;
 
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
 use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MediaCollection extends ResourceCollection implements MediaCollectionContract, MediaListResourceContract
 {

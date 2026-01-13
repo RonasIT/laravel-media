@@ -5,8 +5,8 @@ namespace RonasIT\Media\Contracts\Requests;
 interface RequestContract
 {
     /**
-     * @param array|string $keys
-     * @param mixed $default
+     * @param  array|string  $keys
+     * @param  mixed  $default
      *
      * @return array;
      */
