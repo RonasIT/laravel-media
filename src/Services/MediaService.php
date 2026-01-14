@@ -3,15 +3,15 @@
 namespace RonasIT\Media\Services;
 
 use Bepsvpt\Blurhash\BlurHash;
-use Illuminate\Http\UploadedFile;
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use RonasIT\Media\Enums\PreviewDriverEnum;
-use RonasIT\Media\Repositories\MediaRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Media\Enums\PreviewDriverEnum;
+use RonasIT\Media\Repositories\MediaRepository;
 use RonasIT\Support\Services\EntityService;
 use RonasIT\Support\Traits\FilesUploadTrait;
 use Spatie\Image\Image;
@@ -19,6 +19,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property MediaRepository $repository
+ *
  * @mixin MediaRepository
  */
 class MediaService extends EntityService implements MediaServiceContract
@@ -174,7 +175,7 @@ class MediaService extends EntityService implements MediaServiceContract
 
         $localStorage->delete($tmpFilename);
 
-       return $blurHash;
+        return $blurHash;
     }
 
     protected function getBlurHashEncoder(): BlurHash
@@ -187,7 +188,7 @@ class MediaService extends EntityService implements MediaServiceContract
         );
     }
 
-    protected function createPreviews(string $fileName, array &$data, int $ownerId = null, PreviewDriverEnum ...$previewTypes): void
+    protected function createPreviews(string $fileName, array &$data, ?int $ownerId = null, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
             $previewTypes = config('media.drivers');

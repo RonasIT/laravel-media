@@ -1,7 +1,7 @@
 <?php
 
-use RonasIT\Media\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
+use RonasIT\Media\Http\Controllers\MediaController;
 use RonasIT\Media\Http\Middlewares\CheckManuallyRegisteredRoutesMiddleware;
 
 Route::group(['middleware' => CheckManuallyRegisteredRoutesMiddleware::class], function () {

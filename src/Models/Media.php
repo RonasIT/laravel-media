@@ -5,13 +5,13 @@ namespace RonasIT\Media\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use RonasIT\Support\Traits\ModelTrait;
 use RonasIT\Media\Database\Factories\MediaFactory;
+use RonasIT\Support\Traits\ModelTrait;
 
 class Media extends Model
 {
-    use ModelTrait;
     use HasFactory;
+    use ModelTrait;
 
     protected $fillable = [
         'link',

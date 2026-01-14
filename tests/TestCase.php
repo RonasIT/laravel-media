@@ -7,8 +7,8 @@ use Dotenv\Dotenv;
 use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as BaseTest;
 use RonasIT\Media\MediaServiceProvider;
-use RonasIT\Support\Traits\FixturesTrait;
 use RonasIT\Media\Tests\Models\User;
+use RonasIT\Support\Traits\FixturesTrait;
 
 class TestCase extends BaseTest
 {
@@ -50,7 +50,7 @@ class TestCase extends BaseTest
 
         $this->setupDb($app);
     }
-    
+
     protected function beforeEnvironmentSetUpHook(): void
     {
     }

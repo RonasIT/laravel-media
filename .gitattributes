@@ -7,3 +7,4 @@ phpunit.xml export-ignore
 .env.testing export-ignore
 CONTRIBUTING.md export-ignore
 readme.md export-ignore
+pint.json export-ignore

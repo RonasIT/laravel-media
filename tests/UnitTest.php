@@ -33,7 +33,7 @@ class UnitTest extends TestCase
 
         Storage::fake();
 
-        Str::createRandomStringsUsing(fn() => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
+        Str::createRandomStringsUsing(fn () => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
     }
 
     public function testCreateMediaWithSetPreviewDrivers(): void
@@ -61,7 +61,7 @@ class UnitTest extends TestCase
             fileName: self::$file->getClientOriginalName(),
             data: [],
             file: PreviewDriverEnum::File,
-            hash: PreviewDriverEnum::Hash
+            hash: PreviewDriverEnum::Hash,
         );
 
         Storage::assertExists('file.png');
@@ -137,7 +137,7 @@ class UnitTest extends TestCase
             ],
             [
                 'file' => self::$file,
-            ]
+            ],
         ];
 
         $media = app(MediaServiceContract::class)->bulkCreate(
@@ -174,7 +174,7 @@ class UnitTest extends TestCase
             ],
             [
                 'file' => self::$file,
-            ]
+            ],
         ];
 
         $media = app(MediaServiceContract::class)->bulkCreate(

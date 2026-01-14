@@ -2,11 +2,11 @@
 
 namespace RonasIT\Media;
 
+use Closure;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Http\Controllers\MediaController;
-use Illuminate\Support\Facades\Config;
-use Closure;
 
 class MediaRouter
 {

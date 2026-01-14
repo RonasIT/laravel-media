@@ -16,8 +16,7 @@ interface MediaServiceContract
     public function bulkCreate(array $data, PreviewDriverEnum ...$previewDrivers): array;
 
     /**
-     * @param $where array|integer|string
-     * @return int
+     * @param  $where  array|integer|string
      */
     public function delete($where): int;
 

@@ -3,6 +3,7 @@
 namespace RonasIT\Media;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -13,7 +14,6 @@ use RonasIT\Media\Http\Requests\CreateMediaRequest;
 use RonasIT\Media\Http\Requests\DeleteMediaRequest;
 use RonasIT\Media\Http\Requests\SearchMediaRequest;
 use RonasIT\Media\Services\MediaService;
-use Illuminate\Support\ServiceProvider;
 
 class MediaServiceProvider extends ServiceProvider
 {
