@@ -33,7 +33,7 @@ class CreateMediaTable extends Migration
                 ->nullable()
                 ->references('id')
                 ->on('media')
-                ->noActionOnDelete();
+                ->nullOnDelete();
         });
     }
 
