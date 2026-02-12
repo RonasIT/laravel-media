@@ -2,12 +2,12 @@
 
 namespace RonasIT\Media\Tests;
 
+use Exception;
 use Illuminate\Support\Facades\Log;
+use Mockery;
 use RonasIT\Media\Commands\CleanupCommand;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Support\ModelTestState;
-use Exception;
-use Mockery;
 use RonasIT\Support\Traits\MockTrait;
 
 class CleanupCommandTest extends TestCase
