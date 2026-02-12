@@ -1,0 +1,42 @@
+{
+    "updated": [],
+    "created": [],
+    "deleted": [
+        {
+            "id": 2,
+            "created_at": "2016-10-20 11:05:00",
+            "updated_at": "2016-10-20 11:05:00",
+            "link": "http:\/\/localhost\/test_preview_2.jpg",
+            "name": "preview_Category Photo photo",
+            "is_public": false,
+            "meta": [],
+            "owner_id": null,
+            "preview_id": null,
+            "blur_hash": null
+        },
+        {
+            "id": 7,
+            "created_at": "2016-10-20 11:05:00",
+            "updated_at": "2016-10-20 11:05:00",
+            "link": "http:\/\/localhost\/test1.jpg",
+            "name": "Category Photo photo",
+            "is_public": false,
+            "meta": [],
+            "owner_id": null,
+            "preview_id": 2,
+            "blur_hash": null
+        },
+        {
+            "id": 11,
+            "created_at": "2016-10-20 11:05:00",
+            "updated_at": "2016-10-20 11:05:00",
+            "link": "http:\/\/localhost\/test11.jpg",
+            "name": "Main photo without preview",
+            "is_public": false,
+            "meta": [],
+            "owner_id": null,
+            "preview_id": null,
+            "blur_hash": null
+        }
+    ]
+}

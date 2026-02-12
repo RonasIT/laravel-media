@@ -4,6 +4,7 @@ namespace RonasIT\Media;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use RonasIT\Media\Commands\CleanupCommand;
 use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
@@ -40,6 +41,10 @@ class MediaServiceProvider extends ServiceProvider
         if (config('media.api_enable')) {
             $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         }
+
+        $this->commands([
+            CleanupCommand::class,
+        ]);
     }
 
     public function register(): void
