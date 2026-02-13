@@ -72,6 +72,17 @@ use RonasIT\Media\Enums\MediaRouteActionEnum;
 Route::media(MediaRouteActionEnum::SingleUpload, MediaRouteActionEnum::Delete);
 ```
 
+Additionally, you can use the Artisan command to delete media records where the referenced `owner_id` no longer exists:
+
+```bash
+php artisan media:cleanup
+```
+
+By default, this command deletes records where the `is_public` flag is set to `false`.
+You may also use the following options:
+* `--delete-all` — Delete all orphaned records, regardless of the `is_public` flag.
+* `--public` — Delete only records where the `is_public` flag is set to `true`.
+
 ## Integration with [LaravelSwagger](https://github.com/RonasIT/laravel-swagger)
 
 This package includes OpenAPI documentation file. To include it to your project's documentation, you need to register it in the `auto-doc.additional_paths` config:

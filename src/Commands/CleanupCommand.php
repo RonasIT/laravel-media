@@ -29,14 +29,20 @@ class CleanupCommand extends Command
 
     public function handle(): void
     {
-        $deletedNumber = $this->deleteRecords();
+        try {
+            $deletedNumber = $this->deleteRecords();
 
-        $this->info("Deleted $deletedNumber record(s).");
+            $this->info("Deleted {$deletedNumber} record(s).");
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+
+            throw new Exception('Failed to delete records.');
+        }
     }
 
     protected function deleteRecords(): int
     {
-        try {
+        return DB::transaction(function () {
             $query = DB::table('media')->whereNull('owner_id');
 
             if ($this->option('delete-all')) {
@@ -46,10 +52,6 @@ class CleanupCommand extends Command
             return $query
                 ->where('is_public', $this->option('public'))
                 ->delete();
-        } catch (Throwable $e) {
-            Log::error($e->getMessage());
-
-            throw new Exception('Failed to delete records.');
-        }
+        });
     }
 }

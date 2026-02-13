@@ -67,7 +67,7 @@ class CleanupCommandTest extends TestCase
             ->andThrow(Exception::class, 'DB failure');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('DB failure');
+        $this->expectExceptionMessage('Failed to delete records.');
 
         $command->handle();
 
