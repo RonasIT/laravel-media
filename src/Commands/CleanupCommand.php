@@ -2,11 +2,10 @@
 
 namespace RonasIT\Media\Commands;
 
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Throwable;
+use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Media\Jobs\DeleteMediaJob;
+use RonasIT\Media\Models\Media;
 
 class CleanupCommand extends Command
 {
@@ -29,29 +28,29 @@ class CleanupCommand extends Command
 
     public function handle(): void
     {
-        try {
-            $deletedNumber = $this->deleteRecords();
+        $dispatchedJobsCount = 0;
 
-            $this->info("Deleted {$deletedNumber} record(s).");
-        } catch (Throwable $e) {
-            Log::error($e->getMessage());
+        app(MediaServiceContract::class)
+            ->lazyById($this->getWhereOptions(), 100)
+            ->each(function (Media $media) use (&$dispatchedJobsCount) {
+                DeleteMediaJob::dispatch($media);
 
-            throw new Exception('Failed to delete records.');
-        }
+                $dispatchedJobsCount++;
+            });
+
+        $this->info("Successfully dispatched {$dispatchedJobsCount} job(s) for deletion.");
     }
 
-    protected function deleteRecords(): int
+    protected function getWhereOptions(): array
     {
-        return DB::transaction(function () {
-            $query = DB::table('media')->whereNull('owner_id');
+        $where = [
+            'owner_id' => null,
+        ];
 
-            if ($this->option('delete-all')) {
-                return $query->delete();
-            }
+        if (!$this->option('delete-all')) {
+            $where['is_public'] = $this->option('public');
+        }
 
-            return $query
-                ->where('is_public', $this->option('public'))
-                ->delete();
-        });
+        return $where;
     }
 }
