@@ -4,11 +4,11 @@ namespace RonasIT\Media\Tests;
 
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Jobs\DeleteMediaJob;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Support\ModelTestState;
 use RonasIT\Support\Traits\MockTrait;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 class CleanupCommandTest extends TestCase
 {
