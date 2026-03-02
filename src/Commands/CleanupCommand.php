@@ -3,9 +3,9 @@
 namespace RonasIT\Media\Commands;
 
 use Illuminate\Console\Command;
-use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Jobs\DeleteMediaJob;
 use RonasIT\Media\Models\Media;
+use RonasIT\Media\Services\MediaService;
 
 class CleanupCommand extends Command
 {
@@ -30,7 +30,7 @@ class CleanupCommand extends Command
     {
         $dispatchedJobsCount = 0;
 
-        app(MediaServiceContract::class)
+        app(MediaService::class)
             ->lazyById($this->getWhereOptions(), 100)
             ->each(function (Media $media) use (&$dispatchedJobsCount) {
                 DeleteMediaJob::dispatch($media);
