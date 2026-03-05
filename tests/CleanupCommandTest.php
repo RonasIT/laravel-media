@@ -28,11 +28,11 @@ class CleanupCommandTest extends TestCase
         return [
             [
                 'option' => '',
-                'jobsNumber' => '3',
+                'jobsNumber' => '5',
             ],
             [
                 'option' => '--delete-all',
-                'jobsNumber' => '7',
+                'jobsNumber' => '9',
             ],
             [
                 'option' => '--public',
@@ -67,10 +67,10 @@ class CleanupCommandTest extends TestCase
         }
 
         $this->artisan('media:cleanup')
-            ->expectsOutput('Successfully dispatched 3 job(s) for deletion.')
+            ->expectsOutput('Successfully dispatched 5 job(s) for deletion.')
             ->assertExitCode(0);
 
-        self::$mediaTestState->assertChangesEqualsFixture('delete_records_default');
+        self::$mediaTestState->assertChangesEqualsFixture('delete_records_default', 1);
 
         foreach ($files as $path) {
             Storage::assertMissing($path);

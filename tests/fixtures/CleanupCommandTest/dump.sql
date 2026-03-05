@@ -13,4 +13,6 @@ INSERT INTO media(id, name, owner_id, is_public, link, preview_id, meta, created
     (8, 'Photo', null, true, 'http://localhost/test4.jpg', 3, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00'),
     (9, 'Private photo', 2, false, 'http://localhost/test5.jpg', 4, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00'),
     (10, 'Product photo with owner 2', 2, false, 'http://localhost/test6.jpg', 5, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00'),
-    (11, 'Main photo without preview', null, false, 'http://localhost/test11.jpg', null, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00');
+    (11, 'Main photo without preview', null, false, 'http://localhost/test11.jpg', null, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00'),
+    (12, 'Photo without owner', null, false, 'http://localhost/test12.jpg', 13, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00'),
+    (13, 'Photo preview without owner', null, false, 'http://localhost/test13.jpg', null, '{}', '2016-10-20 11:05:00', '2016-10-20 11:05:00');

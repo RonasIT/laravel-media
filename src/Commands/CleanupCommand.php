@@ -33,7 +33,7 @@ class CleanupCommand extends Command
         app(MediaService::class)
             ->lazyById($this->getWhereOptions(), 100)
             ->each(function (Media $media) use (&$dispatchedJobsCount) {
-                DeleteMediaJob::dispatch($media);
+                DeleteMediaJob::dispatch($media->id);
 
                 $dispatchedJobsCount++;
             });

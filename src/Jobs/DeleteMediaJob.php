@@ -8,7 +8,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Models\Media;
+use RonasIT\Media\Services\MediaService;
 
 class DeleteMediaJob implements ShouldQueue
 {
@@ -18,12 +18,16 @@ class DeleteMediaJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        protected Media $media,
+        protected int $mediaID,
     ) {
     }
 
     public function handle(): void
     {
-        app(MediaServiceContract::class)->delete($this->media->id);
+        if (!app(MediaService::class)->exists($this->mediaID)) {
+            return;
+        }
+
+        app(MediaServiceContract::class)->delete($this->mediaID);
     }
 }
