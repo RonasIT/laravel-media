@@ -4,8 +4,11 @@ namespace RonasIT\Media\Tests;
 
 use Carbon\Carbon;
 use Dotenv\Dotenv;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
 use Orchestra\Testbench\TestCase as BaseTest;
+use ReflectionClass;
 use RonasIT\Media\MediaServiceProvider;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Support\Traits\FixturesTrait;
@@ -72,5 +75,31 @@ class TestCase extends BaseTest
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', 'secret'),
         ]);
+    }
+
+    protected function assertQueueEqualsFixture(string $fixture, bool $exportMode = false): void
+    {
+        $actualData = [];
+
+        foreach (Queue::pushedJobs() as $namespace => $jobs) {
+            $actualData[$namespace] = Arr::map($jobs, fn ($job) => $this->getObjectAttributes($job['job']));
+        }
+
+        $this->assertEqualsFixture("queue_states/{$fixture}", $actualData, $exportMode);
+    }
+
+    protected function getObjectAttributes(object $object): array
+    {
+        $result = [];
+
+        $properties = (new ReflectionClass($object))->getProperties();
+
+        foreach ($properties as $property) {
+            $value = $property->getValue($object);
+
+            $result[$property->getName()] = $value;
+        }
+
+        return json_decode(json_encode($result), true);
     }
 }

@@ -29,20 +29,23 @@ class CleanupCommandTest extends TestCase
             [
                 'option' => '',
                 'jobsNumber' => '5',
+                'queueStateFixture' => 'cleanup_default',
             ],
             [
                 'option' => '--delete-all',
                 'jobsNumber' => '9',
+                'queueStateFixture' => 'cleanup_delete_all',
             ],
             [
                 'option' => '--public',
                 'jobsNumber' => '4',
+                'queueStateFixture' => 'cleanup_public',
             ],
         ];
     }
 
     #[DataProvider('getCleanupCommandData')]
-    public function testCleanupCommand(string $option, string $jobsNumber): void
+    public function testCleanupCommand(string $option, string $jobsNumber, string $queueStateFixture): void
     {
         Queue::fake();
 
@@ -51,7 +54,7 @@ class CleanupCommandTest extends TestCase
             ->expectsOutput("Successfully dispatched {$jobsNumber} job(s) for deletion.")
             ->assertExitCode(0);
 
-        Queue::assertPushed(DeleteMediaJob::class);
+        $this->assertQueueEqualsFixture($queueStateFixture);
     }
 
     public function testDeleteMediaJob(): void
@@ -59,21 +62,16 @@ class CleanupCommandTest extends TestCase
         $files = [
             'preview_Category Photo photo',
             'Category Photo photo',
-            'Main photo without preview',
         ];
 
         foreach ($files as $path) {
             Storage::put($path, 'content');
         }
 
-        $this->artisan('media:cleanup')
-            ->expectsOutput('Successfully dispatched 5 job(s) for deletion.')
-            ->assertExitCode(0);
+        DeleteMediaJob::dispatchSync(7);
 
-        self::$mediaTestState->assertChangesEqualsFixture('delete_records_default', 1);
+        self::$mediaTestState->assertChangesEqualsFixture('delete_media_job_state');
 
-        foreach ($files as $path) {
-            Storage::assertMissing($path);
-        }
+        Storage::assertMissing($files);
     }
 }

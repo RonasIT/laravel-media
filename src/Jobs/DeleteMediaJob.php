@@ -8,7 +8,6 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Services\MediaService;
 
 class DeleteMediaJob implements ShouldQueue
 {
@@ -24,10 +23,12 @@ class DeleteMediaJob implements ShouldQueue
 
     public function handle(): void
     {
-        if (!app(MediaService::class)->exists($this->mediaID)) {
+        $mediaService = app(MediaServiceContract::class);
+
+        if (!$mediaService->exists($this->mediaID)) {
             return;
         }
 
-        app(MediaServiceContract::class)->delete($this->mediaID);
+        $mediaService->delete($this->mediaID);
     }
 }
