@@ -51,22 +51,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Preview
+    | Previews
     |--------------------------------------------------------------------------
     |
-    | File preview width and height in pixels which will be used to create preview
+    | Drivers: A list of preview generation drivers to use. Supported options are:
+    |    PreviewDriverEnum::File - generates a preview as an actual image file
+    |    PreviewDriverEnum::Hash - generates a BlurHash string representation for placeholder previews
+    |
+    | Size: File preview width and height in pixels
     */
-    'preview' => [
-        'width' => 250,
-        'height' => 250,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Preview drivers
-    |--------------------------------------------------------------------------
-    */
-    'drivers' => [
-        PreviewDriverEnum::File,
+    'previews' => [
+        'drivers' => [
+            PreviewDriverEnum::File,
+        ],
+        'size' => [
+            'width' => 250,
+            'height' => 250,
+        ],
     ],
 ];

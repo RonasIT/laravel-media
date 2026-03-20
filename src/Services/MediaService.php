@@ -126,9 +126,11 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
+        $previewSizeConfig = config('media.previews.size');
+
         Image::load($filePath)
-            ->width(config('media.preview.width'))
-            ->height(config('media.preview.height'))
+            ->width($previewSizeConfig['width'])
+            ->height($previewSizeConfig['height'])
             ->save(Storage::disk('local')->path($tempPreviewFilePath));
 
         Storage::put($previewFilename, Storage::disk('local')->get($tempPreviewFilePath));
@@ -191,7 +193,7 @@ class MediaService extends EntityService implements MediaServiceContract
     protected function createPreviews(string $fileName, array &$data, ?int $ownerId = null, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
-            $previewTypes = config('media.drivers');
+            $previewTypes = config('media.previews.drivers');
         }
 
         foreach ($previewTypes as $type) {
