@@ -6,7 +6,6 @@ use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RonasIT\Media\Enums\MediaRouteActionEnum;
 use RonasIT\Media\Models\Media;
@@ -33,8 +32,6 @@ class MediaStaticTest extends TestCase
         self::$mediaTestState ??= new ModelTestState(Media::class);
 
         Storage::fake();
-
-        Str::createRandomStringsUsing(fn () => 'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20');
     }
 
     public function testEverythingDisabledExceptSearch(): void
@@ -73,6 +70,8 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
+        $this->mockGenerateFilename();
+
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
         $responseDelete = $this->actingAs(self::$user)->json('delete', '/media/1');
         $responseCreateBulk = $this->actingAs(self::$user)->json('post', '/media/bulk');
@@ -88,6 +87,8 @@ class MediaStaticTest extends TestCase
     public function testCreate(): void
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
+
+        $this->mockGenerateFilename();
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
@@ -115,6 +116,8 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
+        $this->mockGenerateFilename();
+
         $response = $this->actingAs(self::$user)->json('post', '/media', [
             'file' => self::$file,
             'is_public' => true,
@@ -129,11 +132,13 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::SingleUpload);
 
+        $this->mockGenerateFilename();
+
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
         $response->assertCreated();
 
-        Storage::disk('local')->assertExists($this->getFilePathFromUrl('WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20.png'));
+        Storage::disk('local')->assertExists($this->getFilePathFromUrl('hashed_file.png'));
 
         $this->clearUploadedFilesFolder();
     }
@@ -166,10 +171,18 @@ class MediaStaticTest extends TestCase
     {
         Route::media(MediaRouteActionEnum::BulkUpload);
 
-        Str::createRandomStringsUsingSequence([
-            'WpaDXtsDIc4IbC19IqHClOEHwTTlpyszZsm7Sb20',
-            'iBaHLNxIRfPi3nKSe14mPJXOVF5EjaldkI6EZZed',
-        ]);
+        $file2 = UploadedFile::fake()->image('file.png', 600, 600);
+
+        $this->mockGenerateFilename(
+            [
+                'argument' => 'file.png',
+                'result' => 'hashed_file_1.png',
+            ],
+            [
+                'argument' => 'file.png',
+                'result' => 'hashed_file_2.png',
+            ],
+        );
 
         $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
             'media' => [
@@ -178,7 +191,7 @@ class MediaStaticTest extends TestCase
                     'meta' => ['test1'],
                 ],
                 [
-                    'file' => UploadedFile::fake()->image('file.png', 600, 600),
+                    'file' => $file2,
                     'meta' => ['test2'],
                 ],
             ],
@@ -378,6 +391,15 @@ class MediaStaticTest extends TestCase
         Route::media(MediaRouteActionEnum::SingleUpload);
 
         self::$file = UploadedFile::fake()->image($fileName, 600, 600);
+
+        list($extension) = extract_last_part($fileName);
+
+        $this->mockGenerateFilename(
+            [
+                'argument' => $fileName,
+                'result' => "hashed_file.{$extension}",
+            ],
+        );
 
         $response = $this->actingAs(self::$user)->json('post', '/media', ['file' => self::$file]);
 
