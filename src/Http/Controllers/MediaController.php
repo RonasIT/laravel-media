@@ -51,7 +51,7 @@ class MediaController extends Controller
     ): MediaListResourceContract {
         $result = array_map(
             callback: fn ($media) => $mediaService->createFromStream($media['file'], $media),
-            array: $request->onlyValidated('media'),
+            array: $request->onlyValidated(['media'])['media'],
         );
 
         return MediaCollection::make($result);
