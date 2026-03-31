@@ -126,11 +126,11 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
-        $previewSizeConfig = config('media.previews.size');
+        $resolution = config('media.previews.size');
 
         Image::load($filePath)
-            ->width($previewSizeConfig['width'])
-            ->height($previewSizeConfig['height'])
+            ->width($resolution['width'])
+            ->height($resolution['height'])
             ->save(Storage::disk('local')->path($tempPreviewFilePath));
 
         Storage::put($previewFilename, Storage::disk('local')->get($tempPreviewFilePath));
