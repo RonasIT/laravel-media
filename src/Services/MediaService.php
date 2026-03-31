@@ -126,7 +126,7 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
-        $resolution = config('media.previews.size');
+        $resolution = config('media.previews.file_driver.size');
 
         Image::load($filePath)
             ->width($resolution['width'])
