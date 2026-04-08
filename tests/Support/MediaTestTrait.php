@@ -10,13 +10,13 @@ trait MediaTestTrait
 {
     use MockTrait;
 
-    public function mockGenerateFilename(...$mockData): void
+    public function mockGenerateFilename(array ...$mockData): void
     {
         if (empty($mockData)) {
             $mockData = [
                 [
                     'argument' => 'file.png',
-                    'result' => 'file.png',
+                    'result' => 'hashed_file.png',
                 ],
             ];
         }
