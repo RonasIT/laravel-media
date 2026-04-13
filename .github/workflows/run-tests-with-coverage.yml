@@ -52,7 +52,7 @@ jobs:
           laravel-version: ${{ matrix.laravel-version }}
           coverage: none
       - name: Execute unit tests via PHPUnit
-        run: php -d zend.exception_ignore_args=0 -d xdebug.collect_params=4 vendor/bin/phpunit
+        run: vendor/bin/phpunit
 
   tests-with-coverage:
     runs-on: ubuntu-latest
