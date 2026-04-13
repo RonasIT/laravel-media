@@ -22,9 +22,6 @@ runs:
         php-version: ${{ inputs.php-version }}
         coverage: ${{ inputs.coverage }}
         tools: composer
-      env:
-        POSTGRES_HOST: postgres
-        POSTGRES_PORT: 5432
 
     - name: Set up PostgreSQL
       shell: bash
@@ -36,9 +33,14 @@ runs:
     - name: Wait for PostgreSQL
       shell: bash
       run: |
+        DB_HOST="${DB_HOST:-127.0.0.1}"
+        DB_PORT="${DB_PORT:-5432}"
+        DB_DATABASE="${DB_DATABASE:-forge}"
+        DB_USERNAME="${DB_USERNAME:-forge}"
+
         echo "Waiting for PostgreSQL to be ready..."
         for i in {1..30}; do
-          if pg_isready -h 127.0.0.1 -p 5432 -U forge -d forge; then
+          if pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_DATABASE"; then
             echo "PostgreSQL is ready"
             exit 0
           fi
