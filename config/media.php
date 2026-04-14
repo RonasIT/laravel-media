@@ -69,6 +69,7 @@ return [
         'drivers' => [
             PreviewDriverEnum::File,
         ],
+
         /*
         |--------------------------------------------------------------------------
         | File driver settings
