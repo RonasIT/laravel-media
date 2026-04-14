@@ -76,7 +76,8 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
-        $filePath = Storage::putFile('', $uploadedFile);
+        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
+        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
 
         $data = $this->prepareMediaData($data, $filePath);
 
@@ -126,9 +127,11 @@ class MediaService extends EntityService implements MediaServiceContract
             $filePath = Storage::disk('local')->path($tempFilePath);
         }
 
+        $resolution = config('media.previews.file_driver.resolution');
+
         Image::load($filePath)
-            ->width(config('media.preview.width'))
-            ->height(config('media.preview.height'))
+            ->width($resolution['width'])
+            ->height($resolution['height'])
             ->save(Storage::disk('local')->path($tempPreviewFilePath));
 
         Storage::put($previewFilename, Storage::disk('local')->get($tempPreviewFilePath));
@@ -191,7 +194,7 @@ class MediaService extends EntityService implements MediaServiceContract
     protected function createPreviews(string $fileName, array &$data, ?int $ownerId = null, PreviewDriverEnum ...$previewTypes): void
     {
         if (empty($previewTypes)) {
-            $previewTypes = config('media.drivers');
+            $previewTypes = config('media.previews.drivers');
         }
 
         foreach ($previewTypes as $type) {

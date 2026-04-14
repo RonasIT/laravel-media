@@ -51,22 +51,40 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Preview
+    | Previews
     |--------------------------------------------------------------------------
-    |
-    | File preview width and height in pixels which will be used to create preview
     */
-    'preview' => [
-        'width' => 250,
-        'height' => 250,
-    ],
+    'previews' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Drivers
+        |--------------------------------------------------------------------------
+        | A list of preview generation drivers will be used by the default in
+        | the create and bulk create operations in case the previews argument was skipped.
+        |
+        | Supported any set of values from the PreviewDriverEnum:
+        |    PreviewDriverEnum::File - image file with the Media entity, store reference in preview_id field
+        |    PreviewDriverEnum::Hash - BlurHash string representation, store in blur_hash field
+        */
+        'drivers' => [
+            PreviewDriverEnum::File,
+        ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Preview drivers
-    |--------------------------------------------------------------------------
-    */
-    'drivers' => [
-        PreviewDriverEnum::File,
+        /*
+        |--------------------------------------------------------------------------
+        | File driver settings
+        |--------------------------------------------------------------------------
+        */
+        'file_driver' => [
+            /*
+            |--------------------------------------------------------------------------
+            | Preview file resolution, pixels
+            |--------------------------------------------------------------------------
+            */
+            'resolution' => [
+                'width' => 250,
+                'height' => 250,
+            ],
+        ],
     ],
 ];
