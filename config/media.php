@@ -81,7 +81,7 @@ return [
             | Preview file resolution, pixels
             |--------------------------------------------------------------------------
             */
-            'size' => [
+            'resolution' => [
                 'width' => 250,
                 'height' => 250,
             ],
