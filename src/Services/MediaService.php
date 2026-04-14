@@ -76,7 +76,8 @@ class MediaService extends EntityService implements MediaServiceContract
 
     public function createFromStream(UploadedFile $uploadedFile, array $data = [], PreviewDriverEnum ...$previewDrivers): Model
     {
-        $filePath = Storage::putFile('', $uploadedFile);
+        $fileName = $this->generateName($uploadedFile->getClientOriginalName());
+        $filePath = Storage::putFileAs('', $uploadedFile, $fileName);
 
         $data = $this->prepareMediaData($data, $filePath);
 
