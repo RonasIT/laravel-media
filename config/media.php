@@ -59,7 +59,7 @@ return [
         |--------------------------------------------------------------------------
         | Drivers
         |--------------------------------------------------------------------------
-        | A list of preview generation drivers will be used by the default
+        | A list of preview generation drivers will be used by the default in
         | the create and bulk create operations in case the previews argument was skipped.
         |
         | Supported any set of values from the PreviewDriverEnum:
