@@ -22,7 +22,7 @@ class CleanupCommand extends Command
 
         $where = $this->getWhereOptions();
 
-// TODO: use laravel-helpers each
+        // TODO: use laravel-helpers each
         app(MediaService::class)
             ->lazyById($where, 100)
             ->each(function (Media $media) use (&$dispatchedJobsCount) {
