@@ -53,7 +53,7 @@ class CleanupCommandTest extends TestCase
             ->artisan("media:cleanup {$option}")
             ->expectsOutput("Successfully dispatched {$jobsNumber} job(s) for deletion.")
             ->assertExitCode(0);
-
+// TODO: use laravel-helpers "assertQueueEqualsFixture"
         $this->assertQueueEqualsFixture($queueStateFixture);
     }
 
