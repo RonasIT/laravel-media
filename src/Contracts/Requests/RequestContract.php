@@ -5,12 +5,11 @@ namespace RonasIT\Media\Contracts\Requests;
 interface RequestContract
 {
     /**
-     * @param  array|string  $keys
-     * @param  mixed  $default
+     * Get the validated data from the request.
      *
      * @return array;
      */
-    public function onlyValidated($keys = null, $default = null): array;
+    public function onlyValidated(array $keys = []): array;
 
     public function rules(): array;
 
