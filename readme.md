@@ -22,6 +22,11 @@ php artisan vendor:publish --provider=RonasIT\\Media\\MediaServiceProvider
 
 3. For Laravel <= 5.5 add `RonasIT\Media\MediaServiceProvider::class` to config `app.providers` list.
 4. Set your project's User model to the `media.classes.user_model` config.
+5. Configure the worker to process jobs from the `default` queue.
+6. Configure cron jobs and run `RonasIT\Media\Commands\CleanupCommand` command:
+``` sh
+php artisan media:cleanup
+```
 
 ## Usage
 
@@ -71,6 +76,13 @@ use RonasIT\Media\Enums\MediaRouteActionEnum;
 
 Route::media(MediaRouteActionEnum::SingleUpload, MediaRouteActionEnum::Delete);
 ```
+
+You can customize `RonasIT\Media\Commands\CleanupCommand` that is used to delete media records where the referenced `owner_id` no longer exists:
+
+By default, this command deletes records where the `is_public` flag is set to `false`.
+You may also use the following options:
+* `--delete-all` — Delete all orphaned records, regardless of the `is_public` flag.
+* `--public` — Delete only records where the `is_public` flag is set to `true`.
 
 ## Integration with [LaravelSwagger](https://github.com/RonasIT/laravel-swagger)
 
