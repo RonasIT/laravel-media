@@ -8,19 +8,26 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-  PHP_LATEST: &php-latest "8.5"
-  LARAVEL_LATEST: &laravel-latest "13.*"
 
 jobs:
+  prepare-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      php-latest: ${{ steps.generate-matrix.outputs.php-latest }}
+      laravel-latest: ${{ steps.generate-matrix.outputs.laravel-latest }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Generate matrix
+        id: generate-matrix
+        uses: ronasit/github-actions/generate-matrix@main
+
   tests:
+    needs: prepare-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        php-version: [ "8.3", "8.4", "8.5" ]
-        laravel-version: [ "12.*", "13.*" ]
-        exclude:
-          - php-version: *php-latest
-            laravel-version: *laravel-latest
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
     env: &db-env
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
@@ -55,6 +62,7 @@ jobs:
         run: vendor/bin/phpunit
 
   tests-with-coverage:
+    needs: prepare-matrix
     runs-on: ubuntu-latest
     env: *db-env
     services: *postgres-service
@@ -64,8 +72,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/php-laravel-setup
         with:
-          php-version: *php-latest
-          laravel-version: *laravel-latest
+          php-version: ${{ needs.prepare-matrix.outputs.php-latest }}
+          laravel-version: ${{ needs.prepare-matrix.outputs.laravel-latest }}
           coverage: xdebug
       - name: Format code style via Pint
         run: vendor/bin/pint --test
@@ -78,7 +86,7 @@ jobs:
           path: build/logs
 
   upload-to-coveralls:
-    needs: tests-with-coverage
+    needs: [ tests, tests-with-coverage ]
     runs-on: ubuntu-latest
     steps:
       - name: Set up PHP
