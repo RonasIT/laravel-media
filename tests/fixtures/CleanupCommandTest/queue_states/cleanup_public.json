@@ -1,0 +1,64 @@
+{
+    "RonasIT\\Media\\Jobs\\DeleteMediaJob": [
+        {
+            "mediaID": 1,
+            "job": null,
+            "connection": null,
+            "queue": null,
+            "messageGroup": null,
+            "deduplicator": null,
+            "delay": null,
+            "afterCommit": null,
+            "middleware": [],
+            "chained": [],
+            "chainConnection": null,
+            "chainQueue": null,
+            "chainCatchCallbacks": null
+        },
+        {
+            "mediaID": 3,
+            "job": null,
+            "connection": null,
+            "queue": null,
+            "messageGroup": null,
+            "deduplicator": null,
+            "delay": null,
+            "afterCommit": null,
+            "middleware": [],
+            "chained": [],
+            "chainConnection": null,
+            "chainQueue": null,
+            "chainCatchCallbacks": null
+        },
+        {
+            "mediaID": 6,
+            "job": null,
+            "connection": null,
+            "queue": null,
+            "messageGroup": null,
+            "deduplicator": null,
+            "delay": null,
+            "afterCommit": null,
+            "middleware": [],
+            "chained": [],
+            "chainConnection": null,
+            "chainQueue": null,
+            "chainCatchCallbacks": null
+        },
+        {
+            "mediaID": 8,
+            "job": null,
+            "connection": null,
+            "queue": null,
+            "messageGroup": null,
+            "deduplicator": null,
+            "delay": null,
+            "afterCommit": null,
+            "middleware": [],
+            "chained": [],
+            "chainConnection": null,
+            "chainQueue": null,
+            "chainCatchCallbacks": null
+        }
+    ]
+}
