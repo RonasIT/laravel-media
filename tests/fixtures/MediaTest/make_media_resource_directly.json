@@ -1,0 +1,14 @@
+{
+    "id": 8,
+    "link": "http:\/\/localhost\/test4.jpg",
+    "name": "Photo",
+    "is_public": true,
+    "meta": [],
+    "preview": {
+        "id": 3,
+        "link": "http:\/\/localhost\/test_preview_4.jpg",
+        "name": "preview_Photo",
+        "is_public": true,
+        "meta": []
+    }
+}

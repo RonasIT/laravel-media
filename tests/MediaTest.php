@@ -7,11 +7,17 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
+use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
+use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
+use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
+use RonasIT\Media\Http\Resources\MediaResource;
 use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
+use RonasIT\Media\Tests\Support\Resources\CustomMediaCollection;
+use RonasIT\Media\Tests\Support\Resources\CustomMediaResource;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
 class MediaTest extends TestCase
@@ -112,31 +118,9 @@ class MediaTest extends TestCase
 
     public function testBulkCreate(): void
     {
-        $file2 = UploadedFile::fake()->image('file2.png', 600, 600);
+        $this->mockBulkGenerateFilename();
 
-        $this->mockGenerateFilename(
-            [
-                'argument' => 'file.png',
-                'result' => 'hashed_file_1.png',
-            ],
-            [
-                'argument' => 'file2.png',
-                'result' => 'hashed_file_2.png',
-            ],
-        );
-
-        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', [
-            'media' => [
-                [
-                    'file' => self::$file,
-                    'meta' => ['test1'],
-                ],
-                [
-                    'file' => $file2,
-                    'meta' => ['test2'],
-                ],
-            ],
-        ]);
+        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', $this->getBulkCreateData());
 
         $response->assertOk();
 
@@ -417,5 +401,95 @@ class MediaTest extends TestCase
         $response->assertJson(['message' => 'Not found.']);
 
         self::$mediaTestState->assertNotChanged();
+    }
+
+    public function testCreateWithCustomResource(): void
+    {
+        $this->app->bind(MediaResourceContract::class, CustomMediaResource::class);
+
+        $this->mockGenerateFilename();
+
+        $response = $this->actingAs(self::$user)->json('post', '/media', [
+            'file' => UploadedFile::fake()->image('file.png', 600, 600),
+        ]);
+
+        $response->assertCreated();
+
+        $this->assertEqualsFixture('create_with_custom_resource_response', $response->json());
+    }
+
+    public static function getCustomBulkCreateResources(): array
+    {
+        return [
+            [
+                'contract' => MediaResourceContract::class,
+                'resource' => CustomMediaResource::class,
+                'fixture' => 'bulk_create_with_custom_resource_response',
+            ],
+            [
+                'contract' => MediaCollectionContract::class,
+                'resource' => CustomMediaCollection::class,
+                'fixture' => 'bulk_create_from_stream_response',
+            ],
+            [
+                'contract' => MediaListResourceContract::class,
+                'resource' => CustomMediaCollection::class,
+                'fixture' => 'bulk_create_with_custom_list_resource_response',
+            ],
+        ];
+    }
+
+    #[DataProvider('getCustomBulkCreateResources')]
+    public function testBulkCreateWithCustomResources(string $contract, string $resource, string $fixture): void
+    {
+        $this->app->bind($contract, $resource);
+
+        $this->mockBulkGenerateFilename();
+
+        $response = $this->actingAs(self::$user)->json('post', '/media/bulk', $this->getBulkCreateData());
+
+        $response->assertOk();
+
+        $this->assertEqualsFixture($fixture, $response->json());
+    }
+
+    public static function getCustomSearchResources(): array
+    {
+        return [
+            [
+                'contract' => MediaResourceContract::class,
+                'resource' => CustomMediaResource::class,
+                'fixture' => 'get_by_all_with_custom_resource',
+            ],
+            [
+                'contract' => MediaCollectionContract::class,
+                'resource' => CustomMediaCollection::class,
+                'fixture' => 'get_by_all_with_custom_collection',
+            ],
+            [
+                'contract' => MediaListResourceContract::class,
+                'resource' => CustomMediaCollection::class,
+                'fixture' => 'get_by_all',
+            ],
+        ];
+    }
+
+    #[DataProvider('getCustomSearchResources')]
+    public function testSearchWithCustomResources(string $contract, string $resource, string $fixture): void
+    {
+        $this->app->bind($contract, $resource);
+
+        $response = $this->json('get', '/media', ['all' => true]);
+
+        $response->assertOk();
+
+        $this->assertEqualsFixture($fixture, $response->json());
+    }
+
+    public function testMakeMediaResourceDirectly(): void
+    {
+        $resource = MediaResource::make(Media::with('preview')->find(8))->response()->getData(true);
+
+        $this->assertEqualsFixture('make_media_resource_directly', $resource);
     }
 }

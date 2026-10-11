@@ -11,8 +11,6 @@ use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
 use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
 use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
-use RonasIT\Media\Http\Resources\MediaCollection;
-use RonasIT\Media\Http\Resources\MediaResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class MediaController extends Controller
@@ -26,7 +24,7 @@ class MediaController extends Controller
 
         $media = $mediaService->createFromStream($file, $data);
 
-        return MediaResource::make($media);
+        return app(MediaResourceContract::class, ['resource' => $media]);
     }
 
     public function delete(DeleteMediaRequestContract $request, MediaServiceContract $mediaService, int $id): Response
@@ -42,7 +40,7 @@ class MediaController extends Controller
     ): MediaCollectionContract {
         $result = $mediaService->search($request->onlyValidated());
 
-        return MediaCollection::make($result);
+        return app(MediaCollectionContract::class, ['resource' => $result]);
     }
 
     public function bulkCreate(
@@ -56,6 +54,6 @@ class MediaController extends Controller
             array: $data['media'],
         );
 
-        return MediaCollection::make($result);
+        return app(MediaListResourceContract::class, ['resource' => $result]);
     }
 }

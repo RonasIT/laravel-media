@@ -1,0 +1,37 @@
+{
+    "data": [
+        {
+            "id": 13,
+            "link": "\/storage\/hashed_file_1.png",
+            "name": "hashed_file_1.png",
+            "is_public": false,
+            "meta": [
+                "test1"
+            ],
+            "preview": {
+                "id": 12,
+                "link": "\/storage\/preview_hashed_file_1.png",
+                "name": "preview_hashed_file_1.png",
+                "is_public": false,
+                "meta": []
+            }
+        },
+        {
+            "id": 15,
+            "link": "\/storage\/hashed_file_2.png",
+            "name": "hashed_file_2.png",
+            "is_public": false,
+            "meta": [
+                "test2"
+            ],
+            "preview": {
+                "id": 14,
+                "link": "\/storage\/preview_hashed_file_2.png",
+                "name": "preview_hashed_file_2.png",
+                "is_public": false,
+                "meta": []
+            }
+        }
+    ],
+    "is_custom": true
+}

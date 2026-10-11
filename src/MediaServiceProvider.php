@@ -8,11 +8,16 @@ use RonasIT\Media\Contracts\Requests\BulkCreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\CreateMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\DeleteMediaRequestContract;
 use RonasIT\Media\Contracts\Requests\SearchMediaRequestContract;
+use RonasIT\Media\Contracts\Resources\MediaCollectionContract;
+use RonasIT\Media\Contracts\Resources\MediaListResourceContract;
+use RonasIT\Media\Contracts\Resources\MediaResourceContract;
 use RonasIT\Media\Contracts\Services\MediaServiceContract;
 use RonasIT\Media\Http\Requests\BulkCreateMediaRequest;
 use RonasIT\Media\Http\Requests\CreateMediaRequest;
 use RonasIT\Media\Http\Requests\DeleteMediaRequest;
 use RonasIT\Media\Http\Requests\SearchMediaRequest;
+use RonasIT\Media\Http\Resources\MediaCollection;
+use RonasIT\Media\Http\Resources\MediaResource;
 use RonasIT\Media\Services\MediaService;
 
 class MediaServiceProvider extends ServiceProvider
@@ -49,5 +54,9 @@ class MediaServiceProvider extends ServiceProvider
         $this->app->bind(SearchMediaRequestContract::class, SearchMediaRequest::class);
         $this->app->bind(DeleteMediaRequestContract::class, DeleteMediaRequest::class);
         $this->app->bind(MediaServiceContract::class, MediaService::class);
+        $this->app->bind(MediaResourceContract::class, MediaResource::class);
+        $this->app->alias(MediaResource::class, MediaResourceContract::class);
+        $this->app->bind(MediaCollectionContract::class, MediaCollection::class);
+        $this->app->bind(MediaListResourceContract::class, MediaCollection::class);
     }
 }
