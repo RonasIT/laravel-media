@@ -16,8 +16,10 @@ use RonasIT\Media\Models\Media;
 use RonasIT\Media\Tests\Models\User;
 use RonasIT\Media\Tests\Support\MediaTestTrait;
 use RonasIT\Media\Tests\Support\ModelTestState;
+use RonasIT\Media\Tests\Support\Resources\AttributeCollectsMediaCollection;
 use RonasIT\Media\Tests\Support\Resources\CustomMediaCollection;
 use RonasIT\Media\Tests\Support\Resources\CustomMediaResource;
+use RonasIT\Media\Tests\Support\Resources\ExplicitCollectsMediaCollection;
 use RonasIT\Support\Traits\FilesUploadTrait;
 
 class MediaTest extends TestCase
@@ -436,6 +438,11 @@ class MediaTest extends TestCase
                 'resource' => CustomMediaCollection::class,
                 'fixture' => 'bulk_create_with_custom_list_resource_response',
             ],
+            [
+                'contract' => MediaResource::class,
+                'resource' => CustomMediaResource::class,
+                'fixture' => 'bulk_create_with_custom_resource_response',
+            ],
         ];
     }
 
@@ -470,6 +477,16 @@ class MediaTest extends TestCase
                 'contract' => MediaListResourceContract::class,
                 'resource' => CustomMediaCollection::class,
                 'fixture' => 'get_by_all',
+            ],
+            [
+                'contract' => MediaCollectionContract::class,
+                'resource' => ExplicitCollectsMediaCollection::class,
+                'fixture' => 'get_by_all_with_custom_resource',
+            ],
+            [
+                'contract' => MediaCollectionContract::class,
+                'resource' => AttributeCollectsMediaCollection::class,
+                'fixture' => 'get_by_all_with_custom_resource',
             ],
         ];
     }
